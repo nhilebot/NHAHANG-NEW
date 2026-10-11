@@ -38,7 +38,7 @@
     }
 
     /* ĐỒNG BỘ CATEGORY NAV */
-    .category-nav { margin-bottom: 50px; text-align: center; }
+    .category-nav { padding: 30px; text-align: center; }
     .btn-category {
         padding: 10px 22px;
         margin: 5px;
@@ -293,22 +293,44 @@
     display: block;
     object-fit: cover;
 }
+
+/* CHỮ TRONG BANNER (mới thêm): tiêu đề + mô tả nằm trên ảnh */
+.banner-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    background: rgba(0,0,0,0.4);
+    color: white;
+}
+
+.banner-overlay .section-title {
+    color: #ffffff !important;
+    text-shadow: 2px 2px 15px rgba(0,0,0,0.6);
+}
+
+.banner-overlay .section-subtitle {
+    color: rgba(255,255,255,0.9);
+    margin-bottom: 0;
+    padding: 0 20px;
+}
 </style>
 @endsection
 
 @section('content')
 <div class="menu-banner"> 
     <img src="{{ asset('images/thucuong.jpg') }}" alt="Banner Hải Sản" class="banner-img"> 
+    <div class="banner-overlay">
+        <h1 class="section-title">Thức uống</h1>
+        <p class="section-subtitle">
+            Giải nhiệt tức thì với quầy nước phong phú từ nước ép trái cây tươi, trà thanh mát đến các loại cà phê đậm đà hương vị.
+        </p>
+    </div>
 </div>
 <div class="container">
-    <div class="row">
-        <div class="col-xs-12">
-            <h1 class="section-title">Thức uống</h1>
-            <p class="section-subtitle">
-                Giải nhiệt tức thì với quầy nước phong phú từ nước ép trái cây tươi, trà thanh mát đến các loại cà phê đậm đà hương vị.
-            </p>
-        </div>
-    </div>
     
     <div class="category-nav">
         <a href="{{ url('/menu') }}" class="btn-category">Tất cả</a>

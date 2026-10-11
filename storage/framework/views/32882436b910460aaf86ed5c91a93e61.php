@@ -39,7 +39,7 @@
     }
 
     /* ĐỒNG BỘ CATEGORY NAV */
-    .category-nav { margin-bottom: 50px; text-align: center; }
+    .category-nav { padding: 30px; text-align: center; }
     .btn-category {
         padding: 10px 22px;
         margin: 5px;
@@ -302,15 +302,25 @@
     background: rgba(0,0,0,0.4);
     color: white;
 }
+
+/* CHỮ TRONG BANNER (mới thêm): tiêu đề + mô tả nằm trên ảnh */
+.banner-overlay .section-title {
+    color: #ffffff !important;
+    text-shadow: 2px 2px 15px rgba(0,0,0,0.6);
+}
+
+.banner-overlay .section-subtitle {
+    color: rgba(255,255,255,0.9);
+    margin-bottom: 0;
+    padding: 0 20px;
+}
 </style>
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('content'); ?>
 <div class="container">
     <div class="menu-banner"> <img src="<?php echo e(asset('images/bannerhaisan.jpg')); ?>" alt="Banner Hải Sản" class="banner-img"> 
- </div>
-    <div class="row">
-        <div class="col-xs-12">
+        <div class="banner-overlay">
             <h1 class="section-title">Tinh hoa hải sản</h1>
             <p class="section-subtitle">
                 Đại tiệc hải sản tươi ngon được đánh bắt trong ngày và chế biến bởi những đầu bếp hàng đầu.

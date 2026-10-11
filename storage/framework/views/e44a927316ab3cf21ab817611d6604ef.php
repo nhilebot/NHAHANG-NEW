@@ -296,13 +296,23 @@
     background: rgba(0,0,0,0.4);
     color: white;
 }
+
+/* CHỮ TRONG BANNER (mới thêm): tiêu đề nằm trên ảnh */
+.banner-overlay .section-title {
+    color: #ffffff !important;
+    text-shadow: 2px 2px 15px rgba(0,0,0,0.6);
+    margin-bottom: 0;
+}
 </style>
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('content'); ?>
 <div class="container">
     <div class="menu-banner"> <img src="<?php echo e(asset('images/monhan.jpg')); ?>" alt="Banner Hải Sản" class="banner-img"> 
- </div>
+        <div class="banner-overlay">
+            <h1 class="section-title">Khám phá thực đơn</h1>
+        </div>
+    </div>
 <div class="container">
     <div class="row">
         <div class="col-md-6 col-md-offset-3">
@@ -316,12 +326,6 @@
                     </span>
                 </div>
             </form>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-xs-12 text-center">
-            <h1 class="section-title">Khám phá thực đơn</h1>
         </div>
     </div>
     
@@ -403,6 +407,7 @@
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         <?php endif; ?>
     </div>
+</div>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

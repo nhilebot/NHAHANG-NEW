@@ -38,7 +38,7 @@
     }
 
     /* ĐỒNG BỘ CATEGORY NAV */
-    .category-nav { margin-bottom: 50px; text-align: center; }
+    .category-nav { padding: 30px; text-align: center; }
     .btn-category {
         padding: 10px 22px;
         margin: 5px;
@@ -301,22 +301,32 @@
     background: rgba(0,0,0,0.4);
     color: white;
 }
+
+/* CHỮ TRONG BANNER (mới thêm): tiêu đề + mô tả nằm trên ảnh */
+.banner-overlay .section-title {
+    color: #ffffff !important;
+    text-shadow: 2px 2px 15px rgba(0,0,0,0.6);
+}
+
+.banner-overlay .section-subtitle {
+    color: rgba(255,255,255,0.9);
+    margin-bottom: 0;
+    padding: 0 20px;
+}
 </style>
 @endsection
 
 @section('content')
 <div class="container">
     <div class="menu-banner"> <img src="{{ asset('images/trangmieng.jpg') }}" alt="Banner Hải Sản" class="banner-img"> 
- </div>
-<div class="container">
-    <div class="row">
-        <div class="col-xs-12">
+        <div class="banner-overlay">
             <h1 class="section-title">Tráng miệng</h1>
             <p class="section-subtitle">
                 Kết thúc bữa tiệc một cách hoàn hảo với những hương vị ngọt ngào, tinh tế được trang trí cầu kỳ từ các nghệ nhân của chúng tôi.
             </p>
         </div>
     </div>
+<div class="container">
     
     <div class="category-nav">
         <a href="{{ url('/menu') }}" class="btn-category">Tất cả</a>
@@ -351,6 +361,7 @@
         </div>
         @endforeach
     </div>
+</div>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

@@ -1,58 +1,243 @@
 @extends('shared')
 
-@section('title', 'Quên mật khẩu | Tam Nhi Quán')
+@section('title', 'Quên mật khẩu | Nhà Hàng')
 
-@section('body-class', 'd-flex align-items-center min-vh-100')
+@section('body-class', 'p-0')
 
 @section('head')
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 <style>
-    body { background-color: #f9f9f9; font-family: "Times New Roman", serif; }
-    .auth-card { background: white; max-width: 500px; margin: 80px auto; padding: 2.5rem; border-radius: 18px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); border-top: 5px solid #041526e0; }
-    .auth-title { font-family: 'Pacifico', cursive; color: #041526e0; font-size: 36px; margin-bottom: 18px; }
-    .form-control { border-radius: 30px; border: 1px solid #ddd; padding: 12px 18px; height: auto; }
-    .form-control:focus { border-color: #041526e0; box-shadow: 0 0 0 3px rgba(231,76,60,0.18); }
-    .btn-primary-custom { background-color: #041526e0; color: white; border-radius: 30px; border: none; padding: 12px 20px; width: 100%; font-weight: 700; }
-    .btn-primary-custom:hover { background-color: #041526e0; }
-    .text-link { color: #777; text-decoration: none; }
-    .text-link:hover { color: #041526e0; text-decoration: underline; }
+    :root {
+        --navy: #041526;
+        --navy-soft: #0d2a47;
+        --brass: #c8963e;
+        --text: #1f2937;
+        --muted: #6b7280;
+        --line: #d9dee5;
+        --danger: #b42318;
+        --danger-bg: #fef3f2;
+        --success: #067647;
+        --success-bg: #ecfdf3;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+        margin: 0;
+        font-family: 'Be Vietnam Pro', system-ui, -apple-system, 'Segoe UI', sans-serif;
+        color: var(--text);
+        background: #fff;
+    }
+
+    /* ---------- Hộp form ở giữa trang ---------- */
+    body { background: #eef1f5; }
+
+    .auth {
+        display: flex;
+        min-height: 100vh;
+        padding: 96px 16px 48px; /* chừa chỗ cho thanh menu cố định của layout */
+    }
+
+    /* margin:auto giúp hộp nằm giữa khi còn chỗ và không bị cắt phần đầu khi form cao */
+    .auth-card {
+        width: 100%;
+        max-width: 440px;
+        margin: auto;
+        padding: 40px;
+        background: #fff;
+        border-top: 5px solid var(--navy);
+        border-radius: 16px;
+        box-shadow: 0 8px 30px rgba(4, 21, 38, .08);
+    }
+
+    .brand { margin-bottom: 24px; text-align: center; }
+    .brand-name {
+        font-family: 'Playfair Display', Georgia, serif;
+        font-size: 28px;
+        font-weight: 700;
+        letter-spacing: .5px;
+        color: var(--navy);
+    }
+    .brand::after {
+        content: '';
+        display: block;
+        width: 40px;
+        height: 3px;
+        margin: 10px auto 0;
+        background: var(--brass);
+        border-radius: 2px;
+    }
+
+    .auth-card h2, .auth-card .sub { text-align: center; }
+
+    .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        margin-bottom: 28px;
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--muted);
+        text-decoration: none;
+    }
+    .back-link:hover { color: var(--navy); }
+    .back-link:focus-visible { outline: 2px solid var(--navy); outline-offset: 2px; border-radius: 4px; }
+    .back-link svg { width: 18px; height: 18px; }
+
+    .auth-card h2 {
+        margin: 0 0 8px;
+        font-size: 28px;
+        font-weight: 700;
+        color: var(--navy);
+    }
+
+    .auth-card .sub {
+        margin: 0 0 26px;
+        font-size: 15px;
+        line-height: 1.6;
+        color: var(--muted);
+    }
+
+    .alert-box {
+        margin-bottom: 20px;
+        padding: 12px 14px;
+        border-radius: 10px;
+        font-size: 14px;
+        line-height: 1.5;
+    }
+    .alert-box.error { color: var(--danger); background: var(--danger-bg); border: 1px solid #fecdca; }
+    .alert-box.ok { color: var(--success); background: var(--success-bg); border: 1px solid #abefc6; }
+    .alert-box ul { margin: 0; padding-left: 18px; }
+
+    .field { margin-bottom: 20px; }
+
+    .field label {
+        display: block;
+        margin-bottom: 6px;
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--text);
+    }
+
+    .input-wrap { position: relative; }
+
+    .input-wrap .icon {
+        position: absolute;
+        top: 50%;
+        left: 14px;
+        width: 20px;
+        height: 20px;
+        transform: translateY(-50%);
+        color: #9aa3af;
+        pointer-events: none;
+    }
+
+    .input {
+        width: 100%;
+        height: 48px;
+        padding: 0 16px 0 44px;
+        font: inherit;
+        font-size: 15px;
+        color: var(--text);
+        background: #fff;
+        border: 1.5px solid var(--line);
+        border-radius: 10px;
+        transition: border-color .15s, box-shadow .15s;
+    }
+
+    .input::placeholder { color: #a8b0bb; }
+    .input:hover { border-color: #b7bfca; }
+
+    .input:focus {
+        outline: none;
+        border-color: var(--navy);
+        box-shadow: 0 0 0 4px rgba(4, 21, 38, .12);
+    }
+
+    .input.is-invalid { border-color: var(--danger); }
+    .input.is-invalid:focus { box-shadow: 0 0 0 4px rgba(180, 35, 24, .15); }
+
+    .btn-submit {
+        width: 100%;
+        height: 50px;
+        font: inherit;
+        font-size: 16px;
+        font-weight: 600;
+        color: #fff;
+        background: var(--navy);
+        border: 0;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: background .15s, transform .1s;
+    }
+    .btn-submit:hover { background: var(--navy-soft); }
+    .btn-submit:active { transform: translateY(1px); }
+    .btn-submit:focus-visible { outline: 3px solid var(--brass); outline-offset: 2px; }
+    .btn-submit:disabled { opacity: .7; cursor: wait; }
+
+    @media (max-width: 520px) {
+        .auth { padding: 80px 12px 32px; }
+        .auth-card { padding: 28px 20px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        * { transition: none !important; }
+    }
 </style>
 @endsection
 
 @section('content')
-<div class="container">
+<main class="auth">
     <div class="auth-card">
-        <div class="text-center mb-4">
-            <h3 class="auth-title">Quên mật khẩu</h3>
-            <p style="color: #555; font-size: 14px;">Nhập email để nhận mã OTP khôi phục tài khoản.</p>
+                <a href="{{ route('login') }}" class="back-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+                Quay lại đăng nhập
+            </a>
+
+            <h2>Quên mật khẩu</h2>
+            <p class="sub">Nhập email bạn đã đăng ký, chúng tôi sẽ gửi mã OTP để khôi phục tài khoản.</p>
+
+            @if(session('status'))
+                <div class="alert-box ok" role="status">{{ session('status') }}</div>
+            @endif
+
+            @if($errors->any())
+                <div class="alert-box error" role="alert">
+                    <ul>
+                        @foreach($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
+            <form method="POST" action="{{ route('password.email') }}" id="forgotForm" novalidate>
+                @csrf
+
+                <div class="field">
+                    <label for="email">Email</label>
+                    <div class="input-wrap">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+                        <input id="email" type="email" name="email"
+                               class="input @error('email') is-invalid @enderror"
+                               value="{{ old('email') }}" placeholder="ten@example.com"
+                               autocomplete="email" required autofocus>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-submit" id="submitBtn">Gửi mã OTP</button>
+            </form>
         </div>
+</main>
 
-        @if(session('status'))
-            <div class="alert alert-success" style="border-radius: 20px;">{{ session('status') }}</div>
-        @endif
-
-        @if($errors->any())
-            <div class="alert alert-danger" style="border-radius: 15px;">
-                <ul class="mb-0">
-                    @foreach($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
-
-        <form method="POST" action="{{ route('password.email') }}">
-            @csrf
-            <div class="mb-3">
-                <label for="email" class="form-label">Email</label>
-                <input id="email" type="email" name="email" class="form-control" value="{{ old('email') }}" placeholder="your@email.com" required autofocus>
-            </div>
-
-            <button type="submit" class="btn btn-primary-custom">Gửi mã OTP</button>
-
-            <div class="text-center mt-4" style="font-size: 14px;">
-                <a href="{{ route('login') }}" class="text-link">Quay lại đăng nhập</a>
-            </div>
-        </form>
-    </div>
-</div>
+<script>
+    // Tránh bấm gửi nhiều lần (mỗi lần gửi sẽ tạo một mã OTP mới)
+    document.getElementById('forgotForm').addEventListener('submit', function () {
+        var btn = document.getElementById('submitBtn');
+        btn.disabled = true;
+        btn.textContent = 'Đang gửi mã...';
+    });
+</script>
 @endsection

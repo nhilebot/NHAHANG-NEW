@@ -3,245 +3,343 @@
 @section('title', 'FoodHub - Thông tin tài khoản')
 
 @section('head')
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        body {
-            background-color: #f8f9fa;
-            font-family: 'Inter', sans-serif;
-        }
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --navy: #041526;
+        --navy-soft: #0d2a47;
+        --brass: #c8963e;
+        --text: #1f2937;
+        --muted: #6b7280;
+        --line: #d9dee5;
+        --danger: #b42318;
+        --danger-bg: #fef3f2;
+        --success: #067647;
+        --success-bg: #ecfdf3;
+    }
 
-        .profile-wrapper {
-            max-width: 950px;
-            margin: 80px auto;
-            background: #ffffff;
-            padding: 50px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
-        }
+    * { box-sizing: border-box; }
 
-        .profile-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 32px;
-            font-weight: 700;
-            color: #2d3436;
-            margin-bottom: 40px;
-            position: relative;
-        }
+    body {
+        margin: 0;
+        font-family: 'Be Vietnam Pro', system-ui, -apple-system, 'Segoe UI', sans-serif;
+        color: var(--text);
+        background: #eef1f5;
+    }
 
-        .profile-title::after {
-            content: '';
-            display: block;
-            width: 50px;
-            height: 3px;
-            background: #d9534f;
-            margin: 10px auto 0;
-            border-radius: 2px;
-        }
+    .page {
+        padding: 96px 16px 48px; /* chừa chỗ cho thanh menu cố định của layout */
+    }
 
-        .profile-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 50px;
-        }
+    .profile-card {
+        width: 100%;
+        max-width: 920px;
+        margin: 0 auto;
+        padding: 40px;
+        background: #fff;
+        border-top: 5px solid var(--navy);
+        border-radius: 16px;
+        box-shadow: 0 8px 30px rgba(4, 21, 38, .08);
+    }
 
-        /* --- Cột trái: Avatar --- */
-        .profile-left {
-            flex: 0 0 180px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+    .profile-head { margin-bottom: 28px; }
+    .profile-head h2 {
+        margin: 0 0 6px;
+        font-size: 28px;
+        font-weight: 700;
+        color: var(--navy);
+    }
+    .profile-head p { margin: 0; font-size: 15px; color: var(--muted); }
+    .profile-head::after {
+        content: '';
+        display: block;
+        width: 48px;
+        height: 3px;
+        margin-top: 16px;
+        background: var(--brass);
+        border-radius: 2px;
+    }
 
-        .avatar-container {
-            width: 160px;
-            height: 160px;
-            position: relative;
-            transition: transform 0.3s ease;
-        }
+    .alert-box {
+        margin-bottom: 22px;
+        padding: 12px 14px;
+        border-radius: 10px;
+        font-size: 14px;
+        line-height: 1.5;
+    }
+    .alert-box.error { color: var(--danger); background: var(--danger-bg); border: 1px solid #fecdca; }
+    .alert-box.ok { color: var(--success); background: var(--success-bg); border: 1px solid #abefc6; }
+    .alert-box ul { margin: 0; padding-left: 18px; }
 
-        .avatar-container:hover {
-            transform: scale(1.02);
-        }
+    .profile-layout {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 44px;
+    }
 
-        .profile-avatar {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 4px solid #fff;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-        }
+    /* ---------- Cột trái: ảnh đại diện ---------- */
+    .profile-left {
+        flex: 0 0 180px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
 
-        .edit-avatar-btn {
-            position: absolute;
-            bottom: 8px;
-            right: 8px;
-            background: #d9534f;
-            color: white;
-            border-radius: 50%;
-            width: 38px;
-            height: 38px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 3px solid #fff;
-            cursor: pointer;
-            transition: 0.2s;
-        }
+    .avatar-box {
+        position: relative;
+        width: 160px;
+        height: 160px;
+    }
 
-        .edit-avatar-btn:hover {
-            background: #c9302c;
-            transform: rotate(15deg);
-        }
+    .avatar-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 4px solid #fff;
+        box-shadow: 0 4px 18px rgba(4, 21, 38, .15);
+        background: #e5e9ef;
+    }
 
-        /* --- Cột phải: Form --- */
-        .profile-right {
-            flex: 1;
-            min-width: 300px;
-        }
+    .avatar-btn {
+        position: absolute;
+        right: 6px;
+        bottom: 6px;
+        display: grid;
+        place-items: center;
+        width: 40px;
+        height: 40px;
+        padding: 0;
+        color: #fff;
+        background: var(--navy);
+        border: 3px solid #fff;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: background .15s;
+    }
+    .avatar-btn:hover { background: var(--navy-soft); }
+    .avatar-btn:focus-visible { outline: 3px solid var(--brass); outline-offset: 2px; }
+    .avatar-btn svg { width: 18px; height: 18px; }
 
-        .profile-form-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 25px;
-        }
+    .avatar-hint {
+        margin: 14px 0 0;
+        font-size: 13px;
+        line-height: 1.5;
+        text-align: center;
+        color: var(--muted);
+    }
+    .avatar-name {
+        margin: 12px 0 0;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--navy);
+        word-break: break-all;
+        text-align: center;
+    }
 
-        .form-group-custom {
-            display: flex;
-            flex-direction: column;
-        }
+    /* ---------- Cột phải: form ---------- */
+    .profile-right { flex: 1; min-width: 300px; }
 
-        .form-group-custom label {
-            font-size: 13px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            font-weight: 700;
-            color: #636e72;
-            margin-bottom: 8px;
-            margin-left: 2px;
-        }
+    .form-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 20px;
+    }
 
-        .input-custom {
-            width: 100%;
-            height: 48px;
-            padding: 12px 16px;
-            border: 1.5px solid #edf2f7;
-            border-radius: 10px;
-            background-color: #f8fafc;
-            color: #2d3436;
-            font-size: 15px;
-            transition: all 0.3s ease;
-        }
+    .field { display: flex; flex-direction: column; }
+    .field.full { grid-column: 1 / -1; }
 
-        .input-custom:focus {
-            border-color: #d9534f;
-            background-color: #fff;
-            outline: none;
-            box-shadow: 0 0 0 4px rgba(217, 83, 79, 0.1);
-        }
+    .field label {
+        margin-bottom: 6px;
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--text);
+    }
 
-        .input-readonly {
-            background-color: #f1f3f5;
-            color: #adb5bd;
-            cursor: not-allowed;
-            border-style: dashed;
-        }
+    .input {
+        width: 100%;
+        height: 48px;
+        padding: 0 16px;
+        font: inherit;
+        font-size: 15px;
+        color: var(--text);
+        background: #fff;
+        border: 1.5px solid var(--line);
+        border-radius: 10px;
+        transition: border-color .15s, box-shadow .15s;
+    }
+    .input::placeholder { color: #a8b0bb; }
+    .input:hover { border-color: #b7bfca; }
+    .input:focus {
+        outline: none;
+        border-color: var(--navy);
+        box-shadow: 0 0 0 4px rgba(4, 21, 38, .12);
+    }
+    .input.is-invalid { border-color: var(--danger); }
+    .input.is-invalid:focus { box-shadow: 0 0 0 4px rgba(180, 35, 24, .15); }
 
-        /* --- Nút bấm --- */
-        .btn-update-profile {
-            background: #d9534f;
-            color: #fff;
-            padding: 14px 40px;
-            border: none;
-            border-radius: 12px;
-            font-weight: 600;
-            font-size: 15px;
-            margin-top: 40px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-        }
+    .input[readonly] {
+        color: var(--muted);
+        background: #f3f5f8;
+        border-style: dashed;
+        cursor: not-allowed;
+    }
+    .input[readonly]:focus { box-shadow: none; border-color: var(--line); }
 
-        .btn-update-profile:hover {
-            background: #c9302c;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(217, 83, 79, 0.3);
-        }
+    .field-error { margin-top: 6px; font-size: 13px; color: var(--danger); }
+    .field-hint { margin-top: 6px; font-size: 13px; color: var(--muted); }
 
-        /* Responsive cho Mobile */
-        @media (max-width: 768px) {
-            .profile-wrapper { padding: 30px 20px; margin: 40px 15px; }
-            .profile-container { flex-direction: column; align-items: center; }
-            .profile-right { width: 100%; }
-        }
-    </style>
+    .actions {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 32px;
+    }
+
+    .btn-save {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        height: 50px;
+        padding: 0 32px;
+        font: inherit;
+        font-size: 16px;
+        font-weight: 600;
+        color: #fff;
+        background: var(--navy);
+        border: 0;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: background .15s, transform .1s;
+    }
+    .btn-save:hover { background: var(--navy-soft); }
+    .btn-save:active { transform: translateY(1px); }
+    .btn-save:focus-visible { outline: 3px solid var(--brass); outline-offset: 2px; }
+    .btn-save:disabled { opacity: .7; cursor: wait; }
+    .btn-save svg { width: 18px; height: 18px; }
+
+    /* ---------- Điện thoại / máy tính bảng ---------- */
+    @media (max-width: 768px) {
+        .page { padding: 80px 12px 32px; }
+        .profile-card { padding: 28px 20px; }
+        .profile-layout { flex-direction: column; align-items: center; gap: 28px; }
+        .profile-left { flex: none; }
+        .profile-right { width: 100%; min-width: 0; }
+        .form-grid { grid-template-columns: 1fr; }
+        .actions .btn-save { width: 100%; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        * { transition: none !important; }
+    }
+</style>
 @endsection
 
 @section('content')
-<div class="container">
-    <div class="profile-wrapper">
-        <h2 class="profile-title" style="text-align: center;">Thông tin tài khoản</h2>
+<div class="page">
+    <div class="profile-card">
 
-        <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data">
+        <div class="profile-head">
+            <h2>Thông tin tài khoản</h2>
+        </div>
+
+        @if(session('success'))
+            <div class="alert-box ok" role="status">{{ session('success') }}</div>
+        @endif
+
+        @if($errors->any())
+            <div class="alert-box error" role="alert">
+                <ul>
+                    @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
+        <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data" id="profileForm">
             @csrf
             @method('PUT')
 
-            <div class="profile-container">
-                
-                {{-- CỘT TRÁI: AVATAR --}}
+            <div class="profile-layout">
+
+                {{-- CỘT TRÁI: ẢNH ĐẠI DIỆN --}}
                 <div class="profile-left">
-                    <div class="avatar-container">
-                        <img src="{{ $user->avatar ? asset('storage/' . $user->avatar) : 'https://ui-avatars.com/api/?name=' . urlencode($user->name) . '&background=random' }}" 
-                             id="avatar-preview" class="profile-avatar" alt="Avatar">
-                        
-                        <button type="button" class="edit-avatar-btn" onclick="document.getElementById('avatar-input').click();">
-                            <i class="fas fa-camera"></i>
+                    <div class="avatar-box">
+                        <img src="{{ $user->avatar ? asset('storage/' . $user->avatar) : 'https://ui-avatars.com/api/?name=' . urlencode($user->name) . '&background=041526&color=fff' }}"
+                             id="avatar-preview" class="avatar-img" alt="Ảnh đại diện của {{ $user->name }}">
+
+                        <button type="button" class="avatar-btn" id="avatar-btn" aria-label="Đổi ảnh đại diện">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1Z"/><circle cx="12" cy="13" r="3.5"/></svg>
                         </button>
                     </div>
-                    <p style="margin-top: 15px; font-size: 13px; color: #95a5a6;">Định dạng: JPG, PNG</p>
-                    <input type="file" name="avatar" id="avatar-input" style="display:none" onchange="previewImage(this)" accept="image/*">
+
+                    <p class="avatar-hint">Ảnh JPG hoặc PNG</p>
+                    <p class="avatar-name" id="avatar-name" hidden></p>
+
+                    <input type="file" name="avatar" id="avatar-input" accept="image/jpeg,image/png" hidden>
                 </div>
 
-                {{-- CỘT PHẢI: FORM --}}
+                {{-- CỘT PHẢI: THÔNG TIN --}}
                 <div class="profile-right">
-                    <div class="profile-form-grid">
-                        
-                        <div class="form-group-custom">
-                            <label>Họ và tên</label>
-                            <input type="text" name="name" value="{{ $user->name }}" class="input-custom" required placeholder="Nhập tên của bạn">
+                    <div class="form-grid">
+
+                        <div class="field">
+                            <label for="name">Họ và tên</label>
+                            <input id="name" type="text" name="name"
+                                   class="input @error('name') is-invalid @enderror"
+                                   value="{{ old('name', $user->name) }}"
+                                   placeholder="Nguyễn Văn A" autocomplete="name" required>
+                            @error('name') <div class="field-error">{{ $message }}</div> @enderror
                         </div>
 
-                        <div class="form-group-custom">
-                            <label>Số điện thoại</label>
-                            <input type="tel" name="phone" value="{{ $user->phone ?? '' }}" class="input-custom" placeholder="090x xxx xxx">
+                        <div class="field">
+                            <label for="phone">Số điện thoại</label>
+                            <input id="phone" type="tel" name="phone"
+                                   class="input @error('phone') is-invalid @enderror"
+                                   value="{{ old('phone', $user->phone ?? '') }}"
+                                   placeholder="0901234567" autocomplete="tel" inputmode="tel">
+                            @error('phone') <div class="field-error">{{ $message }}</div> @enderror
                         </div>
 
-                        <div class="form-group-custom">
-                            <label>Email liên hệ</label>
-                            <input type="email" value="{{ $user->email }}" class="input-custom input-readonly" readonly title="Không thể thay đổi email">
+                        <div class="field">
+                            <label for="email">Email</label>
+                            <input id="email" type="email" class="input" value="{{ $user->email }}" readonly>
+                            <div class="field-hint">Email không thể thay đổi.</div>
                         </div>
 
-                        <div class="form-group-custom">
-                            <label>Quận / Huyện</label>
-                            <input type="text" name="city" value="{{ $user->city ?? '' }}" class="input-custom" placeholder="Ví dụ: Quận 1">
+                        <div class="field">
+                            <label for="city">Quận / Huyện</label>
+                            <input id="city" type="text" name="city"
+                                   class="input @error('city') is-invalid @enderror"
+                                   value="{{ old('city', $user->city ?? '') }}"
+                                   placeholder="Ví dụ: Quận 1">
+                            @error('city') <div class="field-error">{{ $message }}</div> @enderror
                         </div>
 
-                        <div class="form-group-custom" style="grid-column: span 2;">
-                            <label>Địa chỉ nhận hàng</label>
-                            <input type="text" name="address" value="{{ $user->address ?? '' }}" class="input-custom" placeholder="Số nhà, tên đường, phường/xã...">
+                        <div class="field full">
+                            <label for="address">Địa chỉ nhận hàng</label>
+                            <input id="address" type="text" name="address"
+                                   class="input @error('address') is-invalid @enderror"
+                                   value="{{ old('address', $user->address ?? '') }}"
+                                   placeholder="Số nhà, tên đường, phường/xã..." autocomplete="street-address">
+                            @error('address') <div class="field-error">{{ $message }}</div> @enderror
                         </div>
 
-                        <div class="form-group-custom">
-                            <label>Ngày gia nhập</label>
-                            <input type="text" value="{{ $user->created_at ? $user->created_at->format('d/m/Y') : 'N/A' }}" class="input-custom input-readonly" readonly>
+                        <div class="field">
+                            <label for="joined">Ngày tham gia</label>
+                            <input id="joined" type="text" class="input"
+                                   value="{{ $user->created_at ? $user->created_at->format('d/m/Y') : 'Chưa có' }}" readonly>
                         </div>
+
                     </div>
 
-                    <div style="text-align: right;">
-                        <button type="submit" class="btn-update-profile">
-                            <i class="fas fa-save"></i> Cập nhật ngay
+                    <div class="actions">
+                        <button type="submit" class="btn-save" id="saveBtn">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h11l3 3v13H5Z"/><path d="M8 4v5h7V4M8 20v-6h8v6"/></svg>
+                            <span id="saveText">Lưu thay đổi</span>
                         </button>
                     </div>
                 </div>
@@ -250,16 +348,34 @@
         </form>
     </div>
 </div>
-@endsection
 
 <script>
-function previewImage(input) {
-    if (input.files && input.files[0]) {
-        var reader = new FileReader();
-        reader.onload = function(e) {
-            document.getElementById('avatar-preview').src = e.target.result;
+(function () {
+    var input = document.getElementById('avatar-input');
+    var preview = document.getElementById('avatar-preview');
+    var nameEl = document.getElementById('avatar-name');
+
+    document.getElementById('avatar-btn').addEventListener('click', function () {
+        input.click();
+    });
+
+    // Xem trước ảnh vừa chọn
+    input.addEventListener('change', function () {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) { preview.src = e.target.result; };
+            reader.readAsDataURL(input.files[0]);
+            nameEl.textContent = input.files[0].name;
+            nameEl.hidden = false;
         }
-        reader.readAsDataURL(input.files[0]);
-    }
-}
+    });
+
+    // Tránh bấm lưu nhiều lần
+    document.getElementById('profileForm').addEventListener('submit', function () {
+        var btn = document.getElementById('saveBtn');
+        btn.disabled = true;
+        document.getElementById('saveText').textContent = 'Đang lưu...';
+    });
+})();
 </script>
+@endsection

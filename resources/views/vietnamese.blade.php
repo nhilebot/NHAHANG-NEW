@@ -38,7 +38,7 @@
     }
 
     /* ĐỒNG BỘ CATEGORY NAV */
-    .category-nav { margin-bottom: 50px; text-align: center; }
+    .category-nav { padding: 30px ; text-align: center; }
     .btn-category {
         padding: 10px 22px;
         margin: 5px;
@@ -301,22 +301,32 @@
     background: rgba(0,0,0,0.4);
     color: white;
 }
+
+/* CHỮ TRONG BANNER (mới thêm): tiêu đề + mô tả nằm trên ảnh */
+.banner-overlay .section-title {
+    color: #ffffff !important;
+    text-shadow: 2px 2px 15px rgba(0,0,0,0.6);
+}
+
+.banner-overlay .section-subtitle {
+    color: rgba(255,255,255,0.9);
+    margin-bottom: 0;
+    padding: 0 20px;
+}
 </style>
 @endsection
 
 @section('content')
 <div class="menu-banner"> 
     <img src="{{ asset('images/breakfast.jpg') }}" alt="Banner Hải Sản" class="banner-img"> 
+    <div class="banner-overlay">
+        <h1 class="section-title">Món Việt truyền thống</h1>
+        <p class="section-subtitle">
+            Ẩm thực Việt tại Nhà Hàng mang đến hương vị truyền thống đậm đà, kết hợp tinh tế giữa nguyên liệu tươi ngon và bí quyết chế biến đặc trưng của từng vùng miền.
+        </p>
+    </div>
 </div>
 <div class="container">
-    <div class="row">
-        <div class="col-xs-12">
-            <h1 class="section-title">Món Việt truyền thống</h1>
-            <p class="section-subtitle">
-                Ẩm thực Việt tại Nhà Hàng mang đến hương vị truyền thống đậm đà, kết hợp tinh tế giữa nguyên liệu tươi ngon và bí quyết chế biến đặc trưng của từng vùng miền.
-            </p>
-        </div>
-    </div>
     
     <div class="category-nav">
         <a href="{{ url('/menu') }}" class="btn-category">Tất cả</a>

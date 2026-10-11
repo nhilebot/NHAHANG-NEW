@@ -38,7 +38,7 @@
     }
 
     /* ĐỒNG BỘ CATEGORY NAV */
-    .category-nav { margin-bottom: 50px; text-align: center; }
+    .category-nav { padding: 30px; text-align: center; }
     .btn-category {
         padding: 10px 22px;
         margin: 5px;
@@ -305,21 +305,31 @@ body {
     background: rgba(0,0,0,0.4);
     color: white;
 }
+
+/* CHỮ TRONG BANNER (mới thêm): tiêu đề + mô tả nằm trên ảnh */
+.banner-overlay .section-title {
+    color: #ffffff !important;
+    text-shadow: 2px 2px 15px rgba(0,0,0,0.6);
+}
+
+.banner-overlay .section-subtitle {
+    color: rgba(255,255,255,0.9);
+    margin-bottom: 0;
+    padding: 0 20px;
+}
 </style>
 @endsection
 @section('content')
 <div class="container">
     <div class="menu-banner"> <img src="{{ asset('images/bannersl.jpg') }}" alt="Banner Hải Sản" class="banner-img"> 
- </div>
-<div class="container">
-    <div class="row">
-        <div class="col-xs-12">
+        <div class="banner-overlay">
             <h1 class="section-title">Thực đơn Salad</h1>
             <p class="section-subtitle">
                 Góp phần không thể thiếu trong bữa tiệc đầy ắp mỹ vị, những dĩa salad tươi mát giúp thực khách cân bằng lại vị giác và bổ sung nguồn năng lượng xanh lành mạnh.
             </p>
         </div>
     </div>
+<div class="container">
     
     <div class="category-nav">
         <a href="{{ url('/menu') }}" class="btn-category">Tất cả</a>
@@ -353,6 +363,7 @@ body {
         </div>
         @endforeach
     </div>
+</div>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
