@@ -554,3 +554,13 @@
 [2026-10-11 11:32:07] local.ERROR: MAIL ERROR (deposit confirmed): View [emails.booking_confirmation] not found.  
 [2026-10-11 11:50:04] local.INFO: === CART INDEX DEBUG === {"user_id":4,"user_name":"Khách hàng"} 
 [2026-10-11 11:50:04] local.INFO: === LATEST RESERVATION === {"found":"YES","reservation":{"id":3,"full_name":"LE YEN NHI","table_id":2}} 
+[2026-10-11 11:54:13] local.INFO: === CART INDEX DEBUG === {"user_id":4,"user_name":"Khách hàng"} 
+[2026-10-11 11:54:13] local.INFO: === LATEST RESERVATION === {"found":"YES","reservation":{"id":3,"full_name":"LE YEN NHI","table_id":2}} 
+[2026-10-11 12:07:15] local.INFO: === CART INDEX DEBUG === {"user_id":4,"user_name":"Khách hàng"} 
+[2026-10-11 12:07:15] local.INFO: === LATEST RESERVATION === {"found":"YES","reservation":{"id":3,"full_name":"LE YEN NHI","table_id":2}} 
+[2026-10-11 12:08:36] local.INFO: === CART INDEX DEBUG === {"user_id":4,"user_name":"Khách hàng"} 
+[2026-10-11 12:08:36] local.INFO: === LATEST RESERVATION === {"found":"YES","reservation":{"id":3,"full_name":"LE YEN NHI","table_id":2}} 
+[2026-10-11 12:08:46] local.INFO: === CART INDEX DEBUG === {"user_id":4,"user_name":"Khách hàng"} 
+[2026-10-11 12:08:46] local.INFO: === LATEST RESERVATION === {"found":"YES","reservation":{"id":3,"full_name":"LE YEN NHI","table_id":2}} 
+[2026-10-11 12:09:02] local.INFO: === CART INDEX DEBUG === {"user_id":4,"user_name":"Khách hàng"} 
+[2026-10-11 12:09:02] local.INFO: === LATEST RESERVATION === {"found":"YES","reservation":{"id":3,"full_name":"LE YEN NHI","table_id":2}} 

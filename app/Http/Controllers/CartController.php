@@ -454,10 +454,15 @@ public function history()
         
         if ($reservation) {
             // Cập nhật lại mảng JSON và tổng tiền
-            $reservation->update([
-                'cart_data'   => $cartData,
-                'total_price' => $totalPrice
-            ]);
+            $payload = [
+    'cart_data'   => $cartData,
+    'total_price' => $totalPrice,
+];
+// Đơn chưa cọc: tiền cọc luôn = 20% tổng mới
+if ($reservation->status === 'pending_deposit') {
+    $payload['deposit_amount'] = (int) round($totalPrice * 20 / 100);
+}
+$reservation->update($payload);
 
             // =======================================================
             // 🔥 ĐOẠN FIX QUAN TRỌNG: ĐỒNG BỘ VÀO BẢNG ORDER_ITEMS 

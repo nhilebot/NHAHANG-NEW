@@ -505,7 +505,7 @@
 
     <div class="text-center mt-5">
        <button type="button" class="btn-checkout" data-toggle="modal" data-target="#billModal">
-    Xác nhận đặt cọc <?php echo e(number_format($depositAmount, 0, ',', '.')); ?>đ
+    Xác nhận đặt cọc <span id="checkout-deposit-text"><?php echo e(number_format($depositAmount, 0, ',', '.')); ?></span>đ
 </button>
     </div>
 </form> 
@@ -705,6 +705,8 @@ function buildQrUrl(amount) {
 
     document.getElementById('grand-total-text').innerText = new Intl.NumberFormat('vi-VN').format(total) + ' VNĐ';
     document.getElementById('deposit-total-text').innerText = new Intl.NumberFormat('vi-VN').format(depositAmount) + ' VNĐ';
+    const btnDeposit = document.getElementById('checkout-deposit-text');
+    if (btnDeposit) btnDeposit.innerText = new Intl.NumberFormat('vi-VN').format(depositAmount);
     document.getElementById('remaining-total-text').innerText = new Intl.NumberFormat('vi-VN').format(remainingAmount) + ' VNĐ';
 
     refreshBill(total, depositAmount, remainingAmount);
