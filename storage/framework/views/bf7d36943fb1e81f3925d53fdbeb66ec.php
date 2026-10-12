@@ -2,6 +2,7 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
     <link rel="icon" href="<?php echo e(asset('favicon-1.ico')); ?>" type="image/x-icon">
     <link rel="stylesheet" href="<?php echo e(asset('css/normalize.css')); ?>">
@@ -15,8 +16,8 @@
     <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Playball' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
- 
-    </style>
+    
+    <link rel="stylesheet" href="<?php echo e(asset('css/responsive.css')); ?>?v=1">
     <?php echo $__env->yieldContent('head'); ?>
 </head>
 <body class="<?php echo $__env->yieldContent('body-class', ''); ?>" style="display: flex; flex-direction: column; min-height: 100vh; margin: 0;">
@@ -34,12 +35,12 @@
                             <span class="icon-bar"></span>
                         </button>
                         <a class="navbar-brand" href="<?php echo e(url('/')); ?>" style="padding: 0px 0px; display: flex; align-items: center;">
-                            <img src="<?php echo e(asset('images/logo.png')); ?>" alt="Món Việt Logo" style="height: 100px; width: auto; filter: drop-shadow(0px 0px 2px rgba(0,0,0,0.5)); margin-right: -10px;">
+                            <img class="nav-logo" src="<?php echo e(asset('images/logo.png')); ?>" alt="Món Việt Logo" style="height: 100px; width: auto; filter: drop-shadow(0px 0px 2px rgba(0,0,0,0.5)); margin-right: -10px;">
                         </a>
                     </div>
-                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" style="display: flex !important; justify-content: space-between; align-items: flex-start !important;">
+                    <div class="collapse navbar-collapse nav-flex" id="bs-example-navbar-collapse-1">
     
-    <div class="navbar-header" style="flex: 1; margin: 0; padding: 0;"></div>
+    <div class="navbar-header nav-spacer" style="flex: 1; margin: 0; padding: 0;"></div>
 
     <ul class="nav navbar-nav navbar-center-custom" style="flex: 2; display: flex; justify-content: center; align-items: flex-start; float: none; margin: 0; padding: 0; gap: 20px;">
         <li style="margin: 0; padding: 0;"><a class="color_animation" href="<?php echo e(url('/')); ?>" style="padding: 10px;">TRANG CHỦ</a></li>
@@ -176,10 +177,9 @@
     <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>    
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <script src="<?php echo e(asset('js/main.js')); ?>"></script>
+    <script src="<?php echo e(asset('js/responsive.js')); ?>?v=1"></script>
     <?php echo $__env->yieldContent('scripts'); ?>
+    <?php echo $__env->make('partials.chatbox', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 </body>
-<?php echo $__env->make('partials.chatbox', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
-
-</html>
 </html>
 <?php /**PATH D:\laragon\www\restaurant-fixed\resources\views/shared.blade.php ENDPATH**/ ?>

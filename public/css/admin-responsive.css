@@ -1,0 +1,56 @@
+/* Responsive cho khu quản trị / nhân viên / bếp – chỉ tác động dưới 992px.
+   Desktop (≥992px) giữ nguyên 100%. */
+
+/* Nút/lớp phủ chỉ xuất hiện khi cần (mặc định ẩn nên không ảnh hưởng desktop) */
+.sidebar-backdrop { display: none; }
+
+/* Máy tính bảng + điện thoại: sidebar thành ngăn kéo trượt từ trái */
+@media (max-width: 991px) {
+    .app { height: 100vh; height: 100dvh; width: 100%; }
+    .main, .content { min-width: 0; }
+    .content img { max-width: 100%; height: auto; }
+    .sidebar {
+        position: fixed; top: 0; left: 0; bottom: 0;
+        width: 280px; max-width: 86vw;
+        transform: translateX(-105%); transition: transform .28s ease;
+        z-index: 300;
+    }
+    body.sidebar-open .sidebar { transform: translateX(0); box-shadow: 8px 0 40px rgba(0,0,0,.35); }
+    body.sidebar-open .sidebar-backdrop {
+        display: block; position: fixed; inset: 0; background: rgba(15,20,25,.5);
+        -webkit-backdrop-filter: blur(2px); backdrop-filter: blur(2px); z-index: 250;
+    }
+    .topbar { padding: 10px 16px; gap: 10px; }
+    .topbar-title { font-size: 1rem; }
+    .content { padding: 16px; }
+    .menu-btn { font-size: 1.6rem; min-width: 48px; min-height: 48px; }
+    .sidebar .nav-item { min-height: 48px; }
+    .table-scroll { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .table-scroll > table { min-width: 560px; }
+    .stat-box { min-width: 0 !important; flex: 1 1 200px; }
+}
+
+/* Điện thoại */
+@media (max-width: 767px) {
+    .topbar > div:last-child { gap: 8px !important; }
+    .topbar > div:last-child > div { display: none; }        /* ẩn ô ngày giờ cho gọn */
+    .search-box { padding: 6px 12px; border-radius: 14px; }
+    .search-box input { width: 100px; min-height: 36px; }
+    .flash-bar { left: 12px; right: 12px; top: 12px; border-radius: 14px; }
+    .panel, .panel-header { max-width: 100%; }
+    .panel-header { flex-wrap: wrap; gap: 10px; }
+    input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]), select, textarea {
+        font-size: 16px !important; min-height: 48px; border-radius: 12px; max-width: 100%;
+    }
+    .btn, button, a.btn { min-height: 48px; border-radius: 12px; }
+    h1 { font-size: 1.4rem; } h2 { font-size: 1.2rem; }
+    .info-grid, .grid-2, .grid-3, .stats-grid { grid-template-columns: 1fr !important; }
+    div:has(> .stat-box) { flex-wrap: wrap; }
+    .content { padding: 14px; }
+    .card, .panel { border-radius: 16px; }
+}
+
+/* Laptop: nút ☰ thu gọn / mở rộng sidebar (chỉ có tác dụng khi người dùng bấm) */
+@media (min-width: 992px) {
+    body.sidebar-collapsed .sidebar { display: none; }
+}

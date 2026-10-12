@@ -12,7 +12,7 @@ class TrustProxies extends Middleware
      *
      * @var array<int, string>|string|null
      */
-    protected $proxies;
+    protected $proxies = '*';   // tin cậy ngrok / proxy: nhận đúng https và tên miền
 
     /**
      * The headers that should be used to detect proxies.

@@ -10,7 +10,7 @@
         <h2>📄 Danh sách hóa đơn</h2>
     </div>
 
-    <div style="display:flex;gap:20px;margin-bottom:20px;">
+    <div style="display:flex;flex-wrap:wrap;gap:20px;margin-bottom:20px;">
         <div class="stat-box">
             <h4>💰 Doanh thu hôm nay</h4>
             <p>{{ number_format($todayRevenue) }}đ</p>

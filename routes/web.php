@@ -18,7 +18,7 @@ Route::get('/beer', [BeerController::class, 'index']);
 Route::get('/featured', [FeaturedController::class, 'index']);
 Route::get('/bread', [BreadController::class, 'index']);
 Route::get('/pricing', [PricingController::class, 'index']);
-Route::get('/tables', [TableController::class, 'index']);
+Route::get('/tables', fn () => redirect('/reservation'));
 
 // Đặt bàn qua form trang chủ (không cần đăng nhập)
 Route::post('/book-table', [BookingController::class, 'store'])->name('booking.store');

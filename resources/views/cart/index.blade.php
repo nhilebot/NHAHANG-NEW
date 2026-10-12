@@ -293,7 +293,7 @@
     @endif
     
     <div class="order-container">
-        <h3 class="page-title">Hóa đơn của quý khách</h3>
+        <!-- <h3 class="page-title">Hóa đơn của quý khách</h3> -->
 
         @if (session('success'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">

@@ -450,6 +450,7 @@
         to { transform: translateX(0); opacity: 1; }
     }
 </style>
+<link rel="stylesheet" href="{{ asset('css/admin-responsive.css') }}?v=1">
 </head>
 <body>
 
@@ -700,6 +701,7 @@
 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display:none;">@csrf</form>
 @endauth
 
+<script src="{{ asset('js/responsive.js') }}?v=1"></script>
 <script>
 function toggleSub(e,id,el){
   e.preventDefault();
