@@ -151,7 +151,9 @@
     <div class="form-container-custom">
         <h2 class="form-title">Phục Vụ Tại Quầy (Walk-in)</h2>
 
-        <form action="{{ route('admin.reservations.store') }}" method="POST">
+        <form action="{{ auth()->user()->isAdmin()
+            ? route('admin.reservations.store')
+            : route('staff.reservations.store') }}" method="POST">
             @csrf
             
             <!-- Flag ẩn để Backend biết đây là khách đến trực tiếp -->

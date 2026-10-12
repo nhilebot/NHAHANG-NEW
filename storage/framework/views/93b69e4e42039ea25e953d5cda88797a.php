@@ -294,6 +294,7 @@
 
                         <div class="table-selection-grid">
                             <?php $__currentLoopData = $tables; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $table): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <?php $isUnavailable = in_array($table->id, $bookedTableIds); ?>
                                 <div class="table-item" id="table-container-<?php echo e($table->id); ?>">
 
                                     <input 
@@ -301,7 +302,7 @@
                                         name="table_id"
                                         value="<?php echo e($table->id); ?>"
                                         id="table<?php echo e($table->id); ?>"
-                                        <?php echo e($table->status !== 'empty' ? 'disabled' : ''); ?>
+                                        <?php echo e($isUnavailable ? 'disabled' : ''); ?>
 
                                     >
 
@@ -312,7 +313,7 @@
                                         </div>
 
                                         <div id="status-text-<?php echo e($table->id); ?>">
-                                            <?php if($table->status === 'empty'): ?>
+                                            <?php if($table->status === 'empty' && !$isUnavailable): ?>
                                                  <small style="color:#D4AF37;">(Sẵn sàng)</small>
 
                                             <?php elseif($table->status === 'reserved'): ?>
@@ -329,6 +330,18 @@
                                                           data-id="<?php echo e($table->id); ?>">
                                                           60
                                                     </span>s)
+                                                </small>
+
+                                            <?php elseif($table->status === 'serving' || $table->status === 'occupied'): ?>
+                                                <small class="status-serving">
+                                                    <i class="fa fa-cutlery"></i>
+                                                    Đang phục vụ
+                                                </small>
+
+                                            <?php elseif($isUnavailable): ?>
+                                                <small class="status-reserved">
+                                                    <i class="fa fa-lock"></i>
+                                                    Đã đặt
                                                 </small>
 
                                             <?php else: ?>
@@ -733,7 +746,6 @@
         const timers = document.querySelectorAll('.cleaning-timer');
 
         timers.forEach(timer => {
-            const tableId = timer.getAttribute('data-id');
             const startTimeStr = timer.getAttribute('data-start');
             if (!startTimeStr) return;
 
@@ -747,18 +759,7 @@
 
                 if (secondsLeft <= 0) {
                     clearInterval(updateCountdown);
-                    
-                    document.getElementById('status-text-' + tableId).innerHTML = '<small style="color:#D4AF37;">(Sẵn sàng)</small>';
-                    
-                    const input = document.getElementById('table' + tableId);
-                    if (input) {
-                        input.disabled = false;
-                    }
-
-                    const label = document.getElementById('label-' + tableId);
-                    if (label) {
-                        label.style.cursor = 'pointer';
-                    }
+                    window.location.reload();
                 } else {
                     timer.innerText = secondsLeft;
                 }

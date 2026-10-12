@@ -23,9 +23,13 @@
         </h3>
         <p class="text-center text-muted mb-4">Đang thao tác: <strong style="color: #D4AF37;">{{ $table->name }}</strong></p>
 
-        <form action="{{ route('admin.tables.update', $table->id) }}" method="POST">
-            @csrf
-            @method('PUT')
+        @php
+    $prefix = auth()->user()->role_id == 2 ? 'admin' : 'staff';
+@endphp
+
+<form action="{{ route($prefix . '.tables.update', $table->id) }}" method="POST">
+    @csrf
+    @method('PUT')
 
             <div class="form-group mb-4">
                 <label style="font-weight: 600; color: #4A5568;">Tên bàn <span class="text-danger">*</span></label>

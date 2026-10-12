@@ -453,7 +453,12 @@ public function store(Request $request)
             return back()->withInput()->with('error', $e->getMessage());
         }
 
-        return redirect()->route('admin.reservations.index')->with('success', 'Đã mở bàn và chuyển Order xuống bếp thành công!');
+        $route = (int) auth()->user()->role_id === 2
+    ? 'admin.reservations.index'
+    : 'staff.reservations.index';
+
+return redirect()->route($route)
+    ->with('success', 'Đã mở bàn và chuyển Order xuống bếp thành công!');
     }
 
     public function editItems($id)

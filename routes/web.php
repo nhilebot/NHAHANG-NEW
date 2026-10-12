@@ -6,7 +6,7 @@ use App\Http\Controllers\{
     OrderController, TableController, AdminController, AuthController,
     CartController, OtpPasswordController, ProfileController, CommentController,
     AdminCategoryController, AdminMenuController, AdminTableController,
-    AdminUserController, BookingController, StaffOrderController, ChatbotController
+    AdminUserController, BookingController, StaffOrderController, ChatbotController, AdminBillController
 };
 
 // =========================================================
@@ -148,6 +148,14 @@ Route::delete('/orders/{id}', [OrderController::class, 'destroy'])->name('orders
     //    Admin cũng được vào nhờ logic trong CheckRole
     // =========================================================
     Route::middleware('role:staff')->prefix('staff')->name('staff.')->group(function () {
+        Route::post('/tables', [TableController::class, 'store'])
+    ->name('tables.store');
+        // DS hóa đơn
+        Route::get('/bills', [AdminBillController::class, 'index'])
+    ->name('bills.index');
+    // chi tiết hóa đơn
+    Route::get('/bills/{id}', [AdminBillController::class, 'show'])
+    ->name('bills.show');
         // Danh sách đặt bàn
         Route::get('/reservations', [ReservationController::class, 'adminIndex'])->name('reservations.index');
         Route::post('/reservations/{id}/update-status', [ReservationController::class, 'updateStatus'])->name('reservations.updateStatus');
@@ -155,7 +163,7 @@ Route::delete('/orders/{id}', [OrderController::class, 'destroy'])->name('orders
 
         // Quản lý bàn (Staff xem & cập nhật trạng thái bàn)
         Route::get('/tables', [TableController::class, 'index'])->name('tables.index');     
-        Route::get('/tables/create', [TableController::class, 'create'])->name('tables.create');
+        Route::get('/tables/create', [AdminTableController::class, 'create'])->name('tables.create');
         // 🔥 BỔ SUNG 2 DÒNG NÀY ĐỂ STAFF ĐƯỢC PHÉP SỬA BÀN:
 Route::get('/tables/{table}/edit', [TableController::class, 'edit'])->name('tables.edit');
 Route::put('/tables/{table}', [TableController::class, 'update'])->name('tables.update');

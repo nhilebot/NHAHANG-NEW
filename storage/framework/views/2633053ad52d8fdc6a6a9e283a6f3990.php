@@ -636,7 +636,14 @@
         </div>
 
     </div>
-
+        
+        <a class="nav-item <?php echo e(Request::routeIs('staff.bills.*') ? 'active' : ''); ?>"
+           href="<?php echo e(route('staff.bills.index')); ?>">
+            <div class="nav-item-left">
+                <div class="nav-icon">🧾</div>
+                Hóa đơn
+            </div>
+        </a>
 <?php endif; ?>
 
       

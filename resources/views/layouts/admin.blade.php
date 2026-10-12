@@ -636,7 +636,14 @@
         </div>
 
     </div>
-
+        {{-- HÓA ĐƠN --}}
+        <a class="nav-item {{ Request::routeIs('staff.bills.*') ? 'active' : '' }}"
+           href="{{ route('staff.bills.index') }}">
+            <div class="nav-item-left">
+                <div class="nav-icon">🧾</div>
+                Hóa đơn
+            </div>
+        </a>
 @endif
 
       {{-- ═══ CHEF ═══ --}}

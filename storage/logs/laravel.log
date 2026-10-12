@@ -706,3 +706,1269 @@
 [2026-10-12 13:15:32] local.INFO: === CART INDEX DEBUG === {"user_id":4,"user_name":"Khách hàng"} 
 [2026-10-12 13:15:32] local.INFO: === LATEST RESERVATION === {"found":"YES","reservation":{"id":3,"full_name":"Nhi","table_id":1}} 
 [2026-10-12 13:19:49] local.ERROR: MAIL ERROR (deposit confirmed): View [emails.booking_confirmation] not found.  
+[2026-10-12 13:56:09] local.ERROR: Route [staff.bills.index] not defined. {"view":{"view":"D:\\laragon\\www\\restaurant-fixed\\resources\\views\\layouts\\admin.blade.php","data":{"errors":"<pre class=sf-dump id=sf-dump-374396374 data-indent-pad=\"  \"><span class=sf-dump-note>Illuminate\\Support\\ViewErrorBag</span> {<a class=sf-dump-ref>#1126</a><samp data-depth=1 class=sf-dump-expanded>
+  #<span class=sf-dump-protected title=\"Protected property\">bags</span>: []
+</samp>}
+</pre><script>Sfdump(\"sf-dump-374396374\", {\"maxDepth\":3,\"maxStringLength\":160})</script>
+","reservations":"<pre class=sf-dump id=sf-dump-756376336 data-indent-pad=\"  \"><span class=sf-dump-note>Illuminate\\Database\\Eloquent\\Collection</span> {<a class=sf-dump-ref>#1178</a><samp data-depth=1 class=sf-dump-expanded>
+  #<span class=sf-dump-protected title=\"Protected property\">items</span>: <span class=sf-dump-note>array:3</span> [<samp data-depth=2 class=sf-dump-compact>
+    <span class=sf-dump-index>0</span> => <span class=\"sf-dump-note sf-dump-ellipsization\" title=\"App\\Models\\Reservation
+\"><span class=\"sf-dump-ellipsis sf-dump-ellipsis-note\">App\\Models</span><span class=\"sf-dump-ellipsis sf-dump-ellipsis-note\">\\</span><span class=\"sf-dump-ellipsis-tail\">Reservation</span></span> {<a class=sf-dump-ref>#1173</a><samp data-depth=3 class=sf-dump-compact>
+      #<span class=sf-dump-protected title=\"Protected property\">connection</span>: \"<span class=sf-dump-str title=\"5 characters\">mysql</span>\"
+      #<span class=sf-dump-protected title=\"Protected property\">table</span>: \"<span class=sf-dump-str title=\"12 characters\">reservations</span>\"
+      #<span class=sf-dump-protected title=\"Protected property\">primaryKey</span>: \"<span class=sf-dump-str title=\"2 characters\">id</span>\"
+      #<span class=sf-dump-protected title=\"Protected property\">keyType</span>: \"<span class=sf-dump-str title=\"3 characters\">int</span>\"
+      +<span class=sf-dump-public title=\"Public property\">incrementing</span>: <span class=sf-dump-const>true</span>
+      #<span class=sf-dump-protected title=\"Protected property\">with</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">withCount</span>: []
+      +<span class=sf-dump-public title=\"Public property\">preventsLazyLoading</span>: <span class=sf-dump-const>false</span>
+      #<span class=sf-dump-protected title=\"Protected property\">perPage</span>: <span class=sf-dump-num>15</span>
+      +<span class=sf-dump-public title=\"Public property\">exists</span>: <span class=sf-dump-const>true</span>
+      +<span class=sf-dump-public title=\"Public property\">wasRecentlyCreated</span>: <span class=sf-dump-const>false</span>
+      #<span class=sf-dump-protected title=\"Protected property\">escapeWhenCastingToString</span>: <span class=sf-dump-const>false</span>
+      #<span class=sf-dump-protected title=\"Protected property\">attributes</span>: <span class=sf-dump-note>array:25</span> [ &#8230;25]
+      #<span class=sf-dump-protected title=\"Protected property\">original</span>: <span class=sf-dump-note>array:25</span> [ &#8230;25]
+      #<span class=sf-dump-protected title=\"Protected property\">changes</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">casts</span>: <span class=sf-dump-note>array:6</span> [ &#8230;6]
+      #<span class=sf-dump-protected title=\"Protected property\">classCastCache</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">attributeCastCache</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">dateFormat</span>: <span class=sf-dump-const>null</span>
+      #<span class=sf-dump-protected title=\"Protected property\">appends</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">dispatchesEvents</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">observables</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">relations</span>: <span class=sf-dump-note>array:2</span> [ &#8230;2]
+      #<span class=sf-dump-protected title=\"Protected property\">touches</span>: []
+      +<span class=sf-dump-public title=\"Public property\">timestamps</span>: <span class=sf-dump-const>true</span>
+      +<span class=sf-dump-public title=\"Public property\">usesUniqueIds</span>: <span class=sf-dump-const>false</span>
+      #<span class=sf-dump-protected title=\"Protected property\">hidden</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">visible</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">fillable</span>: <span class=sf-dump-note>array:16</span> [ &#8230;16]
+      #<span class=sf-dump-protected title=\"Protected property\">guarded</span>: <span class=sf-dump-note>array:1</span> [ &#8230;1]
+    </samp>}
+    <span class=sf-dump-index>1</span> => <span class=\"sf-dump-note sf-dump-ellipsization\" title=\"App\\Models\\Reservation
+\"><span class=\"sf-dump-ellipsis sf-dump-ellipsis-note\">App\\Models</span><span class=\"sf-dump-ellipsis sf-dump-ellipsis-note\">\\</span><span class=\"sf-dump-ellipsis-tail\">Reservation</span></span> {<a class=sf-dump-ref>#1174</a><samp data-depth=3 class=sf-dump-compact>
+      #<span class=sf-dump-protected title=\"Protected property\">connection</span>: \"<span class=sf-dump-str title=\"5 characters\">mysql</span>\"
+      #<span class=sf-dump-protected title=\"Protected property\">table</span>: \"<span class=sf-dump-str title=\"12 characters\">reservations</span>\"
+      #<span class=sf-dump-protected title=\"Protected property\">primaryKey</span>: \"<span class=sf-dump-str title=\"2 characters\">id</span>\"
+      #<span class=sf-dump-protected title=\"Protected property\">keyType</span>: \"<span class=sf-dump-str title=\"3 characters\">int</span>\"
+      +<span class=sf-dump-public title=\"Public property\">incrementing</span>: <span class=sf-dump-const>true</span>
+      #<span class=sf-dump-protected title=\"Protected property\">with</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">withCount</span>: []
+      +<span class=sf-dump-public title=\"Public property\">preventsLazyLoading</span>: <span class=sf-dump-const>false</span>
+      #<span class=sf-dump-protected title=\"Protected property\">perPage</span>: <span class=sf-dump-num>15</span>
+      +<span class=sf-dump-public title=\"Public property\">exists</span>: <span class=sf-dump-const>true</span>
+      +<span class=sf-dump-public title=\"Public property\">wasRecentlyCreated</span>: <span class=sf-dump-const>false</span>
+      #<span class=sf-dump-protected title=\"Protected property\">escapeWhenCastingToString</span>: <span class=sf-dump-const>false</span>
+      #<span class=sf-dump-protected title=\"Protected property\">attributes</span>: <span class=sf-dump-note>array:25</span> [ &#8230;25]
+      #<span class=sf-dump-protected title=\"Protected property\">original</span>: <span class=sf-dump-note>array:25</span> [ &#8230;25]
+      #<span class=sf-dump-protected title=\"Protected property\">changes</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">casts</span>: <span class=sf-dump-note>array:6</span> [ &#8230;6]
+      #<span class=sf-dump-protected title=\"Protected property\">classCastCache</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">attributeCastCache</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">dateFormat</span>: <span class=sf-dump-const>null</span>
+      #<span class=sf-dump-protected title=\"Protected property\">appends</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">dispatchesEvents</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">observables</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">relations</span>: <span class=sf-dump-note>array:2</span> [ &#8230;2]
+      #<span class=sf-dump-protected title=\"Protected property\">touches</span>: []
+      +<span class=sf-dump-public title=\"Public property\">timestamps</span>: <span class=sf-dump-const>true</span>
+      +<span class=sf-dump-public title=\"Public property\">usesUniqueIds</span>: <span class=sf-dump-const>false</span>
+      #<span class=sf-dump-protected title=\"Protected property\">hidden</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">visible</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">fillable</span>: <span class=sf-dump-note>array:16</span> [ &#8230;16]
+      #<span class=sf-dump-protected title=\"Protected property\">guarded</span>: <span class=sf-dump-note>array:1</span> [ &#8230;1]
+    </samp>}
+    <span class=sf-dump-index>2</span> => <span class=\"sf-dump-note sf-dump-ellipsization\" title=\"App\\Models\\Reservation
+\"><span class=\"sf-dump-ellipsis sf-dump-ellipsis-note\">App\\Models</span><span class=\"sf-dump-ellipsis sf-dump-ellipsis-note\">\\</span><span class=\"sf-dump-ellipsis-tail\">Reservation</span></span> {<a class=sf-dump-ref>#1175</a><samp data-depth=3 class=sf-dump-compact>
+      #<span class=sf-dump-protected title=\"Protected property\">connection</span>: \"<span class=sf-dump-str title=\"5 characters\">mysql</span>\"
+      #<span class=sf-dump-protected title=\"Protected property\">table</span>: \"<span class=sf-dump-str title=\"12 characters\">reservations</span>\"
+      #<span class=sf-dump-protected title=\"Protected property\">primaryKey</span>: \"<span class=sf-dump-str title=\"2 characters\">id</span>\"
+      #<span class=sf-dump-protected title=\"Protected property\">keyType</span>: \"<span class=sf-dump-str title=\"3 characters\">int</span>\"
+      +<span class=sf-dump-public title=\"Public property\">incrementing</span>: <span class=sf-dump-const>true</span>
+      #<span class=sf-dump-protected title=\"Protected property\">with</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">withCount</span>: []
+      +<span class=sf-dump-public title=\"Public property\">preventsLazyLoading</span>: <span class=sf-dump-const>false</span>
+      #<span class=sf-dump-protected title=\"Protected property\">perPage</span>: <span class=sf-dump-num>15</span>
+      +<span class=sf-dump-public title=\"Public property\">exists</span>: <span class=sf-dump-const>true</span>
+      +<span class=sf-dump-public title=\"Public property\">wasRecentlyCreated</span>: <span class=sf-dump-const>false</span>
+      #<span class=sf-dump-protected title=\"Protected property\">escapeWhenCastingToString</span>: <span class=sf-dump-const>false</span>
+      #<span class=sf-dump-protected title=\"Protected property\">attributes</span>: <span class=sf-dump-note>array:25</span> [ &#8230;25]
+      #<span class=sf-dump-protected title=\"Protected property\">original</span>: <span class=sf-dump-note>array:25</span> [ &#8230;25]
+      #<span class=sf-dump-protected title=\"Protected property\">changes</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">casts</span>: <span class=sf-dump-note>array:6</span> [ &#8230;6]
+      #<span class=sf-dump-protected title=\"Protected property\">classCastCache</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">attributeCastCache</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">dateFormat</span>: <span class=sf-dump-const>null</span>
+      #<span class=sf-dump-protected title=\"Protected property\">appends</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">dispatchesEvents</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">observables</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">relations</span>: <span class=sf-dump-note>array:2</span> [ &#8230;2]
+      #<span class=sf-dump-protected title=\"Protected property\">touches</span>: []
+      +<span class=sf-dump-public title=\"Public property\">timestamps</span>: <span class=sf-dump-const>true</span>
+      +<span class=sf-dump-public title=\"Public property\">usesUniqueIds</span>: <span class=sf-dump-const>false</span>
+      #<span class=sf-dump-protected title=\"Protected property\">hidden</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">visible</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">fillable</span>: <span class=sf-dump-note>array:16</span> [ &#8230;16]
+      #<span class=sf-dump-protected title=\"Protected property\">guarded</span>: <span class=sf-dump-note>array:1</span> [ &#8230;1]
+    </samp>}
+  </samp>]
+  #<span class=sf-dump-protected title=\"Protected property\">escapeWhenCastingToString</span>: <span class=sf-dump-const>false</span>
+</samp>}
+</pre><script>Sfdump(\"sf-dump-756376336\", {\"maxDepth\":3,\"maxStringLength\":160})</script>
+","__empty_1":"<pre class=sf-dump id=sf-dump-622902161 data-indent-pad=\"  \"><span class=sf-dump-const>false</span>
+</pre><script>Sfdump(\"sf-dump-622902161\", {\"maxDepth\":3,\"maxStringLength\":160})</script>
+","__currentLoopData":"<pre class=sf-dump id=sf-dump-1931860778 data-indent-pad=\"  \"><span class=sf-dump-note>Illuminate\\Database\\Eloquent\\Collection</span> {<a class=sf-dump-ref>#1178</a><samp data-depth=1 class=sf-dump-expanded>
+  #<span class=sf-dump-protected title=\"Protected property\">items</span>: <span class=sf-dump-note>array:3</span> [<samp data-depth=2 class=sf-dump-compact>
+    <span class=sf-dump-index>0</span> => <span class=\"sf-dump-note sf-dump-ellipsization\" title=\"App\\Models\\Reservation
+\"><span class=\"sf-dump-ellipsis sf-dump-ellipsis-note\">App\\Models</span><span class=\"sf-dump-ellipsis sf-dump-ellipsis-note\">\\</span><span class=\"sf-dump-ellipsis-tail\">Reservation</span></span> {<a class=sf-dump-ref>#1173</a><samp data-depth=3 class=sf-dump-compact>
+      #<span class=sf-dump-protected title=\"Protected property\">connection</span>: \"<span class=sf-dump-str title=\"5 characters\">mysql</span>\"
+      #<span class=sf-dump-protected title=\"Protected property\">table</span>: \"<span class=sf-dump-str title=\"12 characters\">reservations</span>\"
+      #<span class=sf-dump-protected title=\"Protected property\">primaryKey</span>: \"<span class=sf-dump-str title=\"2 characters\">id</span>\"
+      #<span class=sf-dump-protected title=\"Protected property\">keyType</span>: \"<span class=sf-dump-str title=\"3 characters\">int</span>\"
+      +<span class=sf-dump-public title=\"Public property\">incrementing</span>: <span class=sf-dump-const>true</span>
+      #<span class=sf-dump-protected title=\"Protected property\">with</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">withCount</span>: []
+      +<span class=sf-dump-public title=\"Public property\">preventsLazyLoading</span>: <span class=sf-dump-const>false</span>
+      #<span class=sf-dump-protected title=\"Protected property\">perPage</span>: <span class=sf-dump-num>15</span>
+      +<span class=sf-dump-public title=\"Public property\">exists</span>: <span class=sf-dump-const>true</span>
+      +<span class=sf-dump-public title=\"Public property\">wasRecentlyCreated</span>: <span class=sf-dump-const>false</span>
+      #<span class=sf-dump-protected title=\"Protected property\">escapeWhenCastingToString</span>: <span class=sf-dump-const>false</span>
+      #<span class=sf-dump-protected title=\"Protected property\">attributes</span>: <span class=sf-dump-note>array:25</span> [ &#8230;25]
+      #<span class=sf-dump-protected title=\"Protected property\">original</span>: <span class=sf-dump-note>array:25</span> [ &#8230;25]
+      #<span class=sf-dump-protected title=\"Protected property\">changes</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">casts</span>: <span class=sf-dump-note>array:6</span> [ &#8230;6]
+      #<span class=sf-dump-protected title=\"Protected property\">classCastCache</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">attributeCastCache</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">dateFormat</span>: <span class=sf-dump-const>null</span>
+      #<span class=sf-dump-protected title=\"Protected property\">appends</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">dispatchesEvents</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">observables</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">relations</span>: <span class=sf-dump-note>array:2</span> [ &#8230;2]
+      #<span class=sf-dump-protected title=\"Protected property\">touches</span>: []
+      +<span class=sf-dump-public title=\"Public property\">timestamps</span>: <span class=sf-dump-const>true</span>
+      +<span class=sf-dump-public title=\"Public property\">usesUniqueIds</span>: <span class=sf-dump-const>false</span>
+      #<span class=sf-dump-protected title=\"Protected property\">hidden</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">visible</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">fillable</span>: <span class=sf-dump-note>array:16</span> [ &#8230;16]
+      #<span class=sf-dump-protected title=\"Protected property\">guarded</span>: <span class=sf-dump-note>array:1</span> [ &#8230;1]
+    </samp>}
+    <span class=sf-dump-index>1</span> => <span class=\"sf-dump-note sf-dump-ellipsization\" title=\"App\\Models\\Reservation
+\"><span class=\"sf-dump-ellipsis sf-dump-ellipsis-note\">App\\Models</span><span class=\"sf-dump-ellipsis sf-dump-ellipsis-note\">\\</span><span class=\"sf-dump-ellipsis-tail\">Reservation</span></span> {<a class=sf-dump-ref>#1174</a><samp data-depth=3 class=sf-dump-compact>
+      #<span class=sf-dump-protected title=\"Protected property\">connection</span>: \"<span class=sf-dump-str title=\"5 characters\">mysql</span>\"
+      #<span class=sf-dump-protected title=\"Protected property\">table</span>: \"<span class=sf-dump-str title=\"12 characters\">reservations</span>\"
+      #<span class=sf-dump-protected title=\"Protected property\">primaryKey</span>: \"<span class=sf-dump-str title=\"2 characters\">id</span>\"
+      #<span class=sf-dump-protected title=\"Protected property\">keyType</span>: \"<span class=sf-dump-str title=\"3 characters\">int</span>\"
+      +<span class=sf-dump-public title=\"Public property\">incrementing</span>: <span class=sf-dump-const>true</span>
+      #<span class=sf-dump-protected title=\"Protected property\">with</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">withCount</span>: []
+      +<span class=sf-dump-public title=\"Public property\">preventsLazyLoading</span>: <span class=sf-dump-const>false</span>
+      #<span class=sf-dump-protected title=\"Protected property\">perPage</span>: <span class=sf-dump-num>15</span>
+      +<span class=sf-dump-public title=\"Public property\">exists</span>: <span class=sf-dump-const>true</span>
+      +<span class=sf-dump-public title=\"Public property\">wasRecentlyCreated</span>: <span class=sf-dump-const>false</span>
+      #<span class=sf-dump-protected title=\"Protected property\">escapeWhenCastingToString</span>: <span class=sf-dump-const>false</span>
+      #<span class=sf-dump-protected title=\"Protected property\">attributes</span>: <span class=sf-dump-note>array:25</span> [ &#8230;25]
+      #<span class=sf-dump-protected title=\"Protected property\">original</span>: <span class=sf-dump-note>array:25</span> [ &#8230;25]
+      #<span class=sf-dump-protected title=\"Protected property\">changes</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">casts</span>: <span class=sf-dump-note>array:6</span> [ &#8230;6]
+      #<span class=sf-dump-protected title=\"Protected property\">classCastCache</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">attributeCastCache</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">dateFormat</span>: <span class=sf-dump-const>null</span>
+      #<span class=sf-dump-protected title=\"Protected property\">appends</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">dispatchesEvents</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">observables</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">relations</span>: <span class=sf-dump-note>array:2</span> [ &#8230;2]
+      #<span class=sf-dump-protected title=\"Protected property\">touches</span>: []
+      +<span class=sf-dump-public title=\"Public property\">timestamps</span>: <span class=sf-dump-const>true</span>
+      +<span class=sf-dump-public title=\"Public property\">usesUniqueIds</span>: <span class=sf-dump-const>false</span>
+      #<span class=sf-dump-protected title=\"Protected property\">hidden</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">visible</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">fillable</span>: <span class=sf-dump-note>array:16</span> [ &#8230;16]
+      #<span class=sf-dump-protected title=\"Protected property\">guarded</span>: <span class=sf-dump-note>array:1</span> [ &#8230;1]
+    </samp>}
+    <span class=sf-dump-index>2</span> => <span class=\"sf-dump-note sf-dump-ellipsization\" title=\"App\\Models\\Reservation
+\"><span class=\"sf-dump-ellipsis sf-dump-ellipsis-note\">App\\Models</span><span class=\"sf-dump-ellipsis sf-dump-ellipsis-note\">\\</span><span class=\"sf-dump-ellipsis-tail\">Reservation</span></span> {<a class=sf-dump-ref>#1175</a><samp data-depth=3 class=sf-dump-compact>
+      #<span class=sf-dump-protected title=\"Protected property\">connection</span>: \"<span class=sf-dump-str title=\"5 characters\">mysql</span>\"
+      #<span class=sf-dump-protected title=\"Protected property\">table</span>: \"<span class=sf-dump-str title=\"12 characters\">reservations</span>\"
+      #<span class=sf-dump-protected title=\"Protected property\">primaryKey</span>: \"<span class=sf-dump-str title=\"2 characters\">id</span>\"
+      #<span class=sf-dump-protected title=\"Protected property\">keyType</span>: \"<span class=sf-dump-str title=\"3 characters\">int</span>\"
+      +<span class=sf-dump-public title=\"Public property\">incrementing</span>: <span class=sf-dump-const>true</span>
+      #<span class=sf-dump-protected title=\"Protected property\">with</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">withCount</span>: []
+      +<span class=sf-dump-public title=\"Public property\">preventsLazyLoading</span>: <span class=sf-dump-const>false</span>
+      #<span class=sf-dump-protected title=\"Protected property\">perPage</span>: <span class=sf-dump-num>15</span>
+      +<span class=sf-dump-public title=\"Public property\">exists</span>: <span class=sf-dump-const>true</span>
+      +<span class=sf-dump-public title=\"Public property\">wasRecentlyCreated</span>: <span class=sf-dump-const>false</span>
+      #<span class=sf-dump-protected title=\"Protected property\">escapeWhenCastingToString</span>: <span class=sf-dump-const>false</span>
+      #<span class=sf-dump-protected title=\"Protected property\">attributes</span>: <span class=sf-dump-note>array:25</span> [ &#8230;25]
+      #<span class=sf-dump-protected title=\"Protected property\">original</span>: <span class=sf-dump-note>array:25</span> [ &#8230;25]
+      #<span class=sf-dump-protected title=\"Protected property\">changes</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">casts</span>: <span class=sf-dump-note>array:6</span> [ &#8230;6]
+      #<span class=sf-dump-protected title=\"Protected property\">classCastCache</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">attributeCastCache</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">dateFormat</span>: <span class=sf-dump-const>null</span>
+      #<span class=sf-dump-protected title=\"Protected property\">appends</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">dispatchesEvents</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">observables</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">relations</span>: <span class=sf-dump-note>array:2</span> [ &#8230;2]
+      #<span class=sf-dump-protected title=\"Protected property\">touches</span>: []
+      +<span class=sf-dump-public title=\"Public property\">timestamps</span>: <span class=sf-dump-const>true</span>
+      +<span class=sf-dump-public title=\"Public property\">usesUniqueIds</span>: <span class=sf-dump-const>false</span>
+      #<span class=sf-dump-protected title=\"Protected property\">hidden</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">visible</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">fillable</span>: <span class=sf-dump-note>array:16</span> [ &#8230;16]
+      #<span class=sf-dump-protected title=\"Protected property\">guarded</span>: <span class=sf-dump-note>array:1</span> [ &#8230;1]
+    </samp>}
+  </samp>]
+  #<span class=sf-dump-protected title=\"Protected property\">escapeWhenCastingToString</span>: <span class=sf-dump-const>false</span>
+</samp>}
+</pre><script>Sfdump(\"sf-dump-1931860778\", {\"maxDepth\":3,\"maxStringLength\":160})</script>
+","res":"<pre class=sf-dump id=sf-dump-1626984394 data-indent-pad=\"  \"><span class=sf-dump-note>App\\Models\\Reservation</span> {<a class=sf-dump-ref>#1175</a><samp data-depth=1 class=sf-dump-expanded>
+  #<span class=sf-dump-protected title=\"Protected property\">connection</span>: \"<span class=sf-dump-str title=\"5 characters\">mysql</span>\"
+  #<span class=sf-dump-protected title=\"Protected property\">table</span>: \"<span class=sf-dump-str title=\"12 characters\">reservations</span>\"
+  #<span class=sf-dump-protected title=\"Protected property\">primaryKey</span>: \"<span class=sf-dump-str title=\"2 characters\">id</span>\"
+  #<span class=sf-dump-protected title=\"Protected property\">keyType</span>: \"<span class=sf-dump-str title=\"3 characters\">int</span>\"
+  +<span class=sf-dump-public title=\"Public property\">incrementing</span>: <span class=sf-dump-const>true</span>
+  #<span class=sf-dump-protected title=\"Protected property\">with</span>: []
+  #<span class=sf-dump-protected title=\"Protected property\">withCount</span>: []
+  +<span class=sf-dump-public title=\"Public property\">preventsLazyLoading</span>: <span class=sf-dump-const>false</span>
+  #<span class=sf-dump-protected title=\"Protected property\">perPage</span>: <span class=sf-dump-num>15</span>
+  +<span class=sf-dump-public title=\"Public property\">exists</span>: <span class=sf-dump-const>true</span>
+  +<span class=sf-dump-public title=\"Public property\">wasRecentlyCreated</span>: <span class=sf-dump-const>false</span>
+  #<span class=sf-dump-protected title=\"Protected property\">escapeWhenCastingToString</span>: <span class=sf-dump-const>false</span>
+  #<span class=sf-dump-protected title=\"Protected property\">attributes</span>: <span class=sf-dump-note>array:25</span> [<samp data-depth=2 class=sf-dump-compact>
+    \"<span class=sf-dump-key>id</span>\" => <span class=sf-dump-num>1</span>
+    \"<span class=sf-dump-key>code</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>user_id</span>\" => <span class=sf-dump-num>5</span>
+    \"<span class=sf-dump-key>reservation_date</span>\" => \"<span class=sf-dump-str title=\"10 characters\">2026-10-12</span>\"
+    \"<span class=sf-dump-key>reservation_time</span>\" => \"<span class=sf-dump-str title=\"8 characters\">12:34:00</span>\"
+    \"<span class=sf-dump-key>table_id</span>\" => <span class=sf-dump-num>2</span>
+    \"<span class=sf-dump-key>full_name</span>\" => \"<span class=sf-dump-str title=\"8 characters\">Ng Van A</span>\"
+    \"<span class=sf-dump-key>phone</span>\" => \"<span class=sf-dump-str title=\"10 characters\">0704409810</span>\"
+    \"<span class=sf-dump-key>notes</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>total_price</span>\" => \"<span class=sf-dump-str title=\"9 characters\">170000.00</span>\"
+    \"<span class=sf-dump-key>deposit_amount</span>\" => <span class=sf-dump-num>34000</span>
+    \"<span class=sf-dump-key>paid_amount</span>\" => <span class=sf-dump-num>136000</span>
+    \"<span class=sf-dump-key>paid_at</span>\" => \"<span class=sf-dump-str title=\"19 characters\">2026-10-12 12:36:41</span>\"
+    \"<span class=sf-dump-key>paid_by</span>\" => <span class=sf-dump-num>1</span>
+    \"<span class=sf-dump-key>deposit_paid_at</span>\" => \"<span class=sf-dump-str title=\"19 characters\">2026-10-12 12:36:17</span>\"
+    \"<span class=sf-dump-key>cart_data</span>\" => \"<span class=sf-dump-str title=\"203 characters\">[{&quot;id&quot;: 43, &quot;name&quot;: &quot;N&#432;&#7899;c Mocktail Hokkaido Strawberry&quot;, &quot;image&quot;: &quot;images/nc3.jpg&quot;, &quot;price&quot;: 80000, &quot;quantity&quot;: 1}, {&quot;id&quot;: 31, &quot;name&quot;: &quot;Ph&#7903; b&#242;&quot;, &quot;image&quot;: &quot;images/mv7.jpg&quot;, &quot;price&quot;: 90000, &quot;quantity&quot;: 1}]</span>\"
+    \"<span class=sf-dump-key>chef_statuses</span>\" => \"<span class=sf-dump-str title=\"28 characters\">{&quot;31&quot;: &quot;done&quot;, &quot;43&quot;: &quot;done&quot;}</span>\"
+    \"<span class=sf-dump-key>reservation_status</span>\" => \"<span class=sf-dump-str title=\"7 characters\">pending</span>\"
+    \"<span class=sf-dump-key>payment_status</span>\" => \"<span class=sf-dump-str title=\"4 characters\">paid</span>\"
+    \"<span class=sf-dump-key>payment_method</span>\" => \"<span class=sf-dump-str title=\"4 characters\">BANK</span>\"
+    \"<span class=sf-dump-key>cleanup_started_at</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>created_at</span>\" => \"<span class=sf-dump-str title=\"19 characters\">2026-10-12 12:34:51</span>\"
+    \"<span class=sf-dump-key>updated_at</span>\" => \"<span class=sf-dump-str title=\"19 characters\">2026-10-12 12:37:10</span>\"
+    \"<span class=sf-dump-key>status</span>\" => \"<span class=sf-dump-str title=\"9 characters\">completed</span>\"
+    \"<span class=sf-dump-key>email</span>\" => \"<span class=sf-dump-str title=\"20 characters\">nhilee2229@gmail.com</span>\"
+  </samp>]
+  #<span class=sf-dump-protected title=\"Protected property\">original</span>: <span class=sf-dump-note>array:25</span> [<samp data-depth=2 class=sf-dump-compact>
+    \"<span class=sf-dump-key>id</span>\" => <span class=sf-dump-num>1</span>
+    \"<span class=sf-dump-key>code</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>user_id</span>\" => <span class=sf-dump-num>5</span>
+    \"<span class=sf-dump-key>reservation_date</span>\" => \"<span class=sf-dump-str title=\"10 characters\">2026-10-12</span>\"
+    \"<span class=sf-dump-key>reservation_time</span>\" => \"<span class=sf-dump-str title=\"8 characters\">12:34:00</span>\"
+    \"<span class=sf-dump-key>table_id</span>\" => <span class=sf-dump-num>2</span>
+    \"<span class=sf-dump-key>full_name</span>\" => \"<span class=sf-dump-str title=\"8 characters\">Ng Van A</span>\"
+    \"<span class=sf-dump-key>phone</span>\" => \"<span class=sf-dump-str title=\"10 characters\">0704409810</span>\"
+    \"<span class=sf-dump-key>notes</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>total_price</span>\" => \"<span class=sf-dump-str title=\"9 characters\">170000.00</span>\"
+    \"<span class=sf-dump-key>deposit_amount</span>\" => <span class=sf-dump-num>34000</span>
+    \"<span class=sf-dump-key>paid_amount</span>\" => <span class=sf-dump-num>136000</span>
+    \"<span class=sf-dump-key>paid_at</span>\" => \"<span class=sf-dump-str title=\"19 characters\">2026-10-12 12:36:41</span>\"
+    \"<span class=sf-dump-key>paid_by</span>\" => <span class=sf-dump-num>1</span>
+    \"<span class=sf-dump-key>deposit_paid_at</span>\" => \"<span class=sf-dump-str title=\"19 characters\">2026-10-12 12:36:17</span>\"
+    \"<span class=sf-dump-key>cart_data</span>\" => \"<span class=sf-dump-str title=\"203 characters\">[{&quot;id&quot;: 43, &quot;name&quot;: &quot;N&#432;&#7899;c Mocktail Hokkaido Strawberry&quot;, &quot;image&quot;: &quot;images/nc3.jpg&quot;, &quot;price&quot;: 80000, &quot;quantity&quot;: 1}, {&quot;id&quot;: 31, &quot;name&quot;: &quot;Ph&#7903; b&#242;&quot;, &quot;image&quot;: &quot;images/mv7.jpg&quot;, &quot;price&quot;: 90000, &quot;quantity&quot;: 1}]</span>\"
+    \"<span class=sf-dump-key>chef_statuses</span>\" => \"<span class=sf-dump-str title=\"28 characters\">{&quot;31&quot;: &quot;done&quot;, &quot;43&quot;: &quot;done&quot;}</span>\"
+    \"<span class=sf-dump-key>reservation_status</span>\" => \"<span class=sf-dump-str title=\"7 characters\">pending</span>\"
+    \"<span class=sf-dump-key>payment_status</span>\" => \"<span class=sf-dump-str title=\"4 characters\">paid</span>\"
+    \"<span class=sf-dump-key>payment_method</span>\" => \"<span class=sf-dump-str title=\"4 characters\">BANK</span>\"
+    \"<span class=sf-dump-key>cleanup_started_at</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>created_at</span>\" => \"<span class=sf-dump-str title=\"19 characters\">2026-10-12 12:34:51</span>\"
+    \"<span class=sf-dump-key>updated_at</span>\" => \"<span class=sf-dump-str title=\"19 characters\">2026-10-12 12:37:10</span>\"
+    \"<span class=sf-dump-key>status</span>\" => \"<span class=sf-dump-str title=\"9 characters\">completed</span>\"
+    \"<span class=sf-dump-key>email</span>\" => \"<span class=sf-dump-str title=\"20 characters\">nhilee2229@gmail.com</span>\"
+  </samp>]
+  #<span class=sf-dump-protected title=\"Protected property\">changes</span>: []
+  #<span class=sf-dump-protected title=\"Protected property\">casts</span>: <span class=sf-dump-note>array:6</span> [<samp data-depth=2 class=sf-dump-compact>
+    \"<span class=sf-dump-key>cleanup_started_at</span>\" => \"<span class=sf-dump-str title=\"8 characters\">datetime</span>\"
+    \"<span class=sf-dump-key>paid_at</span>\" => \"<span class=sf-dump-str title=\"8 characters\">datetime</span>\"
+    \"<span class=sf-dump-key>deposit_paid_at</span>\" => \"<span class=sf-dump-str title=\"8 characters\">datetime</span>\"
+    \"<span class=sf-dump-key>reservation_date</span>\" => \"<span class=sf-dump-str title=\"4 characters\">date</span>\"
+    \"<span class=sf-dump-key>cart_data</span>\" => \"<span class=sf-dump-str title=\"5 characters\">array</span>\"
+    \"<span class=sf-dump-key>chef_statuses</span>\" => \"<span class=sf-dump-str title=\"5 characters\">array</span>\"
+  </samp>]
+  #<span class=sf-dump-protected title=\"Protected property\">classCastCache</span>: []
+  #<span class=sf-dump-protected title=\"Protected property\">attributeCastCache</span>: []
+  #<span class=sf-dump-protected title=\"Protected property\">dateFormat</span>: <span class=sf-dump-const>null</span>
+  #<span class=sf-dump-protected title=\"Protected property\">appends</span>: []
+  #<span class=sf-dump-protected title=\"Protected property\">dispatchesEvents</span>: []
+  #<span class=sf-dump-protected title=\"Protected property\">observables</span>: []
+  #<span class=sf-dump-protected title=\"Protected property\">relations</span>: <span class=sf-dump-note>array:2</span> [<samp data-depth=2 class=sf-dump-compact>
+    \"<span class=sf-dump-key>user</span>\" => <span class=\"sf-dump-note sf-dump-ellipsization\" title=\"App\\Models\\User
+\"><span class=\"sf-dump-ellipsis sf-dump-ellipsis-note\">App\\Models</span><span class=\"sf-dump-ellipsis sf-dump-ellipsis-note\">\\</span><span class=\"sf-dump-ellipsis-tail\">User</span></span> {<a class=sf-dump-ref>#1181</a><samp data-depth=3 class=sf-dump-compact>
+      #<span class=sf-dump-protected title=\"Protected property\">connection</span>: \"<span class=sf-dump-str title=\"5 characters\">mysql</span>\"
+      #<span class=sf-dump-protected title=\"Protected property\">table</span>: \"<span class=sf-dump-str title=\"5 characters\">users</span>\"
+      #<span class=sf-dump-protected title=\"Protected property\">primaryKey</span>: \"<span class=sf-dump-str title=\"2 characters\">id</span>\"
+      #<span class=sf-dump-protected title=\"Protected property\">keyType</span>: \"<span class=sf-dump-str title=\"3 characters\">int</span>\"
+      +<span class=sf-dump-public title=\"Public property\">incrementing</span>: <span class=sf-dump-const>true</span>
+      #<span class=sf-dump-protected title=\"Protected property\">with</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">withCount</span>: []
+      +<span class=sf-dump-public title=\"Public property\">preventsLazyLoading</span>: <span class=sf-dump-const>false</span>
+      #<span class=sf-dump-protected title=\"Protected property\">perPage</span>: <span class=sf-dump-num>15</span>
+      +<span class=sf-dump-public title=\"Public property\">exists</span>: <span class=sf-dump-const>true</span>
+      +<span class=sf-dump-public title=\"Public property\">wasRecentlyCreated</span>: <span class=sf-dump-const>false</span>
+      #<span class=sf-dump-protected title=\"Protected property\">escapeWhenCastingToString</span>: <span class=sf-dump-const>false</span>
+      #<span class=sf-dump-protected title=\"Protected property\">attributes</span>: <span class=sf-dump-note>array:15</span> [ &#8230;15]
+      #<span class=sf-dump-protected title=\"Protected property\">original</span>: <span class=sf-dump-note>array:15</span> [ &#8230;15]
+      #<span class=sf-dump-protected title=\"Protected property\">changes</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">casts</span>: <span class=sf-dump-note>array:3</span> [ &#8230;3]
+      #<span class=sf-dump-protected title=\"Protected property\">classCastCache</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">attributeCastCache</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">dateFormat</span>: <span class=sf-dump-const>null</span>
+      #<span class=sf-dump-protected title=\"Protected property\">appends</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">dispatchesEvents</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">observables</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">relations</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">touches</span>: []
+      +<span class=sf-dump-public title=\"Public property\">timestamps</span>: <span class=sf-dump-const>true</span>
+      +<span class=sf-dump-public title=\"Public property\">usesUniqueIds</span>: <span class=sf-dump-const>false</span>
+      #<span class=sf-dump-protected title=\"Protected property\">hidden</span>: <span class=sf-dump-note>array:2</span> [ &#8230;2]
+      #<span class=sf-dump-protected title=\"Protected property\">visible</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">fillable</span>: <span class=sf-dump-note>array:8</span> [ &#8230;8]
+      #<span class=sf-dump-protected title=\"Protected property\">guarded</span>: <span class=sf-dump-note>array:1</span> [ &#8230;1]
+      #<span class=sf-dump-protected title=\"Protected property\">rememberTokenName</span>: \"<span class=sf-dump-str title=\"14 characters\">remember_token</span>\"
+      #<span class=sf-dump-protected title=\"Protected property\">accessToken</span>: <span class=sf-dump-const>null</span>
+    </samp>}
+    \"<span class=sf-dump-key>table</span>\" => <span class=\"sf-dump-note sf-dump-ellipsization\" title=\"App\\Models\\Table
+\"><span class=\"sf-dump-ellipsis sf-dump-ellipsis-note\">App\\Models</span><span class=\"sf-dump-ellipsis sf-dump-ellipsis-note\">\\</span><span class=\"sf-dump-ellipsis-tail\">Table</span></span> {<a class=sf-dump-ref>#1184</a><samp data-depth=3 class=sf-dump-compact>
+      #<span class=sf-dump-protected title=\"Protected property\">connection</span>: \"<span class=sf-dump-str title=\"5 characters\">mysql</span>\"
+      #<span class=sf-dump-protected title=\"Protected property\">table</span>: \"<span class=sf-dump-str title=\"6 characters\">tables</span>\"
+      #<span class=sf-dump-protected title=\"Protected property\">primaryKey</span>: \"<span class=sf-dump-str title=\"2 characters\">id</span>\"
+      #<span class=sf-dump-protected title=\"Protected property\">keyType</span>: \"<span class=sf-dump-str title=\"3 characters\">int</span>\"
+      +<span class=sf-dump-public title=\"Public property\">incrementing</span>: <span class=sf-dump-const>true</span>
+      #<span class=sf-dump-protected title=\"Protected property\">with</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">withCount</span>: []
+      +<span class=sf-dump-public title=\"Public property\">preventsLazyLoading</span>: <span class=sf-dump-const>false</span>
+      #<span class=sf-dump-protected title=\"Protected property\">perPage</span>: <span class=sf-dump-num>15</span>
+      +<span class=sf-dump-public title=\"Public property\">exists</span>: <span class=sf-dump-const>true</span>
+      +<span class=sf-dump-public title=\"Public property\">wasRecentlyCreated</span>: <span class=sf-dump-const>false</span>
+      #<span class=sf-dump-protected title=\"Protected property\">escapeWhenCastingToString</span>: <span class=sf-dump-const>false</span>
+      #<span class=sf-dump-protected title=\"Protected property\">attributes</span>: <span class=sf-dump-note>array:7</span> [ &#8230;7]
+      #<span class=sf-dump-protected title=\"Protected property\">original</span>: <span class=sf-dump-note>array:7</span> [ &#8230;7]
+      #<span class=sf-dump-protected title=\"Protected property\">changes</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">casts</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">classCastCache</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">attributeCastCache</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">dateFormat</span>: <span class=sf-dump-const>null</span>
+      #<span class=sf-dump-protected title=\"Protected property\">appends</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">dispatchesEvents</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">observables</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">relations</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">touches</span>: []
+      +<span class=sf-dump-public title=\"Public property\">timestamps</span>: <span class=sf-dump-const>true</span>
+      +<span class=sf-dump-public title=\"Public property\">usesUniqueIds</span>: <span class=sf-dump-const>false</span>
+      #<span class=sf-dump-protected title=\"Protected property\">hidden</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">visible</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">fillable</span>: <span class=sf-dump-note>array:4</span> [ &#8230;4]
+      #<span class=sf-dump-protected title=\"Protected property\">guarded</span>: <span class=sf-dump-note>array:1</span> [ &#8230;1]
+    </samp>}
+  </samp>]
+  #<span class=sf-dump-protected title=\"Protected property\">touches</span>: []
+  +<span class=sf-dump-public title=\"Public property\">timestamps</span>: <span class=sf-dump-const>true</span>
+  +<span class=sf-dump-public title=\"Public property\">usesUniqueIds</span>: <span class=sf-dump-const>false</span>
+  #<span class=sf-dump-protected title=\"Protected property\">hidden</span>: []
+  #<span class=sf-dump-protected title=\"Protected property\">visible</span>: []
+  #<span class=sf-dump-protected title=\"Protected property\">fillable</span>: <span class=sf-dump-note>array:16</span> [<samp data-depth=2 class=sf-dump-compact>
+    <span class=sf-dump-index>0</span> => \"<span class=sf-dump-str title=\"7 characters\">user_id</span>\"
+    <span class=sf-dump-index>1</span> => \"<span class=sf-dump-str title=\"16 characters\">reservation_date</span>\"
+    <span class=sf-dump-index>2</span> => \"<span class=sf-dump-str title=\"16 characters\">reservation_time</span>\"
+    <span class=sf-dump-index>3</span> => \"<span class=sf-dump-str title=\"8 characters\">table_id</span>\"
+    <span class=sf-dump-index>4</span> => \"<span class=sf-dump-str title=\"9 characters\">full_name</span>\"
+    <span class=sf-dump-index>5</span> => \"<span class=sf-dump-str title=\"5 characters\">email</span>\"
+    <span class=sf-dump-index>6</span> => \"<span class=sf-dump-str title=\"5 characters\">phone</span>\"
+    <span class=sf-dump-index>7</span> => \"<span class=sf-dump-str title=\"5 characters\">notes</span>\"
+    <span class=sf-dump-index>8</span> => \"<span class=sf-dump-str title=\"9 characters\">cart_data</span>\"
+    <span class=sf-dump-index>9</span> => \"<span class=sf-dump-str title=\"11 characters\">total_price</span>\"
+    <span class=sf-dump-index>10</span> => \"<span class=sf-dump-str title=\"18 characters\">reservation_status</span>\"
+    <span class=sf-dump-index>11</span> => \"<span class=sf-dump-str title=\"14 characters\">payment_status</span>\"
+    <span class=sf-dump-index>12</span> => \"<span class=sf-dump-str title=\"14 characters\">payment_method</span>\"
+    <span class=sf-dump-index>13</span> => \"<span class=sf-dump-str title=\"14 characters\">deposit_amount</span>\"
+    <span class=sf-dump-index>14</span> => \"<span class=sf-dump-str title=\"18 characters\">cleanup_started_at</span>\"
+    <span class=sf-dump-index>15</span> => \"<span class=sf-dump-str title=\"6 characters\">status</span>\"
+  </samp>]
+  #<span class=sf-dump-protected title=\"Protected property\">guarded</span>: <span class=sf-dump-note>array:1</span> [<samp data-depth=2 class=sf-dump-compact>
+    <span class=sf-dump-index>0</span> => \"<span class=sf-dump-str>*</span>\"
+  </samp>]
+</samp>}
+</pre><script>Sfdump(\"sf-dump-1626984394\", {\"maxDepth\":3,\"maxStringLength\":160})</script>
+","loop":"<pre class=sf-dump id=sf-dump-1123996313 data-indent-pad=\"  \"><span class=sf-dump-const>null</span>
+</pre><script>Sfdump(\"sf-dump-1123996313\", {\"maxDepth\":3,\"maxStringLength\":160})</script>
+"}},"userId":2,"exception":"[object] (Spatie\\LaravelIgnition\\Exceptions\\ViewException(code: 0): Route [staff.bills.index] not defined. at D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Routing/UrlGenerator.php:477)
+[stacktrace]
+#0 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/helpers.php(811): Illuminate/Routing/UrlGenerator->route('staff.bills.ind...', Array, true)
+#1 D:/laragon/www/restaurant-fixed/resources/views/layouts/admin.blade.php(641): route('staff.bills.ind...')
+#2 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(123): require('D://laragon//www//...')
+#3 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(124): Illuminate/Filesystem/Filesystem::Illuminate/Filesystem/{closure}()
+#4 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/View/Engines/PhpEngine.php(58): Illuminate/Filesystem/Filesystem->getRequire('D://laragon//www//...', Array)
+#5 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/View/Engines/CompilerEngine.php(72): Illuminate/View/Engines/PhpEngine->evaluatePath('D://laragon//www//...', Array)
+#6 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/View/View.php(207): Illuminate/View/Engines/CompilerEngine->get('D://laragon//www//...', Array)
+#7 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/View/View.php(190): Illuminate/View/View->getContents()
+#8 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/View/View.php(159): Illuminate/View/View->renderContents()
+#9 D:/laragon/www/restaurant-fixed/resources/views/staff/reservations.blade.php(176): Illuminate/View/View->render()
+#10 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(123): require('D://laragon//www//...')
+#11 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(124): Illuminate/Filesystem/Filesystem::Illuminate/Filesystem/{closure}()
+#12 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/View/Engines/PhpEngine.php(58): Illuminate/Filesystem/Filesystem->getRequire('D://laragon//www//...', Array)
+#13 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/View/Engines/CompilerEngine.php(72): Illuminate/View/Engines/PhpEngine->evaluatePath('D://laragon//www//...', Array)
+#14 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/View/View.php(207): Illuminate/View/Engines/CompilerEngine->get('D://laragon//www//...', Array)
+#15 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/View/View.php(190): Illuminate/View/View->getContents()
+#16 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/View/View.php(159): Illuminate/View/View->renderContents()
+#17 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Http/Response.php(69): Illuminate/View/View->render()
+#18 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Http/Response.php(35): Illuminate/Http/Response->setContent(Object(Illuminate/View/View))
+#19 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Routing/Router.php(918): Illuminate/Http/Response->__construct(Object(Illuminate/View/View), 200, Array)
+#20 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Routing/Router.php(885): Illuminate/Routing/Router::toResponse(Object(Illuminate/Http/Request), Object(Illuminate/View/View))
+#21 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Routing/Router.php(806): Illuminate/Routing/Router->prepareResponse(Object(Illuminate/Http/Request), Object(Illuminate/View/View))
+#22 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(144): Illuminate/Routing/Router->Illuminate/Routing/{closure}(Object(Illuminate/Http/Request))
+#23 D:/laragon/www/restaurant-fixed/app/Http/Middleware/CheckRole.php(33): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#24 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): App/Http/Middleware/CheckRole->handle(Object(Illuminate/Http/Request), Object(Closure), 'staff')
+#25 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Routing/Middleware/SubstituteBindings.php(50): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#26 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Routing/Middleware/SubstituteBindings->handle(Object(Illuminate/Http/Request), Object(Closure))
+#27 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Auth/Middleware/Authenticate.php(57): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#28 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Auth/Middleware/Authenticate->handle(Object(Illuminate/Http/Request), Object(Closure))
+#29 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/VerifyCsrfToken.php(78): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#30 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Foundation/Http/Middleware/VerifyCsrfToken->handle(Object(Illuminate/Http/Request), Object(Closure))
+#31 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/View/Middleware/ShareErrorsFromSession.php(49): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#32 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/View/Middleware/ShareErrorsFromSession->handle(Object(Illuminate/Http/Request), Object(Closure))
+#33 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Session/Middleware/StartSession.php(121): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#34 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Session/Middleware/StartSession.php(64): Illuminate/Session/Middleware/StartSession->handleStatefulRequest(Object(Illuminate/Http/Request), Object(Illuminate/Session/Store), Object(Closure))
+#35 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Session/Middleware/StartSession->handle(Object(Illuminate/Http/Request), Object(Closure))
+#36 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Cookie/Middleware/AddQueuedCookiesToResponse.php(37): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#37 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Cookie/Middleware/AddQueuedCookiesToResponse->handle(Object(Illuminate/Http/Request), Object(Closure))
+#38 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Cookie/Middleware/EncryptCookies.php(67): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#39 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Cookie/Middleware/EncryptCookies->handle(Object(Illuminate/Http/Request), Object(Closure))
+#40 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(119): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#41 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Routing/Router.php(807): Illuminate/Pipeline/Pipeline->then(Object(Closure))
+#42 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Routing/Router.php(784): Illuminate/Routing/Router->runRouteWithinStack(Object(Illuminate/Routing/Route), Object(Illuminate/Http/Request))
+#43 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Routing/Router.php(748): Illuminate/Routing/Router->runRoute(Object(Illuminate/Http/Request), Object(Illuminate/Routing/Route))
+#44 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Routing/Router.php(737): Illuminate/Routing/Router->dispatchToRoute(Object(Illuminate/Http/Request))
+#45 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(200): Illuminate/Routing/Router->dispatch(Object(Illuminate/Http/Request))
+#46 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(144): Illuminate/Foundation/Http/Kernel->Illuminate/Foundation/Http/{closure}(Object(Illuminate/Http/Request))
+#47 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#48 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ConvertEmptyStringsToNull.php(31): Illuminate/Foundation/Http/Middleware/TransformsRequest->handle(Object(Illuminate/Http/Request), Object(Closure))
+#49 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Foundation/Http/Middleware/ConvertEmptyStringsToNull->handle(Object(Illuminate/Http/Request), Object(Closure))
+#50 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#51 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TrimStrings.php(40): Illuminate/Foundation/Http/Middleware/TransformsRequest->handle(Object(Illuminate/Http/Request), Object(Closure))
+#52 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Foundation/Http/Middleware/TrimStrings->handle(Object(Illuminate/Http/Request), Object(Closure))
+#53 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ValidatePostSize.php(27): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#54 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Foundation/Http/Middleware/ValidatePostSize->handle(Object(Illuminate/Http/Request), Object(Closure))
+#55 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/PreventRequestsDuringMaintenance.php(99): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#56 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Foundation/Http/Middleware/PreventRequestsDuringMaintenance->handle(Object(Illuminate/Http/Request), Object(Closure))
+#57 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Http/Middleware/HandleCors.php(49): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#58 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Http/Middleware/HandleCors->handle(Object(Illuminate/Http/Request), Object(Closure))
+#59 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Http/Middleware/TrustProxies.php(39): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#60 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Http/Middleware/TrustProxies->handle(Object(Illuminate/Http/Request), Object(Closure))
+#61 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(119): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#62 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(175): Illuminate/Pipeline/Pipeline->then(Object(Closure))
+#63 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(144): Illuminate/Foundation/Http/Kernel->sendRequestThroughRouter(Object(Illuminate/Http/Request))
+#64 D:/laragon/www/restaurant-fixed/public/index.php(52): Illuminate/Foundation/Http/Kernel->handle(Object(Illuminate/Http/Request))
+#65 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/resources/server.php(16): require_once('D://laragon//www//...')
+#66 {main}
+
+[previous exception] [object] (Symfony\\Component\\Routing\\Exception\\RouteNotFoundException(code: 0): Route [staff.bills.index] not defined. at D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Routing/UrlGenerator.php:477)
+[stacktrace]
+#0 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/helpers.php(811): Illuminate/Routing/UrlGenerator->route('staff.bills.ind...', Array, true)
+#1 D:/laragon/www/restaurant-fixed/storage/framework/views/2633053ad52d8fdc6a6a9e283a6f3990.php(641): route('staff.bills.ind...')
+#2 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(123): require('D://laragon//www//...')
+#3 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(124): Illuminate/Filesystem/Filesystem::Illuminate/Filesystem/{closure}()
+#4 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/View/Engines/PhpEngine.php(58): Illuminate/Filesystem/Filesystem->getRequire('D://laragon//www//...', Array)
+#5 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/View/Engines/CompilerEngine.php(72): Illuminate/View/Engines/PhpEngine->evaluatePath('D://laragon//www//...', Array)
+#6 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/View/View.php(207): Illuminate/View/Engines/CompilerEngine->get('D://laragon//www//...', Array)
+#7 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/View/View.php(190): Illuminate/View/View->getContents()
+#8 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/View/View.php(159): Illuminate/View/View->renderContents()
+#9 D:/laragon/www/restaurant-fixed/storage/framework/views/8c4262b226927efd2222f81fafc10a0d.php(179): Illuminate/View/View->render()
+#10 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(123): require('D://laragon//www//...')
+#11 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(124): Illuminate/Filesystem/Filesystem::Illuminate/Filesystem/{closure}()
+#12 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/View/Engines/PhpEngine.php(58): Illuminate/Filesystem/Filesystem->getRequire('D://laragon//www//...', Array)
+#13 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/View/Engines/CompilerEngine.php(72): Illuminate/View/Engines/PhpEngine->evaluatePath('D://laragon//www//...', Array)
+#14 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/View/View.php(207): Illuminate/View/Engines/CompilerEngine->get('D://laragon//www//...', Array)
+#15 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/View/View.php(190): Illuminate/View/View->getContents()
+#16 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/View/View.php(159): Illuminate/View/View->renderContents()
+#17 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Http/Response.php(69): Illuminate/View/View->render()
+#18 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Http/Response.php(35): Illuminate/Http/Response->setContent(Object(Illuminate/View/View))
+#19 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Routing/Router.php(918): Illuminate/Http/Response->__construct(Object(Illuminate/View/View), 200, Array)
+#20 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Routing/Router.php(885): Illuminate/Routing/Router::toResponse(Object(Illuminate/Http/Request), Object(Illuminate/View/View))
+#21 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Routing/Router.php(806): Illuminate/Routing/Router->prepareResponse(Object(Illuminate/Http/Request), Object(Illuminate/View/View))
+#22 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(144): Illuminate/Routing/Router->Illuminate/Routing/{closure}(Object(Illuminate/Http/Request))
+#23 D:/laragon/www/restaurant-fixed/app/Http/Middleware/CheckRole.php(33): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#24 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): App/Http/Middleware/CheckRole->handle(Object(Illuminate/Http/Request), Object(Closure), 'staff')
+#25 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Routing/Middleware/SubstituteBindings.php(50): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#26 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Routing/Middleware/SubstituteBindings->handle(Object(Illuminate/Http/Request), Object(Closure))
+#27 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Auth/Middleware/Authenticate.php(57): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#28 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Auth/Middleware/Authenticate->handle(Object(Illuminate/Http/Request), Object(Closure))
+#29 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/VerifyCsrfToken.php(78): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#30 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Foundation/Http/Middleware/VerifyCsrfToken->handle(Object(Illuminate/Http/Request), Object(Closure))
+#31 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/View/Middleware/ShareErrorsFromSession.php(49): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#32 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/View/Middleware/ShareErrorsFromSession->handle(Object(Illuminate/Http/Request), Object(Closure))
+#33 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Session/Middleware/StartSession.php(121): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#34 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Session/Middleware/StartSession.php(64): Illuminate/Session/Middleware/StartSession->handleStatefulRequest(Object(Illuminate/Http/Request), Object(Illuminate/Session/Store), Object(Closure))
+#35 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Session/Middleware/StartSession->handle(Object(Illuminate/Http/Request), Object(Closure))
+#36 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Cookie/Middleware/AddQueuedCookiesToResponse.php(37): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#37 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Cookie/Middleware/AddQueuedCookiesToResponse->handle(Object(Illuminate/Http/Request), Object(Closure))
+#38 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Cookie/Middleware/EncryptCookies.php(67): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#39 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Cookie/Middleware/EncryptCookies->handle(Object(Illuminate/Http/Request), Object(Closure))
+#40 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(119): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#41 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Routing/Router.php(807): Illuminate/Pipeline/Pipeline->then(Object(Closure))
+#42 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Routing/Router.php(784): Illuminate/Routing/Router->runRouteWithinStack(Object(Illuminate/Routing/Route), Object(Illuminate/Http/Request))
+#43 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Routing/Router.php(748): Illuminate/Routing/Router->runRoute(Object(Illuminate/Http/Request), Object(Illuminate/Routing/Route))
+#44 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Routing/Router.php(737): Illuminate/Routing/Router->dispatchToRoute(Object(Illuminate/Http/Request))
+#45 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(200): Illuminate/Routing/Router->dispatch(Object(Illuminate/Http/Request))
+#46 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(144): Illuminate/Foundation/Http/Kernel->Illuminate/Foundation/Http/{closure}(Object(Illuminate/Http/Request))
+#47 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#48 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ConvertEmptyStringsToNull.php(31): Illuminate/Foundation/Http/Middleware/TransformsRequest->handle(Object(Illuminate/Http/Request), Object(Closure))
+#49 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Foundation/Http/Middleware/ConvertEmptyStringsToNull->handle(Object(Illuminate/Http/Request), Object(Closure))
+#50 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#51 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TrimStrings.php(40): Illuminate/Foundation/Http/Middleware/TransformsRequest->handle(Object(Illuminate/Http/Request), Object(Closure))
+#52 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Foundation/Http/Middleware/TrimStrings->handle(Object(Illuminate/Http/Request), Object(Closure))
+#53 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ValidatePostSize.php(27): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#54 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Foundation/Http/Middleware/ValidatePostSize->handle(Object(Illuminate/Http/Request), Object(Closure))
+#55 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/PreventRequestsDuringMaintenance.php(99): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#56 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Foundation/Http/Middleware/PreventRequestsDuringMaintenance->handle(Object(Illuminate/Http/Request), Object(Closure))
+#57 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Http/Middleware/HandleCors.php(49): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#58 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Http/Middleware/HandleCors->handle(Object(Illuminate/Http/Request), Object(Closure))
+#59 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Http/Middleware/TrustProxies.php(39): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#60 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Http/Middleware/TrustProxies->handle(Object(Illuminate/Http/Request), Object(Closure))
+#61 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(119): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#62 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(175): Illuminate/Pipeline/Pipeline->then(Object(Closure))
+#63 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(144): Illuminate/Foundation/Http/Kernel->sendRequestThroughRouter(Object(Illuminate/Http/Request))
+#64 D:/laragon/www/restaurant-fixed/public/index.php(52): Illuminate/Foundation/Http/Kernel->handle(Object(Illuminate/Http/Request))
+#65 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/resources/server.php(16): require_once('D://laragon//www//...')
+#66 {main}
+"} 
+[2026-10-12 14:01:45] local.ERROR: Route [staff.bills.index] not defined. {"view":{"view":"D:\\laragon\\www\\restaurant-fixed\\resources\\views\\layouts\\admin.blade.php","data":{"errors":"<pre class=sf-dump id=sf-dump-1985227137 data-indent-pad=\"  \"><span class=sf-dump-note>Illuminate\\Support\\ViewErrorBag</span> {<a class=sf-dump-ref>#1126</a><samp data-depth=1 class=sf-dump-expanded>
+  #<span class=sf-dump-protected title=\"Protected property\">bags</span>: []
+</samp>}
+</pre><script>Sfdump(\"sf-dump-1985227137\", {\"maxDepth\":3,\"maxStringLength\":160})</script>
+","reservations":"<pre class=sf-dump id=sf-dump-738119888 data-indent-pad=\"  \"><span class=sf-dump-note>Illuminate\\Database\\Eloquent\\Collection</span> {<a class=sf-dump-ref>#1178</a><samp data-depth=1 class=sf-dump-expanded>
+  #<span class=sf-dump-protected title=\"Protected property\">items</span>: <span class=sf-dump-note>array:3</span> [<samp data-depth=2 class=sf-dump-compact>
+    <span class=sf-dump-index>0</span> => <span class=\"sf-dump-note sf-dump-ellipsization\" title=\"App\\Models\\Reservation
+\"><span class=\"sf-dump-ellipsis sf-dump-ellipsis-note\">App\\Models</span><span class=\"sf-dump-ellipsis sf-dump-ellipsis-note\">\\</span><span class=\"sf-dump-ellipsis-tail\">Reservation</span></span> {<a class=sf-dump-ref>#1173</a><samp data-depth=3 class=sf-dump-compact>
+      #<span class=sf-dump-protected title=\"Protected property\">connection</span>: \"<span class=sf-dump-str title=\"5 characters\">mysql</span>\"
+      #<span class=sf-dump-protected title=\"Protected property\">table</span>: \"<span class=sf-dump-str title=\"12 characters\">reservations</span>\"
+      #<span class=sf-dump-protected title=\"Protected property\">primaryKey</span>: \"<span class=sf-dump-str title=\"2 characters\">id</span>\"
+      #<span class=sf-dump-protected title=\"Protected property\">keyType</span>: \"<span class=sf-dump-str title=\"3 characters\">int</span>\"
+      +<span class=sf-dump-public title=\"Public property\">incrementing</span>: <span class=sf-dump-const>true</span>
+      #<span class=sf-dump-protected title=\"Protected property\">with</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">withCount</span>: []
+      +<span class=sf-dump-public title=\"Public property\">preventsLazyLoading</span>: <span class=sf-dump-const>false</span>
+      #<span class=sf-dump-protected title=\"Protected property\">perPage</span>: <span class=sf-dump-num>15</span>
+      +<span class=sf-dump-public title=\"Public property\">exists</span>: <span class=sf-dump-const>true</span>
+      +<span class=sf-dump-public title=\"Public property\">wasRecentlyCreated</span>: <span class=sf-dump-const>false</span>
+      #<span class=sf-dump-protected title=\"Protected property\">escapeWhenCastingToString</span>: <span class=sf-dump-const>false</span>
+      #<span class=sf-dump-protected title=\"Protected property\">attributes</span>: <span class=sf-dump-note>array:25</span> [ &#8230;25]
+      #<span class=sf-dump-protected title=\"Protected property\">original</span>: <span class=sf-dump-note>array:25</span> [ &#8230;25]
+      #<span class=sf-dump-protected title=\"Protected property\">changes</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">casts</span>: <span class=sf-dump-note>array:6</span> [ &#8230;6]
+      #<span class=sf-dump-protected title=\"Protected property\">classCastCache</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">attributeCastCache</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">dateFormat</span>: <span class=sf-dump-const>null</span>
+      #<span class=sf-dump-protected title=\"Protected property\">appends</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">dispatchesEvents</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">observables</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">relations</span>: <span class=sf-dump-note>array:2</span> [ &#8230;2]
+      #<span class=sf-dump-protected title=\"Protected property\">touches</span>: []
+      +<span class=sf-dump-public title=\"Public property\">timestamps</span>: <span class=sf-dump-const>true</span>
+      +<span class=sf-dump-public title=\"Public property\">usesUniqueIds</span>: <span class=sf-dump-const>false</span>
+      #<span class=sf-dump-protected title=\"Protected property\">hidden</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">visible</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">fillable</span>: <span class=sf-dump-note>array:16</span> [ &#8230;16]
+      #<span class=sf-dump-protected title=\"Protected property\">guarded</span>: <span class=sf-dump-note>array:1</span> [ &#8230;1]
+    </samp>}
+    <span class=sf-dump-index>1</span> => <span class=\"sf-dump-note sf-dump-ellipsization\" title=\"App\\Models\\Reservation
+\"><span class=\"sf-dump-ellipsis sf-dump-ellipsis-note\">App\\Models</span><span class=\"sf-dump-ellipsis sf-dump-ellipsis-note\">\\</span><span class=\"sf-dump-ellipsis-tail\">Reservation</span></span> {<a class=sf-dump-ref>#1174</a><samp data-depth=3 class=sf-dump-compact>
+      #<span class=sf-dump-protected title=\"Protected property\">connection</span>: \"<span class=sf-dump-str title=\"5 characters\">mysql</span>\"
+      #<span class=sf-dump-protected title=\"Protected property\">table</span>: \"<span class=sf-dump-str title=\"12 characters\">reservations</span>\"
+      #<span class=sf-dump-protected title=\"Protected property\">primaryKey</span>: \"<span class=sf-dump-str title=\"2 characters\">id</span>\"
+      #<span class=sf-dump-protected title=\"Protected property\">keyType</span>: \"<span class=sf-dump-str title=\"3 characters\">int</span>\"
+      +<span class=sf-dump-public title=\"Public property\">incrementing</span>: <span class=sf-dump-const>true</span>
+      #<span class=sf-dump-protected title=\"Protected property\">with</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">withCount</span>: []
+      +<span class=sf-dump-public title=\"Public property\">preventsLazyLoading</span>: <span class=sf-dump-const>false</span>
+      #<span class=sf-dump-protected title=\"Protected property\">perPage</span>: <span class=sf-dump-num>15</span>
+      +<span class=sf-dump-public title=\"Public property\">exists</span>: <span class=sf-dump-const>true</span>
+      +<span class=sf-dump-public title=\"Public property\">wasRecentlyCreated</span>: <span class=sf-dump-const>false</span>
+      #<span class=sf-dump-protected title=\"Protected property\">escapeWhenCastingToString</span>: <span class=sf-dump-const>false</span>
+      #<span class=sf-dump-protected title=\"Protected property\">attributes</span>: <span class=sf-dump-note>array:25</span> [ &#8230;25]
+      #<span class=sf-dump-protected title=\"Protected property\">original</span>: <span class=sf-dump-note>array:25</span> [ &#8230;25]
+      #<span class=sf-dump-protected title=\"Protected property\">changes</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">casts</span>: <span class=sf-dump-note>array:6</span> [ &#8230;6]
+      #<span class=sf-dump-protected title=\"Protected property\">classCastCache</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">attributeCastCache</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">dateFormat</span>: <span class=sf-dump-const>null</span>
+      #<span class=sf-dump-protected title=\"Protected property\">appends</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">dispatchesEvents</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">observables</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">relations</span>: <span class=sf-dump-note>array:2</span> [ &#8230;2]
+      #<span class=sf-dump-protected title=\"Protected property\">touches</span>: []
+      +<span class=sf-dump-public title=\"Public property\">timestamps</span>: <span class=sf-dump-const>true</span>
+      +<span class=sf-dump-public title=\"Public property\">usesUniqueIds</span>: <span class=sf-dump-const>false</span>
+      #<span class=sf-dump-protected title=\"Protected property\">hidden</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">visible</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">fillable</span>: <span class=sf-dump-note>array:16</span> [ &#8230;16]
+      #<span class=sf-dump-protected title=\"Protected property\">guarded</span>: <span class=sf-dump-note>array:1</span> [ &#8230;1]
+    </samp>}
+    <span class=sf-dump-index>2</span> => <span class=\"sf-dump-note sf-dump-ellipsization\" title=\"App\\Models\\Reservation
+\"><span class=\"sf-dump-ellipsis sf-dump-ellipsis-note\">App\\Models</span><span class=\"sf-dump-ellipsis sf-dump-ellipsis-note\">\\</span><span class=\"sf-dump-ellipsis-tail\">Reservation</span></span> {<a class=sf-dump-ref>#1175</a><samp data-depth=3 class=sf-dump-compact>
+      #<span class=sf-dump-protected title=\"Protected property\">connection</span>: \"<span class=sf-dump-str title=\"5 characters\">mysql</span>\"
+      #<span class=sf-dump-protected title=\"Protected property\">table</span>: \"<span class=sf-dump-str title=\"12 characters\">reservations</span>\"
+      #<span class=sf-dump-protected title=\"Protected property\">primaryKey</span>: \"<span class=sf-dump-str title=\"2 characters\">id</span>\"
+      #<span class=sf-dump-protected title=\"Protected property\">keyType</span>: \"<span class=sf-dump-str title=\"3 characters\">int</span>\"
+      +<span class=sf-dump-public title=\"Public property\">incrementing</span>: <span class=sf-dump-const>true</span>
+      #<span class=sf-dump-protected title=\"Protected property\">with</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">withCount</span>: []
+      +<span class=sf-dump-public title=\"Public property\">preventsLazyLoading</span>: <span class=sf-dump-const>false</span>
+      #<span class=sf-dump-protected title=\"Protected property\">perPage</span>: <span class=sf-dump-num>15</span>
+      +<span class=sf-dump-public title=\"Public property\">exists</span>: <span class=sf-dump-const>true</span>
+      +<span class=sf-dump-public title=\"Public property\">wasRecentlyCreated</span>: <span class=sf-dump-const>false</span>
+      #<span class=sf-dump-protected title=\"Protected property\">escapeWhenCastingToString</span>: <span class=sf-dump-const>false</span>
+      #<span class=sf-dump-protected title=\"Protected property\">attributes</span>: <span class=sf-dump-note>array:25</span> [ &#8230;25]
+      #<span class=sf-dump-protected title=\"Protected property\">original</span>: <span class=sf-dump-note>array:25</span> [ &#8230;25]
+      #<span class=sf-dump-protected title=\"Protected property\">changes</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">casts</span>: <span class=sf-dump-note>array:6</span> [ &#8230;6]
+      #<span class=sf-dump-protected title=\"Protected property\">classCastCache</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">attributeCastCache</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">dateFormat</span>: <span class=sf-dump-const>null</span>
+      #<span class=sf-dump-protected title=\"Protected property\">appends</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">dispatchesEvents</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">observables</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">relations</span>: <span class=sf-dump-note>array:2</span> [ &#8230;2]
+      #<span class=sf-dump-protected title=\"Protected property\">touches</span>: []
+      +<span class=sf-dump-public title=\"Public property\">timestamps</span>: <span class=sf-dump-const>true</span>
+      +<span class=sf-dump-public title=\"Public property\">usesUniqueIds</span>: <span class=sf-dump-const>false</span>
+      #<span class=sf-dump-protected title=\"Protected property\">hidden</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">visible</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">fillable</span>: <span class=sf-dump-note>array:16</span> [ &#8230;16]
+      #<span class=sf-dump-protected title=\"Protected property\">guarded</span>: <span class=sf-dump-note>array:1</span> [ &#8230;1]
+    </samp>}
+  </samp>]
+  #<span class=sf-dump-protected title=\"Protected property\">escapeWhenCastingToString</span>: <span class=sf-dump-const>false</span>
+</samp>}
+</pre><script>Sfdump(\"sf-dump-738119888\", {\"maxDepth\":3,\"maxStringLength\":160})</script>
+","__empty_1":"<pre class=sf-dump id=sf-dump-1107559021 data-indent-pad=\"  \"><span class=sf-dump-const>false</span>
+</pre><script>Sfdump(\"sf-dump-1107559021\", {\"maxDepth\":3,\"maxStringLength\":160})</script>
+","__currentLoopData":"<pre class=sf-dump id=sf-dump-533202719 data-indent-pad=\"  \"><span class=sf-dump-note>Illuminate\\Database\\Eloquent\\Collection</span> {<a class=sf-dump-ref>#1178</a><samp data-depth=1 class=sf-dump-expanded>
+  #<span class=sf-dump-protected title=\"Protected property\">items</span>: <span class=sf-dump-note>array:3</span> [<samp data-depth=2 class=sf-dump-compact>
+    <span class=sf-dump-index>0</span> => <span class=\"sf-dump-note sf-dump-ellipsization\" title=\"App\\Models\\Reservation
+\"><span class=\"sf-dump-ellipsis sf-dump-ellipsis-note\">App\\Models</span><span class=\"sf-dump-ellipsis sf-dump-ellipsis-note\">\\</span><span class=\"sf-dump-ellipsis-tail\">Reservation</span></span> {<a class=sf-dump-ref>#1173</a><samp data-depth=3 class=sf-dump-compact>
+      #<span class=sf-dump-protected title=\"Protected property\">connection</span>: \"<span class=sf-dump-str title=\"5 characters\">mysql</span>\"
+      #<span class=sf-dump-protected title=\"Protected property\">table</span>: \"<span class=sf-dump-str title=\"12 characters\">reservations</span>\"
+      #<span class=sf-dump-protected title=\"Protected property\">primaryKey</span>: \"<span class=sf-dump-str title=\"2 characters\">id</span>\"
+      #<span class=sf-dump-protected title=\"Protected property\">keyType</span>: \"<span class=sf-dump-str title=\"3 characters\">int</span>\"
+      +<span class=sf-dump-public title=\"Public property\">incrementing</span>: <span class=sf-dump-const>true</span>
+      #<span class=sf-dump-protected title=\"Protected property\">with</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">withCount</span>: []
+      +<span class=sf-dump-public title=\"Public property\">preventsLazyLoading</span>: <span class=sf-dump-const>false</span>
+      #<span class=sf-dump-protected title=\"Protected property\">perPage</span>: <span class=sf-dump-num>15</span>
+      +<span class=sf-dump-public title=\"Public property\">exists</span>: <span class=sf-dump-const>true</span>
+      +<span class=sf-dump-public title=\"Public property\">wasRecentlyCreated</span>: <span class=sf-dump-const>false</span>
+      #<span class=sf-dump-protected title=\"Protected property\">escapeWhenCastingToString</span>: <span class=sf-dump-const>false</span>
+      #<span class=sf-dump-protected title=\"Protected property\">attributes</span>: <span class=sf-dump-note>array:25</span> [ &#8230;25]
+      #<span class=sf-dump-protected title=\"Protected property\">original</span>: <span class=sf-dump-note>array:25</span> [ &#8230;25]
+      #<span class=sf-dump-protected title=\"Protected property\">changes</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">casts</span>: <span class=sf-dump-note>array:6</span> [ &#8230;6]
+      #<span class=sf-dump-protected title=\"Protected property\">classCastCache</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">attributeCastCache</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">dateFormat</span>: <span class=sf-dump-const>null</span>
+      #<span class=sf-dump-protected title=\"Protected property\">appends</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">dispatchesEvents</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">observables</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">relations</span>: <span class=sf-dump-note>array:2</span> [ &#8230;2]
+      #<span class=sf-dump-protected title=\"Protected property\">touches</span>: []
+      +<span class=sf-dump-public title=\"Public property\">timestamps</span>: <span class=sf-dump-const>true</span>
+      +<span class=sf-dump-public title=\"Public property\">usesUniqueIds</span>: <span class=sf-dump-const>false</span>
+      #<span class=sf-dump-protected title=\"Protected property\">hidden</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">visible</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">fillable</span>: <span class=sf-dump-note>array:16</span> [ &#8230;16]
+      #<span class=sf-dump-protected title=\"Protected property\">guarded</span>: <span class=sf-dump-note>array:1</span> [ &#8230;1]
+    </samp>}
+    <span class=sf-dump-index>1</span> => <span class=\"sf-dump-note sf-dump-ellipsization\" title=\"App\\Models\\Reservation
+\"><span class=\"sf-dump-ellipsis sf-dump-ellipsis-note\">App\\Models</span><span class=\"sf-dump-ellipsis sf-dump-ellipsis-note\">\\</span><span class=\"sf-dump-ellipsis-tail\">Reservation</span></span> {<a class=sf-dump-ref>#1174</a><samp data-depth=3 class=sf-dump-compact>
+      #<span class=sf-dump-protected title=\"Protected property\">connection</span>: \"<span class=sf-dump-str title=\"5 characters\">mysql</span>\"
+      #<span class=sf-dump-protected title=\"Protected property\">table</span>: \"<span class=sf-dump-str title=\"12 characters\">reservations</span>\"
+      #<span class=sf-dump-protected title=\"Protected property\">primaryKey</span>: \"<span class=sf-dump-str title=\"2 characters\">id</span>\"
+      #<span class=sf-dump-protected title=\"Protected property\">keyType</span>: \"<span class=sf-dump-str title=\"3 characters\">int</span>\"
+      +<span class=sf-dump-public title=\"Public property\">incrementing</span>: <span class=sf-dump-const>true</span>
+      #<span class=sf-dump-protected title=\"Protected property\">with</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">withCount</span>: []
+      +<span class=sf-dump-public title=\"Public property\">preventsLazyLoading</span>: <span class=sf-dump-const>false</span>
+      #<span class=sf-dump-protected title=\"Protected property\">perPage</span>: <span class=sf-dump-num>15</span>
+      +<span class=sf-dump-public title=\"Public property\">exists</span>: <span class=sf-dump-const>true</span>
+      +<span class=sf-dump-public title=\"Public property\">wasRecentlyCreated</span>: <span class=sf-dump-const>false</span>
+      #<span class=sf-dump-protected title=\"Protected property\">escapeWhenCastingToString</span>: <span class=sf-dump-const>false</span>
+      #<span class=sf-dump-protected title=\"Protected property\">attributes</span>: <span class=sf-dump-note>array:25</span> [ &#8230;25]
+      #<span class=sf-dump-protected title=\"Protected property\">original</span>: <span class=sf-dump-note>array:25</span> [ &#8230;25]
+      #<span class=sf-dump-protected title=\"Protected property\">changes</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">casts</span>: <span class=sf-dump-note>array:6</span> [ &#8230;6]
+      #<span class=sf-dump-protected title=\"Protected property\">classCastCache</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">attributeCastCache</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">dateFormat</span>: <span class=sf-dump-const>null</span>
+      #<span class=sf-dump-protected title=\"Protected property\">appends</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">dispatchesEvents</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">observables</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">relations</span>: <span class=sf-dump-note>array:2</span> [ &#8230;2]
+      #<span class=sf-dump-protected title=\"Protected property\">touches</span>: []
+      +<span class=sf-dump-public title=\"Public property\">timestamps</span>: <span class=sf-dump-const>true</span>
+      +<span class=sf-dump-public title=\"Public property\">usesUniqueIds</span>: <span class=sf-dump-const>false</span>
+      #<span class=sf-dump-protected title=\"Protected property\">hidden</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">visible</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">fillable</span>: <span class=sf-dump-note>array:16</span> [ &#8230;16]
+      #<span class=sf-dump-protected title=\"Protected property\">guarded</span>: <span class=sf-dump-note>array:1</span> [ &#8230;1]
+    </samp>}
+    <span class=sf-dump-index>2</span> => <span class=\"sf-dump-note sf-dump-ellipsization\" title=\"App\\Models\\Reservation
+\"><span class=\"sf-dump-ellipsis sf-dump-ellipsis-note\">App\\Models</span><span class=\"sf-dump-ellipsis sf-dump-ellipsis-note\">\\</span><span class=\"sf-dump-ellipsis-tail\">Reservation</span></span> {<a class=sf-dump-ref>#1175</a><samp data-depth=3 class=sf-dump-compact>
+      #<span class=sf-dump-protected title=\"Protected property\">connection</span>: \"<span class=sf-dump-str title=\"5 characters\">mysql</span>\"
+      #<span class=sf-dump-protected title=\"Protected property\">table</span>: \"<span class=sf-dump-str title=\"12 characters\">reservations</span>\"
+      #<span class=sf-dump-protected title=\"Protected property\">primaryKey</span>: \"<span class=sf-dump-str title=\"2 characters\">id</span>\"
+      #<span class=sf-dump-protected title=\"Protected property\">keyType</span>: \"<span class=sf-dump-str title=\"3 characters\">int</span>\"
+      +<span class=sf-dump-public title=\"Public property\">incrementing</span>: <span class=sf-dump-const>true</span>
+      #<span class=sf-dump-protected title=\"Protected property\">with</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">withCount</span>: []
+      +<span class=sf-dump-public title=\"Public property\">preventsLazyLoading</span>: <span class=sf-dump-const>false</span>
+      #<span class=sf-dump-protected title=\"Protected property\">perPage</span>: <span class=sf-dump-num>15</span>
+      +<span class=sf-dump-public title=\"Public property\">exists</span>: <span class=sf-dump-const>true</span>
+      +<span class=sf-dump-public title=\"Public property\">wasRecentlyCreated</span>: <span class=sf-dump-const>false</span>
+      #<span class=sf-dump-protected title=\"Protected property\">escapeWhenCastingToString</span>: <span class=sf-dump-const>false</span>
+      #<span class=sf-dump-protected title=\"Protected property\">attributes</span>: <span class=sf-dump-note>array:25</span> [ &#8230;25]
+      #<span class=sf-dump-protected title=\"Protected property\">original</span>: <span class=sf-dump-note>array:25</span> [ &#8230;25]
+      #<span class=sf-dump-protected title=\"Protected property\">changes</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">casts</span>: <span class=sf-dump-note>array:6</span> [ &#8230;6]
+      #<span class=sf-dump-protected title=\"Protected property\">classCastCache</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">attributeCastCache</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">dateFormat</span>: <span class=sf-dump-const>null</span>
+      #<span class=sf-dump-protected title=\"Protected property\">appends</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">dispatchesEvents</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">observables</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">relations</span>: <span class=sf-dump-note>array:2</span> [ &#8230;2]
+      #<span class=sf-dump-protected title=\"Protected property\">touches</span>: []
+      +<span class=sf-dump-public title=\"Public property\">timestamps</span>: <span class=sf-dump-const>true</span>
+      +<span class=sf-dump-public title=\"Public property\">usesUniqueIds</span>: <span class=sf-dump-const>false</span>
+      #<span class=sf-dump-protected title=\"Protected property\">hidden</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">visible</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">fillable</span>: <span class=sf-dump-note>array:16</span> [ &#8230;16]
+      #<span class=sf-dump-protected title=\"Protected property\">guarded</span>: <span class=sf-dump-note>array:1</span> [ &#8230;1]
+    </samp>}
+  </samp>]
+  #<span class=sf-dump-protected title=\"Protected property\">escapeWhenCastingToString</span>: <span class=sf-dump-const>false</span>
+</samp>}
+</pre><script>Sfdump(\"sf-dump-533202719\", {\"maxDepth\":3,\"maxStringLength\":160})</script>
+","res":"<pre class=sf-dump id=sf-dump-986877949 data-indent-pad=\"  \"><span class=sf-dump-note>App\\Models\\Reservation</span> {<a class=sf-dump-ref>#1175</a><samp data-depth=1 class=sf-dump-expanded>
+  #<span class=sf-dump-protected title=\"Protected property\">connection</span>: \"<span class=sf-dump-str title=\"5 characters\">mysql</span>\"
+  #<span class=sf-dump-protected title=\"Protected property\">table</span>: \"<span class=sf-dump-str title=\"12 characters\">reservations</span>\"
+  #<span class=sf-dump-protected title=\"Protected property\">primaryKey</span>: \"<span class=sf-dump-str title=\"2 characters\">id</span>\"
+  #<span class=sf-dump-protected title=\"Protected property\">keyType</span>: \"<span class=sf-dump-str title=\"3 characters\">int</span>\"
+  +<span class=sf-dump-public title=\"Public property\">incrementing</span>: <span class=sf-dump-const>true</span>
+  #<span class=sf-dump-protected title=\"Protected property\">with</span>: []
+  #<span class=sf-dump-protected title=\"Protected property\">withCount</span>: []
+  +<span class=sf-dump-public title=\"Public property\">preventsLazyLoading</span>: <span class=sf-dump-const>false</span>
+  #<span class=sf-dump-protected title=\"Protected property\">perPage</span>: <span class=sf-dump-num>15</span>
+  +<span class=sf-dump-public title=\"Public property\">exists</span>: <span class=sf-dump-const>true</span>
+  +<span class=sf-dump-public title=\"Public property\">wasRecentlyCreated</span>: <span class=sf-dump-const>false</span>
+  #<span class=sf-dump-protected title=\"Protected property\">escapeWhenCastingToString</span>: <span class=sf-dump-const>false</span>
+  #<span class=sf-dump-protected title=\"Protected property\">attributes</span>: <span class=sf-dump-note>array:25</span> [<samp data-depth=2 class=sf-dump-compact>
+    \"<span class=sf-dump-key>id</span>\" => <span class=sf-dump-num>1</span>
+    \"<span class=sf-dump-key>code</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>user_id</span>\" => <span class=sf-dump-num>5</span>
+    \"<span class=sf-dump-key>reservation_date</span>\" => \"<span class=sf-dump-str title=\"10 characters\">2026-10-12</span>\"
+    \"<span class=sf-dump-key>reservation_time</span>\" => \"<span class=sf-dump-str title=\"8 characters\">12:34:00</span>\"
+    \"<span class=sf-dump-key>table_id</span>\" => <span class=sf-dump-num>2</span>
+    \"<span class=sf-dump-key>full_name</span>\" => \"<span class=sf-dump-str title=\"8 characters\">Ng Van A</span>\"
+    \"<span class=sf-dump-key>phone</span>\" => \"<span class=sf-dump-str title=\"10 characters\">0704409810</span>\"
+    \"<span class=sf-dump-key>notes</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>total_price</span>\" => \"<span class=sf-dump-str title=\"9 characters\">170000.00</span>\"
+    \"<span class=sf-dump-key>deposit_amount</span>\" => <span class=sf-dump-num>34000</span>
+    \"<span class=sf-dump-key>paid_amount</span>\" => <span class=sf-dump-num>136000</span>
+    \"<span class=sf-dump-key>paid_at</span>\" => \"<span class=sf-dump-str title=\"19 characters\">2026-10-12 12:36:41</span>\"
+    \"<span class=sf-dump-key>paid_by</span>\" => <span class=sf-dump-num>1</span>
+    \"<span class=sf-dump-key>deposit_paid_at</span>\" => \"<span class=sf-dump-str title=\"19 characters\">2026-10-12 12:36:17</span>\"
+    \"<span class=sf-dump-key>cart_data</span>\" => \"<span class=sf-dump-str title=\"203 characters\">[{&quot;id&quot;: 43, &quot;name&quot;: &quot;N&#432;&#7899;c Mocktail Hokkaido Strawberry&quot;, &quot;image&quot;: &quot;images/nc3.jpg&quot;, &quot;price&quot;: 80000, &quot;quantity&quot;: 1}, {&quot;id&quot;: 31, &quot;name&quot;: &quot;Ph&#7903; b&#242;&quot;, &quot;image&quot;: &quot;images/mv7.jpg&quot;, &quot;price&quot;: 90000, &quot;quantity&quot;: 1}]</span>\"
+    \"<span class=sf-dump-key>chef_statuses</span>\" => \"<span class=sf-dump-str title=\"28 characters\">{&quot;31&quot;: &quot;done&quot;, &quot;43&quot;: &quot;done&quot;}</span>\"
+    \"<span class=sf-dump-key>reservation_status</span>\" => \"<span class=sf-dump-str title=\"7 characters\">pending</span>\"
+    \"<span class=sf-dump-key>payment_status</span>\" => \"<span class=sf-dump-str title=\"4 characters\">paid</span>\"
+    \"<span class=sf-dump-key>payment_method</span>\" => \"<span class=sf-dump-str title=\"4 characters\">BANK</span>\"
+    \"<span class=sf-dump-key>cleanup_started_at</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>created_at</span>\" => \"<span class=sf-dump-str title=\"19 characters\">2026-10-12 12:34:51</span>\"
+    \"<span class=sf-dump-key>updated_at</span>\" => \"<span class=sf-dump-str title=\"19 characters\">2026-10-12 12:37:10</span>\"
+    \"<span class=sf-dump-key>status</span>\" => \"<span class=sf-dump-str title=\"9 characters\">completed</span>\"
+    \"<span class=sf-dump-key>email</span>\" => \"<span class=sf-dump-str title=\"20 characters\">nhilee2229@gmail.com</span>\"
+  </samp>]
+  #<span class=sf-dump-protected title=\"Protected property\">original</span>: <span class=sf-dump-note>array:25</span> [<samp data-depth=2 class=sf-dump-compact>
+    \"<span class=sf-dump-key>id</span>\" => <span class=sf-dump-num>1</span>
+    \"<span class=sf-dump-key>code</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>user_id</span>\" => <span class=sf-dump-num>5</span>
+    \"<span class=sf-dump-key>reservation_date</span>\" => \"<span class=sf-dump-str title=\"10 characters\">2026-10-12</span>\"
+    \"<span class=sf-dump-key>reservation_time</span>\" => \"<span class=sf-dump-str title=\"8 characters\">12:34:00</span>\"
+    \"<span class=sf-dump-key>table_id</span>\" => <span class=sf-dump-num>2</span>
+    \"<span class=sf-dump-key>full_name</span>\" => \"<span class=sf-dump-str title=\"8 characters\">Ng Van A</span>\"
+    \"<span class=sf-dump-key>phone</span>\" => \"<span class=sf-dump-str title=\"10 characters\">0704409810</span>\"
+    \"<span class=sf-dump-key>notes</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>total_price</span>\" => \"<span class=sf-dump-str title=\"9 characters\">170000.00</span>\"
+    \"<span class=sf-dump-key>deposit_amount</span>\" => <span class=sf-dump-num>34000</span>
+    \"<span class=sf-dump-key>paid_amount</span>\" => <span class=sf-dump-num>136000</span>
+    \"<span class=sf-dump-key>paid_at</span>\" => \"<span class=sf-dump-str title=\"19 characters\">2026-10-12 12:36:41</span>\"
+    \"<span class=sf-dump-key>paid_by</span>\" => <span class=sf-dump-num>1</span>
+    \"<span class=sf-dump-key>deposit_paid_at</span>\" => \"<span class=sf-dump-str title=\"19 characters\">2026-10-12 12:36:17</span>\"
+    \"<span class=sf-dump-key>cart_data</span>\" => \"<span class=sf-dump-str title=\"203 characters\">[{&quot;id&quot;: 43, &quot;name&quot;: &quot;N&#432;&#7899;c Mocktail Hokkaido Strawberry&quot;, &quot;image&quot;: &quot;images/nc3.jpg&quot;, &quot;price&quot;: 80000, &quot;quantity&quot;: 1}, {&quot;id&quot;: 31, &quot;name&quot;: &quot;Ph&#7903; b&#242;&quot;, &quot;image&quot;: &quot;images/mv7.jpg&quot;, &quot;price&quot;: 90000, &quot;quantity&quot;: 1}]</span>\"
+    \"<span class=sf-dump-key>chef_statuses</span>\" => \"<span class=sf-dump-str title=\"28 characters\">{&quot;31&quot;: &quot;done&quot;, &quot;43&quot;: &quot;done&quot;}</span>\"
+    \"<span class=sf-dump-key>reservation_status</span>\" => \"<span class=sf-dump-str title=\"7 characters\">pending</span>\"
+    \"<span class=sf-dump-key>payment_status</span>\" => \"<span class=sf-dump-str title=\"4 characters\">paid</span>\"
+    \"<span class=sf-dump-key>payment_method</span>\" => \"<span class=sf-dump-str title=\"4 characters\">BANK</span>\"
+    \"<span class=sf-dump-key>cleanup_started_at</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>created_at</span>\" => \"<span class=sf-dump-str title=\"19 characters\">2026-10-12 12:34:51</span>\"
+    \"<span class=sf-dump-key>updated_at</span>\" => \"<span class=sf-dump-str title=\"19 characters\">2026-10-12 12:37:10</span>\"
+    \"<span class=sf-dump-key>status</span>\" => \"<span class=sf-dump-str title=\"9 characters\">completed</span>\"
+    \"<span class=sf-dump-key>email</span>\" => \"<span class=sf-dump-str title=\"20 characters\">nhilee2229@gmail.com</span>\"
+  </samp>]
+  #<span class=sf-dump-protected title=\"Protected property\">changes</span>: []
+  #<span class=sf-dump-protected title=\"Protected property\">casts</span>: <span class=sf-dump-note>array:6</span> [<samp data-depth=2 class=sf-dump-compact>
+    \"<span class=sf-dump-key>cleanup_started_at</span>\" => \"<span class=sf-dump-str title=\"8 characters\">datetime</span>\"
+    \"<span class=sf-dump-key>paid_at</span>\" => \"<span class=sf-dump-str title=\"8 characters\">datetime</span>\"
+    \"<span class=sf-dump-key>deposit_paid_at</span>\" => \"<span class=sf-dump-str title=\"8 characters\">datetime</span>\"
+    \"<span class=sf-dump-key>reservation_date</span>\" => \"<span class=sf-dump-str title=\"4 characters\">date</span>\"
+    \"<span class=sf-dump-key>cart_data</span>\" => \"<span class=sf-dump-str title=\"5 characters\">array</span>\"
+    \"<span class=sf-dump-key>chef_statuses</span>\" => \"<span class=sf-dump-str title=\"5 characters\">array</span>\"
+  </samp>]
+  #<span class=sf-dump-protected title=\"Protected property\">classCastCache</span>: []
+  #<span class=sf-dump-protected title=\"Protected property\">attributeCastCache</span>: []
+  #<span class=sf-dump-protected title=\"Protected property\">dateFormat</span>: <span class=sf-dump-const>null</span>
+  #<span class=sf-dump-protected title=\"Protected property\">appends</span>: []
+  #<span class=sf-dump-protected title=\"Protected property\">dispatchesEvents</span>: []
+  #<span class=sf-dump-protected title=\"Protected property\">observables</span>: []
+  #<span class=sf-dump-protected title=\"Protected property\">relations</span>: <span class=sf-dump-note>array:2</span> [<samp data-depth=2 class=sf-dump-compact>
+    \"<span class=sf-dump-key>user</span>\" => <span class=\"sf-dump-note sf-dump-ellipsization\" title=\"App\\Models\\User
+\"><span class=\"sf-dump-ellipsis sf-dump-ellipsis-note\">App\\Models</span><span class=\"sf-dump-ellipsis sf-dump-ellipsis-note\">\\</span><span class=\"sf-dump-ellipsis-tail\">User</span></span> {<a class=sf-dump-ref>#1181</a><samp data-depth=3 class=sf-dump-compact>
+      #<span class=sf-dump-protected title=\"Protected property\">connection</span>: \"<span class=sf-dump-str title=\"5 characters\">mysql</span>\"
+      #<span class=sf-dump-protected title=\"Protected property\">table</span>: \"<span class=sf-dump-str title=\"5 characters\">users</span>\"
+      #<span class=sf-dump-protected title=\"Protected property\">primaryKey</span>: \"<span class=sf-dump-str title=\"2 characters\">id</span>\"
+      #<span class=sf-dump-protected title=\"Protected property\">keyType</span>: \"<span class=sf-dump-str title=\"3 characters\">int</span>\"
+      +<span class=sf-dump-public title=\"Public property\">incrementing</span>: <span class=sf-dump-const>true</span>
+      #<span class=sf-dump-protected title=\"Protected property\">with</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">withCount</span>: []
+      +<span class=sf-dump-public title=\"Public property\">preventsLazyLoading</span>: <span class=sf-dump-const>false</span>
+      #<span class=sf-dump-protected title=\"Protected property\">perPage</span>: <span class=sf-dump-num>15</span>
+      +<span class=sf-dump-public title=\"Public property\">exists</span>: <span class=sf-dump-const>true</span>
+      +<span class=sf-dump-public title=\"Public property\">wasRecentlyCreated</span>: <span class=sf-dump-const>false</span>
+      #<span class=sf-dump-protected title=\"Protected property\">escapeWhenCastingToString</span>: <span class=sf-dump-const>false</span>
+      #<span class=sf-dump-protected title=\"Protected property\">attributes</span>: <span class=sf-dump-note>array:15</span> [ &#8230;15]
+      #<span class=sf-dump-protected title=\"Protected property\">original</span>: <span class=sf-dump-note>array:15</span> [ &#8230;15]
+      #<span class=sf-dump-protected title=\"Protected property\">changes</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">casts</span>: <span class=sf-dump-note>array:3</span> [ &#8230;3]
+      #<span class=sf-dump-protected title=\"Protected property\">classCastCache</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">attributeCastCache</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">dateFormat</span>: <span class=sf-dump-const>null</span>
+      #<span class=sf-dump-protected title=\"Protected property\">appends</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">dispatchesEvents</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">observables</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">relations</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">touches</span>: []
+      +<span class=sf-dump-public title=\"Public property\">timestamps</span>: <span class=sf-dump-const>true</span>
+      +<span class=sf-dump-public title=\"Public property\">usesUniqueIds</span>: <span class=sf-dump-const>false</span>
+      #<span class=sf-dump-protected title=\"Protected property\">hidden</span>: <span class=sf-dump-note>array:2</span> [ &#8230;2]
+      #<span class=sf-dump-protected title=\"Protected property\">visible</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">fillable</span>: <span class=sf-dump-note>array:8</span> [ &#8230;8]
+      #<span class=sf-dump-protected title=\"Protected property\">guarded</span>: <span class=sf-dump-note>array:1</span> [ &#8230;1]
+      #<span class=sf-dump-protected title=\"Protected property\">rememberTokenName</span>: \"<span class=sf-dump-str title=\"14 characters\">remember_token</span>\"
+      #<span class=sf-dump-protected title=\"Protected property\">accessToken</span>: <span class=sf-dump-const>null</span>
+    </samp>}
+    \"<span class=sf-dump-key>table</span>\" => <span class=\"sf-dump-note sf-dump-ellipsization\" title=\"App\\Models\\Table
+\"><span class=\"sf-dump-ellipsis sf-dump-ellipsis-note\">App\\Models</span><span class=\"sf-dump-ellipsis sf-dump-ellipsis-note\">\\</span><span class=\"sf-dump-ellipsis-tail\">Table</span></span> {<a class=sf-dump-ref>#1184</a><samp data-depth=3 class=sf-dump-compact>
+      #<span class=sf-dump-protected title=\"Protected property\">connection</span>: \"<span class=sf-dump-str title=\"5 characters\">mysql</span>\"
+      #<span class=sf-dump-protected title=\"Protected property\">table</span>: \"<span class=sf-dump-str title=\"6 characters\">tables</span>\"
+      #<span class=sf-dump-protected title=\"Protected property\">primaryKey</span>: \"<span class=sf-dump-str title=\"2 characters\">id</span>\"
+      #<span class=sf-dump-protected title=\"Protected property\">keyType</span>: \"<span class=sf-dump-str title=\"3 characters\">int</span>\"
+      +<span class=sf-dump-public title=\"Public property\">incrementing</span>: <span class=sf-dump-const>true</span>
+      #<span class=sf-dump-protected title=\"Protected property\">with</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">withCount</span>: []
+      +<span class=sf-dump-public title=\"Public property\">preventsLazyLoading</span>: <span class=sf-dump-const>false</span>
+      #<span class=sf-dump-protected title=\"Protected property\">perPage</span>: <span class=sf-dump-num>15</span>
+      +<span class=sf-dump-public title=\"Public property\">exists</span>: <span class=sf-dump-const>true</span>
+      +<span class=sf-dump-public title=\"Public property\">wasRecentlyCreated</span>: <span class=sf-dump-const>false</span>
+      #<span class=sf-dump-protected title=\"Protected property\">escapeWhenCastingToString</span>: <span class=sf-dump-const>false</span>
+      #<span class=sf-dump-protected title=\"Protected property\">attributes</span>: <span class=sf-dump-note>array:7</span> [ &#8230;7]
+      #<span class=sf-dump-protected title=\"Protected property\">original</span>: <span class=sf-dump-note>array:7</span> [ &#8230;7]
+      #<span class=sf-dump-protected title=\"Protected property\">changes</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">casts</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">classCastCache</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">attributeCastCache</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">dateFormat</span>: <span class=sf-dump-const>null</span>
+      #<span class=sf-dump-protected title=\"Protected property\">appends</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">dispatchesEvents</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">observables</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">relations</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">touches</span>: []
+      +<span class=sf-dump-public title=\"Public property\">timestamps</span>: <span class=sf-dump-const>true</span>
+      +<span class=sf-dump-public title=\"Public property\">usesUniqueIds</span>: <span class=sf-dump-const>false</span>
+      #<span class=sf-dump-protected title=\"Protected property\">hidden</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">visible</span>: []
+      #<span class=sf-dump-protected title=\"Protected property\">fillable</span>: <span class=sf-dump-note>array:4</span> [ &#8230;4]
+      #<span class=sf-dump-protected title=\"Protected property\">guarded</span>: <span class=sf-dump-note>array:1</span> [ &#8230;1]
+    </samp>}
+  </samp>]
+  #<span class=sf-dump-protected title=\"Protected property\">touches</span>: []
+  +<span class=sf-dump-public title=\"Public property\">timestamps</span>: <span class=sf-dump-const>true</span>
+  +<span class=sf-dump-public title=\"Public property\">usesUniqueIds</span>: <span class=sf-dump-const>false</span>
+  #<span class=sf-dump-protected title=\"Protected property\">hidden</span>: []
+  #<span class=sf-dump-protected title=\"Protected property\">visible</span>: []
+  #<span class=sf-dump-protected title=\"Protected property\">fillable</span>: <span class=sf-dump-note>array:16</span> [<samp data-depth=2 class=sf-dump-compact>
+    <span class=sf-dump-index>0</span> => \"<span class=sf-dump-str title=\"7 characters\">user_id</span>\"
+    <span class=sf-dump-index>1</span> => \"<span class=sf-dump-str title=\"16 characters\">reservation_date</span>\"
+    <span class=sf-dump-index>2</span> => \"<span class=sf-dump-str title=\"16 characters\">reservation_time</span>\"
+    <span class=sf-dump-index>3</span> => \"<span class=sf-dump-str title=\"8 characters\">table_id</span>\"
+    <span class=sf-dump-index>4</span> => \"<span class=sf-dump-str title=\"9 characters\">full_name</span>\"
+    <span class=sf-dump-index>5</span> => \"<span class=sf-dump-str title=\"5 characters\">email</span>\"
+    <span class=sf-dump-index>6</span> => \"<span class=sf-dump-str title=\"5 characters\">phone</span>\"
+    <span class=sf-dump-index>7</span> => \"<span class=sf-dump-str title=\"5 characters\">notes</span>\"
+    <span class=sf-dump-index>8</span> => \"<span class=sf-dump-str title=\"9 characters\">cart_data</span>\"
+    <span class=sf-dump-index>9</span> => \"<span class=sf-dump-str title=\"11 characters\">total_price</span>\"
+    <span class=sf-dump-index>10</span> => \"<span class=sf-dump-str title=\"18 characters\">reservation_status</span>\"
+    <span class=sf-dump-index>11</span> => \"<span class=sf-dump-str title=\"14 characters\">payment_status</span>\"
+    <span class=sf-dump-index>12</span> => \"<span class=sf-dump-str title=\"14 characters\">payment_method</span>\"
+    <span class=sf-dump-index>13</span> => \"<span class=sf-dump-str title=\"14 characters\">deposit_amount</span>\"
+    <span class=sf-dump-index>14</span> => \"<span class=sf-dump-str title=\"18 characters\">cleanup_started_at</span>\"
+    <span class=sf-dump-index>15</span> => \"<span class=sf-dump-str title=\"6 characters\">status</span>\"
+  </samp>]
+  #<span class=sf-dump-protected title=\"Protected property\">guarded</span>: <span class=sf-dump-note>array:1</span> [<samp data-depth=2 class=sf-dump-compact>
+    <span class=sf-dump-index>0</span> => \"<span class=sf-dump-str>*</span>\"
+  </samp>]
+</samp>}
+</pre><script>Sfdump(\"sf-dump-986877949\", {\"maxDepth\":3,\"maxStringLength\":160})</script>
+","loop":"<pre class=sf-dump id=sf-dump-293229619 data-indent-pad=\"  \"><span class=sf-dump-const>null</span>
+</pre><script>Sfdump(\"sf-dump-293229619\", {\"maxDepth\":3,\"maxStringLength\":160})</script>
+"}},"userId":2,"exception":"[object] (Spatie\\LaravelIgnition\\Exceptions\\ViewException(code: 0): Route [staff.bills.index] not defined. at D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Routing/UrlGenerator.php:477)
+[stacktrace]
+#0 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/helpers.php(811): Illuminate/Routing/UrlGenerator->route('staff.bills.ind...', Array, true)
+#1 D:/laragon/www/restaurant-fixed/resources/views/layouts/admin.blade.php(641): route('staff.bills.ind...')
+#2 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(123): require('D://laragon//www//...')
+#3 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(124): Illuminate/Filesystem/Filesystem::Illuminate/Filesystem/{closure}()
+#4 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/View/Engines/PhpEngine.php(58): Illuminate/Filesystem/Filesystem->getRequire('D://laragon//www//...', Array)
+#5 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/View/Engines/CompilerEngine.php(72): Illuminate/View/Engines/PhpEngine->evaluatePath('D://laragon//www//...', Array)
+#6 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/View/View.php(207): Illuminate/View/Engines/CompilerEngine->get('D://laragon//www//...', Array)
+#7 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/View/View.php(190): Illuminate/View/View->getContents()
+#8 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/View/View.php(159): Illuminate/View/View->renderContents()
+#9 D:/laragon/www/restaurant-fixed/resources/views/staff/reservations.blade.php(176): Illuminate/View/View->render()
+#10 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(123): require('D://laragon//www//...')
+#11 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(124): Illuminate/Filesystem/Filesystem::Illuminate/Filesystem/{closure}()
+#12 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/View/Engines/PhpEngine.php(58): Illuminate/Filesystem/Filesystem->getRequire('D://laragon//www//...', Array)
+#13 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/View/Engines/CompilerEngine.php(72): Illuminate/View/Engines/PhpEngine->evaluatePath('D://laragon//www//...', Array)
+#14 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/View/View.php(207): Illuminate/View/Engines/CompilerEngine->get('D://laragon//www//...', Array)
+#15 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/View/View.php(190): Illuminate/View/View->getContents()
+#16 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/View/View.php(159): Illuminate/View/View->renderContents()
+#17 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Http/Response.php(69): Illuminate/View/View->render()
+#18 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Http/Response.php(35): Illuminate/Http/Response->setContent(Object(Illuminate/View/View))
+#19 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Routing/Router.php(918): Illuminate/Http/Response->__construct(Object(Illuminate/View/View), 200, Array)
+#20 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Routing/Router.php(885): Illuminate/Routing/Router::toResponse(Object(Illuminate/Http/Request), Object(Illuminate/View/View))
+#21 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Routing/Router.php(806): Illuminate/Routing/Router->prepareResponse(Object(Illuminate/Http/Request), Object(Illuminate/View/View))
+#22 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(144): Illuminate/Routing/Router->Illuminate/Routing/{closure}(Object(Illuminate/Http/Request))
+#23 D:/laragon/www/restaurant-fixed/app/Http/Middleware/CheckRole.php(33): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#24 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): App/Http/Middleware/CheckRole->handle(Object(Illuminate/Http/Request), Object(Closure), 'staff')
+#25 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Routing/Middleware/SubstituteBindings.php(50): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#26 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Routing/Middleware/SubstituteBindings->handle(Object(Illuminate/Http/Request), Object(Closure))
+#27 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Auth/Middleware/Authenticate.php(57): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#28 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Auth/Middleware/Authenticate->handle(Object(Illuminate/Http/Request), Object(Closure))
+#29 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/VerifyCsrfToken.php(78): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#30 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Foundation/Http/Middleware/VerifyCsrfToken->handle(Object(Illuminate/Http/Request), Object(Closure))
+#31 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/View/Middleware/ShareErrorsFromSession.php(49): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#32 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/View/Middleware/ShareErrorsFromSession->handle(Object(Illuminate/Http/Request), Object(Closure))
+#33 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Session/Middleware/StartSession.php(121): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#34 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Session/Middleware/StartSession.php(64): Illuminate/Session/Middleware/StartSession->handleStatefulRequest(Object(Illuminate/Http/Request), Object(Illuminate/Session/Store), Object(Closure))
+#35 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Session/Middleware/StartSession->handle(Object(Illuminate/Http/Request), Object(Closure))
+#36 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Cookie/Middleware/AddQueuedCookiesToResponse.php(37): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#37 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Cookie/Middleware/AddQueuedCookiesToResponse->handle(Object(Illuminate/Http/Request), Object(Closure))
+#38 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Cookie/Middleware/EncryptCookies.php(67): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#39 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Cookie/Middleware/EncryptCookies->handle(Object(Illuminate/Http/Request), Object(Closure))
+#40 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(119): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#41 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Routing/Router.php(807): Illuminate/Pipeline/Pipeline->then(Object(Closure))
+#42 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Routing/Router.php(784): Illuminate/Routing/Router->runRouteWithinStack(Object(Illuminate/Routing/Route), Object(Illuminate/Http/Request))
+#43 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Routing/Router.php(748): Illuminate/Routing/Router->runRoute(Object(Illuminate/Http/Request), Object(Illuminate/Routing/Route))
+#44 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Routing/Router.php(737): Illuminate/Routing/Router->dispatchToRoute(Object(Illuminate/Http/Request))
+#45 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(200): Illuminate/Routing/Router->dispatch(Object(Illuminate/Http/Request))
+#46 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(144): Illuminate/Foundation/Http/Kernel->Illuminate/Foundation/Http/{closure}(Object(Illuminate/Http/Request))
+#47 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#48 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ConvertEmptyStringsToNull.php(31): Illuminate/Foundation/Http/Middleware/TransformsRequest->handle(Object(Illuminate/Http/Request), Object(Closure))
+#49 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Foundation/Http/Middleware/ConvertEmptyStringsToNull->handle(Object(Illuminate/Http/Request), Object(Closure))
+#50 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#51 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TrimStrings.php(40): Illuminate/Foundation/Http/Middleware/TransformsRequest->handle(Object(Illuminate/Http/Request), Object(Closure))
+#52 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Foundation/Http/Middleware/TrimStrings->handle(Object(Illuminate/Http/Request), Object(Closure))
+#53 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ValidatePostSize.php(27): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#54 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Foundation/Http/Middleware/ValidatePostSize->handle(Object(Illuminate/Http/Request), Object(Closure))
+#55 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/PreventRequestsDuringMaintenance.php(99): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#56 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Foundation/Http/Middleware/PreventRequestsDuringMaintenance->handle(Object(Illuminate/Http/Request), Object(Closure))
+#57 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Http/Middleware/HandleCors.php(49): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#58 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Http/Middleware/HandleCors->handle(Object(Illuminate/Http/Request), Object(Closure))
+#59 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Http/Middleware/TrustProxies.php(39): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#60 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Http/Middleware/TrustProxies->handle(Object(Illuminate/Http/Request), Object(Closure))
+#61 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(119): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#62 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(175): Illuminate/Pipeline/Pipeline->then(Object(Closure))
+#63 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(144): Illuminate/Foundation/Http/Kernel->sendRequestThroughRouter(Object(Illuminate/Http/Request))
+#64 D:/laragon/www/restaurant-fixed/public/index.php(52): Illuminate/Foundation/Http/Kernel->handle(Object(Illuminate/Http/Request))
+#65 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/resources/server.php(16): require_once('D://laragon//www//...')
+#66 {main}
+
+[previous exception] [object] (Symfony\\Component\\Routing\\Exception\\RouteNotFoundException(code: 0): Route [staff.bills.index] not defined. at D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Routing/UrlGenerator.php:477)
+[stacktrace]
+#0 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/helpers.php(811): Illuminate/Routing/UrlGenerator->route('staff.bills.ind...', Array, true)
+#1 D:/laragon/www/restaurant-fixed/storage/framework/views/2633053ad52d8fdc6a6a9e283a6f3990.php(641): route('staff.bills.ind...')
+#2 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(123): require('D://laragon//www//...')
+#3 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(124): Illuminate/Filesystem/Filesystem::Illuminate/Filesystem/{closure}()
+#4 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/View/Engines/PhpEngine.php(58): Illuminate/Filesystem/Filesystem->getRequire('D://laragon//www//...', Array)
+#5 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/View/Engines/CompilerEngine.php(72): Illuminate/View/Engines/PhpEngine->evaluatePath('D://laragon//www//...', Array)
+#6 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/View/View.php(207): Illuminate/View/Engines/CompilerEngine->get('D://laragon//www//...', Array)
+#7 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/View/View.php(190): Illuminate/View/View->getContents()
+#8 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/View/View.php(159): Illuminate/View/View->renderContents()
+#9 D:/laragon/www/restaurant-fixed/storage/framework/views/8c4262b226927efd2222f81fafc10a0d.php(179): Illuminate/View/View->render()
+#10 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(123): require('D://laragon//www//...')
+#11 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(124): Illuminate/Filesystem/Filesystem::Illuminate/Filesystem/{closure}()
+#12 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/View/Engines/PhpEngine.php(58): Illuminate/Filesystem/Filesystem->getRequire('D://laragon//www//...', Array)
+#13 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/View/Engines/CompilerEngine.php(72): Illuminate/View/Engines/PhpEngine->evaluatePath('D://laragon//www//...', Array)
+#14 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/View/View.php(207): Illuminate/View/Engines/CompilerEngine->get('D://laragon//www//...', Array)
+#15 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/View/View.php(190): Illuminate/View/View->getContents()
+#16 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/View/View.php(159): Illuminate/View/View->renderContents()
+#17 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Http/Response.php(69): Illuminate/View/View->render()
+#18 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Http/Response.php(35): Illuminate/Http/Response->setContent(Object(Illuminate/View/View))
+#19 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Routing/Router.php(918): Illuminate/Http/Response->__construct(Object(Illuminate/View/View), 200, Array)
+#20 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Routing/Router.php(885): Illuminate/Routing/Router::toResponse(Object(Illuminate/Http/Request), Object(Illuminate/View/View))
+#21 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Routing/Router.php(806): Illuminate/Routing/Router->prepareResponse(Object(Illuminate/Http/Request), Object(Illuminate/View/View))
+#22 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(144): Illuminate/Routing/Router->Illuminate/Routing/{closure}(Object(Illuminate/Http/Request))
+#23 D:/laragon/www/restaurant-fixed/app/Http/Middleware/CheckRole.php(33): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#24 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): App/Http/Middleware/CheckRole->handle(Object(Illuminate/Http/Request), Object(Closure), 'staff')
+#25 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Routing/Middleware/SubstituteBindings.php(50): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#26 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Routing/Middleware/SubstituteBindings->handle(Object(Illuminate/Http/Request), Object(Closure))
+#27 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Auth/Middleware/Authenticate.php(57): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#28 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Auth/Middleware/Authenticate->handle(Object(Illuminate/Http/Request), Object(Closure))
+#29 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/VerifyCsrfToken.php(78): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#30 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Foundation/Http/Middleware/VerifyCsrfToken->handle(Object(Illuminate/Http/Request), Object(Closure))
+#31 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/View/Middleware/ShareErrorsFromSession.php(49): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#32 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/View/Middleware/ShareErrorsFromSession->handle(Object(Illuminate/Http/Request), Object(Closure))
+#33 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Session/Middleware/StartSession.php(121): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#34 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Session/Middleware/StartSession.php(64): Illuminate/Session/Middleware/StartSession->handleStatefulRequest(Object(Illuminate/Http/Request), Object(Illuminate/Session/Store), Object(Closure))
+#35 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Session/Middleware/StartSession->handle(Object(Illuminate/Http/Request), Object(Closure))
+#36 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Cookie/Middleware/AddQueuedCookiesToResponse.php(37): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#37 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Cookie/Middleware/AddQueuedCookiesToResponse->handle(Object(Illuminate/Http/Request), Object(Closure))
+#38 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Cookie/Middleware/EncryptCookies.php(67): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#39 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Cookie/Middleware/EncryptCookies->handle(Object(Illuminate/Http/Request), Object(Closure))
+#40 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(119): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#41 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Routing/Router.php(807): Illuminate/Pipeline/Pipeline->then(Object(Closure))
+#42 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Routing/Router.php(784): Illuminate/Routing/Router->runRouteWithinStack(Object(Illuminate/Routing/Route), Object(Illuminate/Http/Request))
+#43 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Routing/Router.php(748): Illuminate/Routing/Router->runRoute(Object(Illuminate/Http/Request), Object(Illuminate/Routing/Route))
+#44 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Routing/Router.php(737): Illuminate/Routing/Router->dispatchToRoute(Object(Illuminate/Http/Request))
+#45 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(200): Illuminate/Routing/Router->dispatch(Object(Illuminate/Http/Request))
+#46 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(144): Illuminate/Foundation/Http/Kernel->Illuminate/Foundation/Http/{closure}(Object(Illuminate/Http/Request))
+#47 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#48 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ConvertEmptyStringsToNull.php(31): Illuminate/Foundation/Http/Middleware/TransformsRequest->handle(Object(Illuminate/Http/Request), Object(Closure))
+#49 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Foundation/Http/Middleware/ConvertEmptyStringsToNull->handle(Object(Illuminate/Http/Request), Object(Closure))
+#50 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#51 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TrimStrings.php(40): Illuminate/Foundation/Http/Middleware/TransformsRequest->handle(Object(Illuminate/Http/Request), Object(Closure))
+#52 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Foundation/Http/Middleware/TrimStrings->handle(Object(Illuminate/Http/Request), Object(Closure))
+#53 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ValidatePostSize.php(27): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#54 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Foundation/Http/Middleware/ValidatePostSize->handle(Object(Illuminate/Http/Request), Object(Closure))
+#55 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/PreventRequestsDuringMaintenance.php(99): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#56 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Foundation/Http/Middleware/PreventRequestsDuringMaintenance->handle(Object(Illuminate/Http/Request), Object(Closure))
+#57 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Http/Middleware/HandleCors.php(49): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#58 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Http/Middleware/HandleCors->handle(Object(Illuminate/Http/Request), Object(Closure))
+#59 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Http/Middleware/TrustProxies.php(39): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#60 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Http/Middleware/TrustProxies->handle(Object(Illuminate/Http/Request), Object(Closure))
+#61 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(119): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#62 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(175): Illuminate/Pipeline/Pipeline->then(Object(Closure))
+#63 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(144): Illuminate/Foundation/Http/Kernel->sendRequestThroughRouter(Object(Illuminate/Http/Request))
+#64 D:/laragon/www/restaurant-fixed/public/index.php(52): Illuminate/Foundation/Http/Kernel->handle(Object(Illuminate/Http/Request))
+#65 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/resources/server.php(16): require_once('D://laragon//www//...')
+#66 {main}
+"} 
+[2026-10-12 14:04:55] local.ERROR: Target class [AdminBillController] does not exist. {"userId":2,"exception":"[object] (Illuminate\\Contracts\\Container\\BindingResolutionException(code: 0): Target class [AdminBillController] does not exist. at D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Container/Container.php:914)
+[stacktrace]
+#0 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Container/Container.php(795): Illuminate/Container/Container->build('AdminBillContro...')
+#1 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(986): Illuminate/Container/Container->resolve('AdminBillContro...', Array, true)
+#2 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Container/Container.php(731): Illuminate/Foundation/Application->resolve('AdminBillContro...', Array)
+#3 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(971): Illuminate/Container/Container->make('AdminBillContro...', Array)
+#4 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Routing/Route.php(278): Illuminate/Foundation/Application->make('AdminBillContro...')
+#5 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Routing/Route.php(260): Illuminate/Routing/Route->getController()
+#6 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Routing/Route.php(205): Illuminate/Routing/Route->runController()
+#7 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Routing/Router.php(806): Illuminate/Routing/Route->run()
+#8 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(144): Illuminate/Routing/Router->Illuminate/Routing/{closure}(Object(Illuminate/Http/Request))
+#9 D:/laragon/www/restaurant-fixed/app/Http/Middleware/CheckRole.php(33): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#10 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): App/Http/Middleware/CheckRole->handle(Object(Illuminate/Http/Request), Object(Closure), 'staff')
+#11 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Routing/Middleware/SubstituteBindings.php(50): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#12 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Routing/Middleware/SubstituteBindings->handle(Object(Illuminate/Http/Request), Object(Closure))
+#13 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Auth/Middleware/Authenticate.php(57): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#14 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Auth/Middleware/Authenticate->handle(Object(Illuminate/Http/Request), Object(Closure))
+#15 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/VerifyCsrfToken.php(78): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#16 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Foundation/Http/Middleware/VerifyCsrfToken->handle(Object(Illuminate/Http/Request), Object(Closure))
+#17 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/View/Middleware/ShareErrorsFromSession.php(49): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#18 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/View/Middleware/ShareErrorsFromSession->handle(Object(Illuminate/Http/Request), Object(Closure))
+#19 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Session/Middleware/StartSession.php(121): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#20 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Session/Middleware/StartSession.php(64): Illuminate/Session/Middleware/StartSession->handleStatefulRequest(Object(Illuminate/Http/Request), Object(Illuminate/Session/Store), Object(Closure))
+#21 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Session/Middleware/StartSession->handle(Object(Illuminate/Http/Request), Object(Closure))
+#22 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Cookie/Middleware/AddQueuedCookiesToResponse.php(37): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#23 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Cookie/Middleware/AddQueuedCookiesToResponse->handle(Object(Illuminate/Http/Request), Object(Closure))
+#24 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Cookie/Middleware/EncryptCookies.php(67): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#25 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Cookie/Middleware/EncryptCookies->handle(Object(Illuminate/Http/Request), Object(Closure))
+#26 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(119): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#27 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Routing/Router.php(807): Illuminate/Pipeline/Pipeline->then(Object(Closure))
+#28 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Routing/Router.php(784): Illuminate/Routing/Router->runRouteWithinStack(Object(Illuminate/Routing/Route), Object(Illuminate/Http/Request))
+#29 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Routing/Router.php(748): Illuminate/Routing/Router->runRoute(Object(Illuminate/Http/Request), Object(Illuminate/Routing/Route))
+#30 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Routing/Router.php(737): Illuminate/Routing/Router->dispatchToRoute(Object(Illuminate/Http/Request))
+#31 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(200): Illuminate/Routing/Router->dispatch(Object(Illuminate/Http/Request))
+#32 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(144): Illuminate/Foundation/Http/Kernel->Illuminate/Foundation/Http/{closure}(Object(Illuminate/Http/Request))
+#33 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#34 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ConvertEmptyStringsToNull.php(31): Illuminate/Foundation/Http/Middleware/TransformsRequest->handle(Object(Illuminate/Http/Request), Object(Closure))
+#35 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Foundation/Http/Middleware/ConvertEmptyStringsToNull->handle(Object(Illuminate/Http/Request), Object(Closure))
+#36 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#37 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TrimStrings.php(40): Illuminate/Foundation/Http/Middleware/TransformsRequest->handle(Object(Illuminate/Http/Request), Object(Closure))
+#38 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Foundation/Http/Middleware/TrimStrings->handle(Object(Illuminate/Http/Request), Object(Closure))
+#39 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ValidatePostSize.php(27): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#40 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Foundation/Http/Middleware/ValidatePostSize->handle(Object(Illuminate/Http/Request), Object(Closure))
+#41 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/PreventRequestsDuringMaintenance.php(99): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#42 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Foundation/Http/Middleware/PreventRequestsDuringMaintenance->handle(Object(Illuminate/Http/Request), Object(Closure))
+#43 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Http/Middleware/HandleCors.php(49): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#44 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Http/Middleware/HandleCors->handle(Object(Illuminate/Http/Request), Object(Closure))
+#45 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Http/Middleware/TrustProxies.php(39): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#46 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Http/Middleware/TrustProxies->handle(Object(Illuminate/Http/Request), Object(Closure))
+#47 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(119): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#48 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(175): Illuminate/Pipeline/Pipeline->then(Object(Closure))
+#49 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(144): Illuminate/Foundation/Http/Kernel->sendRequestThroughRouter(Object(Illuminate/Http/Request))
+#50 D:/laragon/www/restaurant-fixed/public/index.php(52): Illuminate/Foundation/Http/Kernel->handle(Object(Illuminate/Http/Request))
+#51 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/resources/server.php(16): require_once('D://laragon//www//...')
+#52 {main}
+
+[previous exception] [object] (ReflectionException(code: -1): Class \"AdminBillController\" does not exist at D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Container/Container.php:912)
+[stacktrace]
+#0 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Container/Container.php(912): ReflectionClass->__construct('AdminBillContro...')
+#1 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Container/Container.php(795): Illuminate/Container/Container->build('AdminBillContro...')
+#2 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(986): Illuminate/Container/Container->resolve('AdminBillContro...', Array, true)
+#3 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Container/Container.php(731): Illuminate/Foundation/Application->resolve('AdminBillContro...', Array)
+#4 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(971): Illuminate/Container/Container->make('AdminBillContro...', Array)
+#5 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Routing/Route.php(278): Illuminate/Foundation/Application->make('AdminBillContro...')
+#6 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Routing/Route.php(260): Illuminate/Routing/Route->getController()
+#7 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Routing/Route.php(205): Illuminate/Routing/Route->runController()
+#8 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Routing/Router.php(806): Illuminate/Routing/Route->run()
+#9 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(144): Illuminate/Routing/Router->Illuminate/Routing/{closure}(Object(Illuminate/Http/Request))
+#10 D:/laragon/www/restaurant-fixed/app/Http/Middleware/CheckRole.php(33): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#11 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): App/Http/Middleware/CheckRole->handle(Object(Illuminate/Http/Request), Object(Closure), 'staff')
+#12 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Routing/Middleware/SubstituteBindings.php(50): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#13 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Routing/Middleware/SubstituteBindings->handle(Object(Illuminate/Http/Request), Object(Closure))
+#14 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Auth/Middleware/Authenticate.php(57): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#15 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Auth/Middleware/Authenticate->handle(Object(Illuminate/Http/Request), Object(Closure))
+#16 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/VerifyCsrfToken.php(78): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#17 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Foundation/Http/Middleware/VerifyCsrfToken->handle(Object(Illuminate/Http/Request), Object(Closure))
+#18 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/View/Middleware/ShareErrorsFromSession.php(49): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#19 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/View/Middleware/ShareErrorsFromSession->handle(Object(Illuminate/Http/Request), Object(Closure))
+#20 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Session/Middleware/StartSession.php(121): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#21 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Session/Middleware/StartSession.php(64): Illuminate/Session/Middleware/StartSession->handleStatefulRequest(Object(Illuminate/Http/Request), Object(Illuminate/Session/Store), Object(Closure))
+#22 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Session/Middleware/StartSession->handle(Object(Illuminate/Http/Request), Object(Closure))
+#23 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Cookie/Middleware/AddQueuedCookiesToResponse.php(37): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#24 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Cookie/Middleware/AddQueuedCookiesToResponse->handle(Object(Illuminate/Http/Request), Object(Closure))
+#25 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Cookie/Middleware/EncryptCookies.php(67): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#26 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Cookie/Middleware/EncryptCookies->handle(Object(Illuminate/Http/Request), Object(Closure))
+#27 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(119): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#28 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Routing/Router.php(807): Illuminate/Pipeline/Pipeline->then(Object(Closure))
+#29 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Routing/Router.php(784): Illuminate/Routing/Router->runRouteWithinStack(Object(Illuminate/Routing/Route), Object(Illuminate/Http/Request))
+#30 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Routing/Router.php(748): Illuminate/Routing/Router->runRoute(Object(Illuminate/Http/Request), Object(Illuminate/Routing/Route))
+#31 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Routing/Router.php(737): Illuminate/Routing/Router->dispatchToRoute(Object(Illuminate/Http/Request))
+#32 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(200): Illuminate/Routing/Router->dispatch(Object(Illuminate/Http/Request))
+#33 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(144): Illuminate/Foundation/Http/Kernel->Illuminate/Foundation/Http/{closure}(Object(Illuminate/Http/Request))
+#34 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#35 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ConvertEmptyStringsToNull.php(31): Illuminate/Foundation/Http/Middleware/TransformsRequest->handle(Object(Illuminate/Http/Request), Object(Closure))
+#36 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Foundation/Http/Middleware/ConvertEmptyStringsToNull->handle(Object(Illuminate/Http/Request), Object(Closure))
+#37 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#38 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TrimStrings.php(40): Illuminate/Foundation/Http/Middleware/TransformsRequest->handle(Object(Illuminate/Http/Request), Object(Closure))
+#39 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Foundation/Http/Middleware/TrimStrings->handle(Object(Illuminate/Http/Request), Object(Closure))
+#40 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ValidatePostSize.php(27): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#41 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Foundation/Http/Middleware/ValidatePostSize->handle(Object(Illuminate/Http/Request), Object(Closure))
+#42 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/PreventRequestsDuringMaintenance.php(99): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#43 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Foundation/Http/Middleware/PreventRequestsDuringMaintenance->handle(Object(Illuminate/Http/Request), Object(Closure))
+#44 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Http/Middleware/HandleCors.php(49): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#45 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Http/Middleware/HandleCors->handle(Object(Illuminate/Http/Request), Object(Closure))
+#46 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Http/Middleware/TrustProxies.php(39): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#47 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Http/Middleware/TrustProxies->handle(Object(Illuminate/Http/Request), Object(Closure))
+#48 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(119): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#49 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(175): Illuminate/Pipeline/Pipeline->then(Object(Closure))
+#50 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(144): Illuminate/Foundation/Http/Kernel->sendRequestThroughRouter(Object(Illuminate/Http/Request))
+#51 D:/laragon/www/restaurant-fixed/public/index.php(52): Illuminate/Foundation/Http/Kernel->handle(Object(Illuminate/Http/Request))
+#52 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/resources/server.php(16): require_once('D://laragon//www//...')
+#53 {main}
+"} 
+[2026-10-12 20:04:45] local.ERROR: Namespace declaration statement has to be the very first statement or after any declare call in the script {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Namespace declaration statement has to be the very first statement or after any declare call in the script at D:/laragon/www/restaurant-fixed/app/Http/Controllers/TableController.php:4)
+[stacktrace]
+#0 {main}
+"} 
+[2026-10-12 21:31:27] local.ERROR: syntax error, unexpected token "`" {"exception":"[object] (ParseError(code: 0): syntax error, unexpected token \"`\" at D:/laragon/www/restaurant-fixed/app/Http/Controllers/ReservationController.php:456)
+[stacktrace]
+#0 D:/laragon/www/restaurant-fixed/vendor/composer/ClassLoader.php(427): Composer/Autoload/{closure}('D://laragon//www//...')
+#1 [internal function]: Composer/Autoload/ClassLoader->loadClass('App//Http//Contro...')
+#2 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Routing/Route.php(1096): is_a('App//Http//Contro...', 'Illuminate//Rout...', true)
+#3 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Routing/Route.php(1035): Illuminate/Routing/Route->controllerMiddleware()
+#4 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Routing/Router.php(818): Illuminate/Routing/Route->gatherMiddleware()
+#5 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Routing/Router.php(800): Illuminate/Routing/Router->gatherRouteMiddleware(Object(Illuminate/Routing/Route))
+#6 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Routing/Router.php(784): Illuminate/Routing/Router->runRouteWithinStack(Object(Illuminate/Routing/Route), Object(Illuminate/Http/Request))
+#7 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Routing/Router.php(748): Illuminate/Routing/Router->runRoute(Object(Illuminate/Http/Request), Object(Illuminate/Routing/Route))
+#8 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Routing/Router.php(737): Illuminate/Routing/Router->dispatchToRoute(Object(Illuminate/Http/Request))
+#9 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(200): Illuminate/Routing/Router->dispatch(Object(Illuminate/Http/Request))
+#10 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(144): Illuminate/Foundation/Http/Kernel->Illuminate/Foundation/Http/{closure}(Object(Illuminate/Http/Request))
+#11 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#12 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ConvertEmptyStringsToNull.php(31): Illuminate/Foundation/Http/Middleware/TransformsRequest->handle(Object(Illuminate/Http/Request), Object(Closure))
+#13 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Foundation/Http/Middleware/ConvertEmptyStringsToNull->handle(Object(Illuminate/Http/Request), Object(Closure))
+#14 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#15 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TrimStrings.php(40): Illuminate/Foundation/Http/Middleware/TransformsRequest->handle(Object(Illuminate/Http/Request), Object(Closure))
+#16 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Foundation/Http/Middleware/TrimStrings->handle(Object(Illuminate/Http/Request), Object(Closure))
+#17 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ValidatePostSize.php(27): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#18 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Foundation/Http/Middleware/ValidatePostSize->handle(Object(Illuminate/Http/Request), Object(Closure))
+#19 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/PreventRequestsDuringMaintenance.php(99): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#20 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Foundation/Http/Middleware/PreventRequestsDuringMaintenance->handle(Object(Illuminate/Http/Request), Object(Closure))
+#21 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Http/Middleware/HandleCors.php(49): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#22 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Http/Middleware/HandleCors->handle(Object(Illuminate/Http/Request), Object(Closure))
+#23 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Http/Middleware/TrustProxies.php(39): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#24 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Http/Middleware/TrustProxies->handle(Object(Illuminate/Http/Request), Object(Closure))
+#25 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(119): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#26 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(175): Illuminate/Pipeline/Pipeline->then(Object(Closure))
+#27 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(144): Illuminate/Foundation/Http/Kernel->sendRequestThroughRouter(Object(Illuminate/Http/Request))
+#28 D:/laragon/www/restaurant-fixed/public/index.php(52): Illuminate/Foundation/Http/Kernel->handle(Object(Illuminate/Http/Request))
+#29 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/resources/server.php(16): require_once('D://laragon//www//...')
+#30 {main}
+"} 
+[2026-10-12 21:31:33] local.ERROR: syntax error, unexpected token "`" {"exception":"[object] (ParseError(code: 0): syntax error, unexpected token \"`\" at D:/laragon/www/restaurant-fixed/app/Http/Controllers/ReservationController.php:456)
+[stacktrace]
+#0 D:/laragon/www/restaurant-fixed/vendor/composer/ClassLoader.php(427): Composer/Autoload/{closure}('D://laragon//www//...')
+#1 [internal function]: Composer/Autoload/ClassLoader->loadClass('App//Http//Contro...')
+#2 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Routing/Route.php(1096): is_a('App//Http//Contro...', 'Illuminate//Rout...', true)
+#3 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Routing/Route.php(1035): Illuminate/Routing/Route->controllerMiddleware()
+#4 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Routing/Router.php(818): Illuminate/Routing/Route->gatherMiddleware()
+#5 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Routing/Router.php(800): Illuminate/Routing/Router->gatherRouteMiddleware(Object(Illuminate/Routing/Route))
+#6 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Routing/Router.php(784): Illuminate/Routing/Router->runRouteWithinStack(Object(Illuminate/Routing/Route), Object(Illuminate/Http/Request))
+#7 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Routing/Router.php(748): Illuminate/Routing/Router->runRoute(Object(Illuminate/Http/Request), Object(Illuminate/Routing/Route))
+#8 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Routing/Router.php(737): Illuminate/Routing/Router->dispatchToRoute(Object(Illuminate/Http/Request))
+#9 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(200): Illuminate/Routing/Router->dispatch(Object(Illuminate/Http/Request))
+#10 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(144): Illuminate/Foundation/Http/Kernel->Illuminate/Foundation/Http/{closure}(Object(Illuminate/Http/Request))
+#11 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#12 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ConvertEmptyStringsToNull.php(31): Illuminate/Foundation/Http/Middleware/TransformsRequest->handle(Object(Illuminate/Http/Request), Object(Closure))
+#13 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Foundation/Http/Middleware/ConvertEmptyStringsToNull->handle(Object(Illuminate/Http/Request), Object(Closure))
+#14 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#15 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TrimStrings.php(40): Illuminate/Foundation/Http/Middleware/TransformsRequest->handle(Object(Illuminate/Http/Request), Object(Closure))
+#16 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Foundation/Http/Middleware/TrimStrings->handle(Object(Illuminate/Http/Request), Object(Closure))
+#17 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ValidatePostSize.php(27): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#18 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Foundation/Http/Middleware/ValidatePostSize->handle(Object(Illuminate/Http/Request), Object(Closure))
+#19 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/PreventRequestsDuringMaintenance.php(99): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#20 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Foundation/Http/Middleware/PreventRequestsDuringMaintenance->handle(Object(Illuminate/Http/Request), Object(Closure))
+#21 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Http/Middleware/HandleCors.php(49): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#22 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Http/Middleware/HandleCors->handle(Object(Illuminate/Http/Request), Object(Closure))
+#23 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Http/Middleware/TrustProxies.php(39): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#24 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate/Http/Middleware/TrustProxies->handle(Object(Illuminate/Http/Request), Object(Closure))
+#25 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(119): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#26 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(175): Illuminate/Pipeline/Pipeline->then(Object(Closure))
+#27 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(144): Illuminate/Foundation/Http/Kernel->sendRequestThroughRouter(Object(Illuminate/Http/Request))
+#28 D:/laragon/www/restaurant-fixed/public/index.php(52): Illuminate/Foundation/Http/Kernel->handle(Object(Illuminate/Http/Request))
+#29 D:/laragon/www/restaurant-fixed/vendor/laravel/framework/src/Illuminate/Foundation/resources/server.php(16): require_once('D://laragon//www//...')
+#30 {main}
+"} 
+[2026-10-12 21:59:19] local.INFO: === CART INDEX DEBUG === {"user_id":4,"user_name":"Khách hàng"} 
+[2026-10-12 21:59:19] local.INFO: === LATEST RESERVATION === {"found":"NO","reservation":null} 
+[2026-10-12 21:59:48] local.ERROR: MAIL ERROR: View [emails.booking_confirmation] not found.  
+[2026-10-12 21:59:48] local.INFO: === CART INDEX DEBUG === {"user_id":4,"user_name":"Khách hàng"} 
+[2026-10-12 21:59:48] local.INFO: === LATEST RESERVATION === {"found":"YES","reservation":{"id":3,"full_name":"Nhi","table_id":4}} 

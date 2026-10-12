@@ -10,17 +10,21 @@
         <h2>📄 Danh sách hóa đơn</h2>
     </div>
 
+    
+@if(auth()->user()->role_id == 2)
     <div style="display:flex;flex-wrap:wrap;gap:20px;margin-bottom:20px;">
         <div class="stat-box">
             <h4>💰 Doanh thu hôm nay</h4>
-            <p>{{ number_format($todayRevenue) }}đ</p>
+            <p>{{ number_format($todayRevenue ?? 0) }}đ</p>
         </div>
 
         <div class="stat-box">
             <h4>🏦 Tổng doanh thu</h4>
-            <p>{{ number_format($totalRevenue) }}đ</p>
+            <p>{{ number_format($totalRevenue ?? 0) }}đ</p>
         </div>
     </div>
+@endif
+
 
     <table class="table">
         <thead>
@@ -77,10 +81,17 @@
                 <td>{{ $bill->updated_at->format('d/m/Y H:i') }}</td>
 
                 <td>
-                    <a href="{{ route('admin.bills.show', $bill->id) }}"
-                       class="btn btn-primary btn-sm">
-                        Chi tiết
-                    </a>
+                     @if(auth()->user()->role_id == 3)
+    <a href="{{ route('staff.bills.show', $bill->id) }}"
+       class="btn btn-primary btn-sm">
+        Chi tiết
+    </a>
+@else
+    <a href="{{ route('admin.bills.show', $bill->id) }}"
+       class="btn btn-primary btn-sm">
+        Chi tiết
+    </a>
+@endif
                 </td>
             </tr>
             @empty
