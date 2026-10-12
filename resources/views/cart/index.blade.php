@@ -293,7 +293,7 @@
     @endif
     
     <div class="order-container">
-        <!-- <h3 class="page-title">Hóa đơn của quý khách</h3> -->
+        <h3 class="page-title">Hóa đơn của quý khách</h3>
 
         @if (session('success'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -306,6 +306,13 @@
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
                 {{ session('error') }}
                 <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
+            </div>
+        @endif
+
+        @if ($checkoutUnavailableMessage)
+            <div class="alert alert-warning shadow-sm" role="alert" aria-live="assertive">
+                <strong><i class="fas fa-exclamation-triangle mr-2" aria-hidden="true"></i>Không thể đặt món lúc này.</strong>
+                {{ $checkoutUnavailableMessage }}
             </div>
         @endif
 
@@ -348,18 +355,7 @@
                 <strong>Trạng thái:</strong>
 
                 <span class="font-weight-bold" style="color: #D4AF37;">
-                    @if($reservation['status'] == 'preparing')
-                        👨‍🍳 Đang phục vụ
-
-                    @elseif($reservation['status'] == 'served')
-                        🍽️ Đã lên món
-
-                    @elseif($reservation['status'] == 'completed')
-                        ✅ Hoàn tất
-
-                    @else
-                        ⏳ {{ $reservation['status'] }}
-                    @endif
+                    {{ $reservation['status'] }}
                 </span>
             </p>
 
@@ -464,6 +460,7 @@
         </div>
 
 @if(count($cart))
+@if($canCheckout)
 <form id="checkoutForm" action="{{ route('cart.checkout') }}" method="POST">
     @csrf
     <input type="hidden" name="total_price" value="{{ $total }}">
@@ -505,6 +502,8 @@
 </button>
     </div>
 </form> 
+@else
+@endif
 @else
 <div style="background: #FCFBF8; border: 2px solid #E2E8F0; border-radius: 12px; padding: 40px 30px; text-align: center; margin: 40px 0;">
     <p style="font-size: 18px; color: #1A2228; margin-bottom: 10px; font-weight: 600;">✨ Chỉ Đặt Bàn (Không Có Thực Đơn)</p>

@@ -90,7 +90,7 @@ class OrderController extends Controller
         'table'
     ])->findOrFail($id);
 
-    return view('orders.show', compact('order'));
+    return view('admin.orders.show', compact('order'));
 }
 
     public function updateStatus(Request $request, $id)
@@ -263,7 +263,7 @@ class OrderController extends Controller
     // Danh sách đơn (Admin)
 public function adminIndex()
 {
-    $orders = Order::with('user')->latest()->paginate(20);
+    $orders = Order::with(['user', 'items'])->latest()->paginate(20);
     return view('admin.orders.index', compact('orders'));
 }
 

@@ -27,22 +27,17 @@ class ReservationController extends Controller
      */
     public function index(Request $request)
     {
+        Table::releaseExpiredCleaning();
+
         $menus  = Menu::all();
         $tables = Table::all();
 
-        // Chỉ khóa bàn khi khách đã bấm "xác nhận thanh toán" (hoặc đơn đã qua bước cọc)
+        // Bàn đang được sử dụng/đặt/dọn không thể được khách chọn.
+        $occupiedTableIds = Table::where('status', '!=', 'empty')->pluck('id')->toArray();
+
+        // Chỉ khóa bàn theo reservation khi khách đã xác nhận thanh toán (hoặc đã qua bước cọc).
         $busyTableIds = Reservation::blockingTable()->pluck('table_id')->toArray();
-
-        $cleaningTableIds = Reservation::where('status', 'cleaning')
-            ->where('cleanup_started_at', '>', now()->subMinutes(1))
-            ->pluck('table_id')->toArray();
-
-        $bookedTableIds = array_unique(array_merge($busyTableIds, $cleaningTableIds));
-
-        // Dọn dẹp bàn đã hết thời gian dọn
-        Reservation::where('status', 'cleaning')
-            ->where('cleanup_started_at', '<=', now()->subMinutes(1))
-            ->delete();
+        $bookedTableIds = array_unique(array_merge($occupiedTableIds, $busyTableIds));
 
         return view('reservation', compact('menus', 'tables', 'bookedTableIds'));
     }
@@ -57,13 +52,8 @@ public function store(Request $request)
         'phone'            => 'required|string|max:20',
         'reservation_date' => 'required|date|after_or_equal:today',
         'reservation_time' => 'required',
-        'table_id'         => 'required|integer',
+        'table_id'         => 'required|integer|exists:tables,id',
     ]);
-
-    // Bàn đã có người xác nhận thanh toán / đang dùng thì không cho đặt
-    if (Reservation::blockingTable()->where('table_id', $request->table_id)->exists()) {
-        return back()->withInput()->with('error', 'Bàn này vừa được người khác giữ chỗ. Vui lòng chọn bàn khác.');
-    }
 
     $dbCart     = Cart::with('menu')->where('user_id', auth()->id())->get();
     $cartData   = [];
@@ -88,35 +78,44 @@ public function store(Request $request)
     $depositPercent = 20;
     $depositAmount  = (int) round($totalAmount * $depositPercent / 100);
 
-    $reservation                     = new Reservation();
-    $reservation->user_id            = auth()->id();
-    $reservation->full_name          = $request->full_name;
-    $reservation->email              = auth()->user()->email;
-    $reservation->phone              = $request->phone;
-    $reservation->reservation_date   = $request->reservation_date;
-    $reservation->reservation_time   = $request->reservation_time;
-    $reservation->table_id           = $request->table_id;
-    $reservation->notes              = $request->notes;
-    $reservation->status             = 'pending_deposit';   // 👈 đổi từ 'pending'
-    $reservation->payment_status     = 'unpaid';
-    $reservation->payment_method     = 'BANK'; // Cọc bắt buộc chuyển khoản, khách không được chọn COD ở bước đặt bàn
-    $reservation->deposit_amount     = $depositAmount;       // 👈 thêm
-    $reservation->total_price        = $totalAmount;
-    $reservation->cart_data          = $cartData;
-    $reservation->save();
+    try {
+        $reservation = DB::transaction(function () use ($request, $cartData, $totalAmount, $depositAmount) {
+            if (!Table::lockIfAvailableForBooking((int) $request->table_id)) {
+                throw new \DomainException('Bàn này hiện đang được sử dụng, đã đặt hoặc đang dọn. Vui lòng chọn bàn khác.');
+            }
 
-       // Lưu chi tiết món ăn vào OrderItem (nếu khách có đặt món trước)
-    if (count($cartData) > 0) {
-        foreach ($cartData as $item) {
-            \App\Models\OrderItem::create([
-                'reservation_id' => $reservation->id,
-                'order_id'       => null,
-                'menu_id'        => $item['id'],
-                'product_name'   => $item['name'],
-                'quantity'       => $item['quantity'],
-                'price'          => $item['price'],
-            ]);
-        }
+            $reservation                     = new Reservation();
+            $reservation->user_id            = auth()->id();
+            $reservation->full_name          = $request->full_name;
+            $reservation->email              = auth()->user()->email;
+            $reservation->phone              = $request->phone;
+            $reservation->reservation_date   = $request->reservation_date;
+            $reservation->reservation_time   = $request->reservation_time;
+            $reservation->table_id           = $request->table_id;
+            $reservation->notes              = $request->notes;
+            $reservation->status             = 'pending_deposit';
+            $reservation->payment_status     = 'unpaid';
+            $reservation->payment_method     = 'BANK';
+            $reservation->deposit_amount     = $depositAmount;
+            $reservation->total_price        = $totalAmount;
+            $reservation->cart_data          = $cartData;
+            $reservation->save();
+
+            foreach ($cartData as $item) {
+                \App\Models\OrderItem::create([
+                    'reservation_id' => $reservation->id,
+                    'order_id'       => null,
+                    'menu_id'        => $item['id'],
+                    'product_name'   => $item['name'],
+                    'quantity'       => $item['quantity'],
+                    'price'          => $item['price'],
+                ]);
+            }
+
+            return $reservation;
+        });
+    } catch (\DomainException $e) {
+        return back()->withInput()->with('error', $e->getMessage());
     }
 
     // KHÔNG khóa bàn ở bước này: bàn chỉ được khóa khi khách bấm "xác nhận thanh toán"
@@ -371,7 +370,7 @@ public function store(Request $request)
         $rules = [
             'reservation_date' => 'required|date',
             'reservation_time' => 'required',
-            'table_id'         => 'required|integer',
+            'table_id'         => 'required|integer|exists:tables,id',
         ];
 
         // Chỉ bắt buộc tên và SĐT nếu KHÔNG phải khách Walk-in
@@ -406,51 +405,52 @@ public function store(Request $request)
             }
         }
 
-        // 4. Lưu dữ liệu Đặt bàn (Reservation)
-        $reservation                   = new \App\Models\Reservation();
-        $reservation->user_id          = auth()->id(); // ID của nhân viên tạo đơn
-        $reservation->full_name        = $request->full_name ?? 'Khách vãng lai';
-        $reservation->email            = auth()->user()->email ?? null;
-        $reservation->phone            = $request->phone ?? null;
-        $reservation->reservation_date = $request->reservation_date;
-        $reservation->reservation_time = $request->reservation_time;
-        $reservation->table_id         = $request->table_id;
-        $reservation->notes            = $request->notes;
-        
-        // Trạng thái: Walk-in thì 'serving' (đang phục vụ), Đặt trước thì 'confirmed'
-        $reservation->status = $isWalkIn ? 'arrived' : 'confirmed'; 
-        $reservation->payment_status   = 'unpaid';
-        $reservation->total_price      = $totalAmount;
-        $reservation->cart_data        = $cartData; 
-        $reservation->save();
+        try {
+            DB::transaction(function () use ($request, $isWalkIn, $cartData, $totalAmount) {
+                if (!Table::lockIfAvailableForBooking((int) $request->table_id)) {
+                    throw new \DomainException('Bàn này hiện đang được sử dụng, đã đặt hoặc đang dọn. Vui lòng chọn bàn khác.');
+                }
 
-        // 5. Cập nhật trạng thái Bàn
-        $tableStatus = $isWalkIn ? 'occupied' : 'reserved';
-        \App\Models\Table::where('id', $request->table_id)->update(['status' => $tableStatus]);
+                $reservation                   = new Reservation();
+                $reservation->user_id          = auth()->id();
+                $reservation->full_name        = $request->full_name ?? 'Khách vãng lai';
+                $reservation->email            = auth()->user()->email ?? null;
+                $reservation->phone            = $request->phone ?? null;
+                $reservation->reservation_date = $request->reservation_date;
+                $reservation->reservation_time = $request->reservation_time;
+                $reservation->table_id         = $request->table_id;
+                $reservation->notes            = $request->notes;
+                $reservation->status           = $isWalkIn ? 'arrived' : 'confirmed';
+                $reservation->payment_status   = 'unpaid';
+                $reservation->total_price      = $totalAmount;
+                $reservation->cart_data        = $cartData;
+                $reservation->save();
 
-        // =========================================================
-        // 6. TỰ ĐỘNG TẠO HÓA ĐƠN (ORDER) NẾU CÓ GỌI MÓN (Dành cho Walk-in)
-        // =========================================================
-        if ($isWalkIn && count($cartData) > 0) {
-            // Tạo Hóa đơn chuyển xuống Bếp & Thu ngân
-            $order = \App\Models\Order::create([
-                'user_id'      => auth()->id(),
-                'reservation_id' => $reservation->id,
-                'table_number' => $request->table_id,
-                'total_price'  => $totalAmount,
-                'status'       => 'pending', // 'pending' để Bếp biết có món mới cần làm
-            ]);
+                $tableStatus = $isWalkIn ? 'occupied' : 'reserved';
+                Table::whereKey($request->table_id)->update(['status' => $tableStatus]);
 
-            // Tạo chi tiết các món trong Hóa đơn
-            foreach ($cartData as $item) {
-                \App\Models\OrderItem::create([
-                    'order_id'     => $order->id,
-                    'menu_id'      => $item['id'],
-                    'product_name' => $item['name'],
-                    'quantity'     => $item['quantity'],
-                    'price'        => $item['price'],
-                ]);
-            }
+                if ($isWalkIn && count($cartData) > 0) {
+                    $order = \App\Models\Order::create([
+                        'user_id'        => auth()->id(),
+                        'reservation_id' => $reservation->id,
+                        'table_number'    => $request->table_id,
+                        'total_price'    => $totalAmount,
+                        'status'         => 'pending',
+                    ]);
+
+                    foreach ($cartData as $item) {
+                        \App\Models\OrderItem::create([
+                            'order_id'     => $order->id,
+                            'menu_id'      => $item['id'],
+                            'product_name' => $item['name'],
+                            'quantity'     => $item['quantity'],
+                            'price'        => $item['price'],
+                        ]);
+                    }
+                }
+            });
+        } catch (\DomainException $e) {
+            return back()->withInput()->with('error', $e->getMessage());
         }
 
         return redirect()->route('admin.reservations.index')->with('success', 'Đã mở bàn và chuyển Order xuống bếp thành công!');
@@ -517,25 +517,17 @@ public function store(Request $request)
     }
   public function create()
     {
-        // 1. ĐỒNG BỘ LOGIC DỌN BÀN: 
-        // Tìm các bàn đang ở trạng thái 'cleaning' mà đã trôi qua 1 phút (60 giây)
-        $expiredTables = \App\Models\Table::where('status', 'cleaning')
-            ->where('cleanup_started_at', '<=', now()->subMinutes(1))
-            ->get();
-
-        // Tự động chuyển các bàn đó về trạng thái 'empty' (Sẵn sàng)
-        foreach ($expiredTables as $table) {
-            $table->update([
-                'status' => 'empty',
-                'cleanup_started_at' => null
-            ]);
-        }
+        Table::releaseExpiredCleaning();
 
         // 2. Sau khi đã làm mới trạng thái, mới tiến hành lấy danh sách Bàn và Menu
         $tables = \App\Models\Table::all();
+        $bookedTableIds = array_unique(array_merge(
+            Table::where('status', '!=', 'empty')->pluck('id')->toArray(),
+            Reservation::blockingTable()->pluck('table_id')->toArray()
+        ));
         $menus = \App\Models\Menu::all(); 
 
         // 3. Gọi đúng file giao diện của Admin/Staff (file vừa được gắn code đếm ngược)
-        return view('admin.reservations.create', compact('tables', 'menus'));
+        return view('admin.reservations.create', compact('tables', 'menus', 'bookedTableIds'));
     }
 }

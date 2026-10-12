@@ -46,8 +46,40 @@ class CartController extends Controller
 
         // 2. LẤY THÔNG TIN ĐẶT BÀN MỚI NHẤT TỪ DATABASE (Tuyệt đối không sợ mất Session)
         $latestReservation = \App\Models\Reservation::where('user_id', $userId)
+                            ->whereIn('status', Reservation::ACTIVE_STATUSES)
                             ->orderBy('created_at', 'desc')
                             ->first();
+        $reservationTable = $latestReservation
+            ? \App\Models\Table::find($latestReservation->table_id)
+            : null;
+        $reservationStatusLabel = $latestReservation
+            ? \App\Helpers\StatusHelper::getTextWithEmoji($latestReservation->status)
+            : 'Chưa đặt';
+        $hasTableConflict = $latestReservation
+            && \App\Models\Reservation::blockingTable()
+                ->where('table_id', $latestReservation->table_id)
+                ->where('id', '!=', $latestReservation->id)
+                ->exists();
+        $canCheckout = !$latestReservation || (
+            $latestReservation->status === 'pending_deposit'
+            && $latestReservation->payment_status === 'unpaid'
+            && $reservationTable
+            && $reservationTable->status === 'empty'
+            && !$hasTableConflict
+        );
+        $checkoutUnavailableMessage = null;
+        if ($latestReservation && !$canCheckout) {
+            if ($latestReservation->status !== 'pending_deposit'
+                || $latestReservation->payment_status !== 'unpaid') {
+                $checkoutUnavailableMessage = "Yêu cầu đặt bàn đang ở trạng thái {$reservationStatusLabel}. Vui lòng liên hệ nhân viên để được hỗ trợ.";
+            } elseif (!$reservationTable || $reservationTable->status !== 'empty') {
+                $tableName = $reservationTable->name ?? ('Số ' . $latestReservation->table_id);
+                $checkoutUnavailableMessage = "Bàn {$tableName} hiện không trống. Vui lòng chờ nhân viên dọn bàn hoặc liên hệ nhân viên để được hỗ trợ.";
+            } elseif ($hasTableConflict) {
+                $tableName = $reservationTable->name;
+                $checkoutUnavailableMessage = "Bàn {$tableName} đã được giữ cho khách khác. Vui lòng chọn bàn trống khác hoặc liên hệ nhân viên.";
+            }
+        }
 
         // ✅ DEBUG
         \Log::info('=== LATEST RESERVATION ===', [
@@ -70,7 +102,7 @@ class CartController extends Controller
     'date'      => \Carbon\Carbon::parse($latestReservation->reservation_date)->format('d/m/Y'),
     'time'      => \Carbon\Carbon::parse($latestReservation->reservation_time)->format('H:i'),
     'notes'     => $latestReservation->notes ?? 'Không có yêu cầu đặc biệt',
-    'status'    => 'Chờ xác nhận'
+    'status'    => $reservationStatusLabel
 ];
         } else {
             // Khách chưa đặt bàn, chỉ rẽ ngang vào xem Giỏ hàng
@@ -81,7 +113,7 @@ class CartController extends Controller
     'date'      => '--/--/----',
     'time'      => '--:--',
     'notes'     => 'Chưa có ghi chú',
-    'status'    => 'Chưa đặt'
+    'status'    => $reservationStatusLabel
 ];
         }
 
@@ -92,7 +124,13 @@ class CartController extends Controller
         }
 
         // Trả dữ liệu ra view
-        return view('cart.index', compact('cart', 'total', 'reservation'));
+        return view('cart.index', compact(
+            'cart',
+            'total',
+            'reservation',
+            'canCheckout',
+            'checkoutUnavailableMessage'
+        ));
     }
 
     /**
@@ -253,10 +291,19 @@ public function getCart()
             }
         }
 
-        // 3. Tính tổng tiền từ dữ liệu giỏ hàng thực tế
+        // 3. Dùng một snapshot món ăn từ giỏ DB cho cả hóa đơn và đơn bếp
         $totalAmount = 0;
+        $cartData = [];
         foreach ($cartItems as $item) {
-            $totalAmount += ($item->menu->price ?? 0) * $item->quantity;
+            $price = $item->menu->price;
+            $totalAmount += $price * $item->quantity;
+            $cartData[] = [
+                'id'       => $item->menu_id,
+                'name'     => $item->menu->name,
+                'price'    => $price,
+                'quantity' => $item->quantity,
+                'image'    => $item->menu->image,
+            ];
         }
 
         // 4. Lấy phương thức thanh toán & Tạo mã đơn hàng ngẫu nhiên
@@ -265,22 +312,63 @@ public function getCart()
 
         // 5. Lấy TABLE_ID từ RESERVATION gần nhất
         $latestReservation = \App\Models\Reservation::where('user_id', $userId)
+            ->whereIn('status', Reservation::ACTIVE_STATUSES)
             ->latest()
             ->first();
         $tableId = $latestReservation->table_id ?? null;
 
-        // 5b. KHÓA BÀN: chỉ khi khách bấm "xác nhận thanh toán" mới giữ bàn
-        if ($latestReservation && $latestReservation->status === 'pending_deposit') {
-            $conflict = \App\Models\Reservation::blockingTable()
-                ->where('table_id', $latestReservation->table_id)
-                ->where('id', '!=', $latestReservation->id)
-                ->exists();
-            if ($conflict) {
-                return redirect()->back()->with('error', 'Rất tiếc, bàn này vừa được người khác xác nhận giữ chỗ. Vui lòng quay lại trang đặt bàn để chọn bàn khác.');
+        // Checkout chỉ được gắn với yêu cầu đặt bàn chưa xác nhận cọc và bàn còn trống.
+        if ($latestReservation) {
+            try {
+                DB::transaction(function () use ($latestReservation) {
+                    $lockedReservation = \App\Models\Reservation::lockForUpdate()->findOrFail($latestReservation->id);
+                    $table = \App\Models\Table::whereKey($lockedReservation->table_id)->lockForUpdate()->first();
+                    $conflict = !$table || $table->status !== 'empty'
+                        || \App\Models\Reservation::blockingTable()
+                            ->where('table_id', $lockedReservation->table_id)
+                            ->where('id', '!=', $lockedReservation->id)
+                            ->exists();
+
+                    if ($lockedReservation->status !== 'pending_deposit'
+                        || $lockedReservation->payment_status !== 'unpaid'
+                        || $conflict) {
+                        throw new \DomainException('Bàn này không còn trống hoặc yêu cầu đặt bàn đã được xử lý. Vui lòng chọn bàn khác hoặc liên hệ nhân viên.');
+                    }
+
+                    $lockedReservation->payment_status = 'deposit_submitted';
+                    $lockedReservation->save();
+                    $table->update(['status' => 'reserved']);
+                });
+            } catch (\DomainException $e) {
+                return redirect()->back()->with('error', $e->getMessage());
             }
-            $latestReservation->payment_status = 'deposit_submitted';
+
+            $latestReservation->refresh();
+        }
+
+        // Staff/bếp đọc món từ reservations.cart_data, còn hóa đơn đọc order_items.
+        // Cập nhật cả hai từ cùng snapshot để không lệch với giỏ khách vừa chốt.
+        if ($latestReservation) {
+            $reservationUpdate = [
+                'cart_data' => $cartData,
+                'total_price' => $totalAmount,
+            ];
+            $reservationUpdate['deposit_amount'] = (int) round($totalAmount * 20 / 100);
+            $latestReservation->update($reservationUpdate);
+            $latestReservation->chef_statuses = array_fill_keys(array_column($cartData, 'id'), 'pending');
             $latestReservation->save();
-            \App\Models\Table::where('id', $latestReservation->table_id)->update(['status' => 'reserved']);
+
+            \App\Models\OrderItem::where('reservation_id', $latestReservation->id)->delete();
+            foreach ($cartData as $item) {
+                \App\Models\OrderItem::create([
+                    'reservation_id' => $latestReservation->id,
+                    'order_id'       => null,
+                    'menu_id'        => $item['id'],
+                    'quantity'       => $item['quantity'],
+                    'price'          => $item['price'],
+                    'product_name'   => $item['name'],
+                ]);
+            }
         }
 
         // 6. XÁC ĐỊNH TRẠNG THÁI ĐƠN HÀNG BAN ĐẦU THEO NGHIỆP VỤ
@@ -305,12 +393,13 @@ public function getCart()
         // 8. Lưu OrderItem & TRỪ TỒN KHO TRONG DATABASE VẬT LÝ
         $cartToEmail = []; // Chuẩn bị mảng dữ liệu sạch phục vụ gửi Mail
         foreach ($cartItems as $item) {
+            $price = $item->menu->price;
             \App\Models\OrderItem::create([
                 'order_id'     => $order->id,
                 'menu_id'      => $item->menu_id,
                 'quantity'     => $item->quantity,
-                'price'        => $item->menu->price ?? 0,
-                'product_name' => $item->menu->name ?? '',
+                'price'        => $price,
+                'product_name' => $item->menu->name,
             ]);
 
             // Cập nhật giảm số lượng hàng tồn kho của món ăn
@@ -318,10 +407,10 @@ public function getCart()
 
             // Gom thông tin món phục vụ cấu trúc Mail nhận dữ liệu
             $cartToEmail[] = [
-                'name'     => $item->menu->name ?? '',
+                'name'     => $item->menu->name,
                 'quantity' => $item->quantity,
-                'price'    => $item->menu->price ?? 0,
-                'total'    => ($item->menu->price ?? 0) * $item->quantity
+                'price'    => $price,
+                'total'    => $price * $item->quantity
             ];
         }
 

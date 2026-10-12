@@ -291,7 +291,7 @@
     <?php endif; ?>
     
     <div class="order-container">
-        <!-- <h3 class="page-title">Hóa đơn của quý khách</h3> -->
+        <h3 class="page-title">Hóa đơn của quý khách</h3>
 
         <?php if(session('success')): ?>
             <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -306,6 +306,14 @@
                 <?php echo e(session('error')); ?>
 
                 <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
+            </div>
+        <?php endif; ?>
+
+        <?php if($checkoutUnavailableMessage): ?>
+            <div class="alert alert-warning shadow-sm" role="alert" aria-live="assertive">
+                <strong><i class="fas fa-exclamation-triangle mr-2" aria-hidden="true"></i>Không thể đặt món lúc này.</strong>
+                <?php echo e($checkoutUnavailableMessage); ?>
+
             </div>
         <?php endif; ?>
 
@@ -350,19 +358,8 @@
                 <strong>Trạng thái:</strong>
 
                 <span class="font-weight-bold" style="color: #D4AF37;">
-                    <?php if($reservation['status'] == 'preparing'): ?>
-                        👨‍🍳 Đang phục vụ
+                    <?php echo e($reservation['status']); ?>
 
-                    <?php elseif($reservation['status'] == 'served'): ?>
-                        🍽️ Đã lên món
-
-                    <?php elseif($reservation['status'] == 'completed'): ?>
-                        ✅ Hoàn tất
-
-                    <?php else: ?>
-                        ⏳ <?php echo e($reservation['status']); ?>
-
-                    <?php endif; ?>
                 </span>
             </p>
 
@@ -468,6 +465,7 @@
         </div>
 
 <?php if(count($cart)): ?>
+<?php if($canCheckout): ?>
 <form id="checkoutForm" action="<?php echo e(route('cart.checkout')); ?>" method="POST">
     <?php echo csrf_field(); ?>
     <input type="hidden" name="total_price" value="<?php echo e($total); ?>">
@@ -509,6 +507,8 @@
 </button>
     </div>
 </form> 
+<?php else: ?>
+<?php endif; ?>
 <?php else: ?>
 <div style="background: #FCFBF8; border: 2px solid #E2E8F0; border-radius: 12px; padding: 40px 30px; text-align: center; margin: 40px 0;">
     <p style="font-size: 18px; color: #1A2228; margin-bottom: 10px; font-weight: 600;">✨ Chỉ Đặt Bàn (Không Có Thực Đơn)</p>

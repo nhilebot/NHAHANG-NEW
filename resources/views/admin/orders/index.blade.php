@@ -20,6 +20,7 @@
                         <th>Mã HĐ</th>
                         <th>Số Bàn</th>
                         <th>Khách Hàng</th>
+                        <th>Món đã đặt</th>
                         <th>Tổng Tiền</th>
                         <th>Trạng Thái</th>
                         <th style="text-align: center;">Thao tác</th>
@@ -27,7 +28,6 @@
                 </thead>
                 <tbody>
                     @foreach($orders as $order)
-                    {{ dd($orders) }}
                     <tr>
                         <!-- ID -->
                         <td>
@@ -44,6 +44,14 @@
                         <!-- Tên khách -->
                         <td style="font-weight: 600; color: #374151;">
                             {{ $order->name }}
+                        </td>
+
+                        <td>
+                            @forelse($order->items->where('quantity', '>', 0) as $item)
+                                <div>{{ $item->quantity }}x {{ $item->product_name }}</div>
+                            @empty
+                                <span class="text-muted">Chưa có món</span>
+                            @endforelse
                         </td>
                         
                         <!-- Tổng tiền -->
@@ -69,7 +77,7 @@
                         <td style="text-align: center; display:flex; gap:6px; justify-content:center;">
 
     {{-- Nút xem --}}
-    <a href="{{ route('admin.bills.show', $order->id) }}" class="btn btn-sm btn-primary">
+    <a href="{{ route('admin.orders.show', $order->id) }}" class="btn btn-sm btn-primary">
         Xem
     </a>
 

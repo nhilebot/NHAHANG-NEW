@@ -603,3 +603,85 @@
 [2026-10-12 11:03:00] local.INFO: === CART INDEX DEBUG === {"user_id":5,"user_name":"Nguyen Van A"} 
 [2026-10-12 11:03:00] local.INFO: === LATEST RESERVATION === {"found":"YES","reservation":{"id":2,"full_name":"Ng Van A","table_id":1}} 
 [2026-10-12 11:03:30] local.ERROR: MAIL ERROR (deposit confirmed): View [emails.booking_confirmation] not found.  
+[2026-10-12 11:32:20] local.INFO: === CART INDEX DEBUG === {"user_id":4,"user_name":"Khách hàng"} 
+[2026-10-12 11:32:21] local.INFO: === LATEST RESERVATION === {"found":"NO","reservation":null} 
+[2026-10-12 11:32:24] local.INFO: === CART INDEX DEBUG === {"user_id":4,"user_name":"Khách hàng"} 
+[2026-10-12 11:32:24] local.INFO: === LATEST RESERVATION === {"found":"NO","reservation":null} 
+[2026-10-12 11:32:27] local.INFO: === CART INDEX DEBUG === {"user_id":4,"user_name":"Khách hàng"} 
+[2026-10-12 11:32:27] local.INFO: === LATEST RESERVATION === {"found":"NO","reservation":null} 
+[2026-10-12 11:32:51] local.INFO: === CART INDEX DEBUG === {"user_id":4,"user_name":"Khách hàng"} 
+[2026-10-12 11:32:51] local.INFO: === LATEST RESERVATION === {"found":"NO","reservation":null} 
+[2026-10-12 11:33:05] local.ERROR: MAIL ERROR: View [emails.booking_confirmation] not found.  
+[2026-10-12 11:33:05] local.INFO: === CART INDEX DEBUG === {"user_id":4,"user_name":"Khách hàng"} 
+[2026-10-12 11:33:05] local.INFO: === LATEST RESERVATION === {"found":"YES","reservation":{"id":1,"full_name":"Ng Van A","table_id":2}} 
+[2026-10-12 11:33:28] local.ERROR: MAIL ERROR (deposit confirmed): View [emails.booking_confirmation] not found.  
+[2026-10-12 11:38:23] local.INFO: === CART INDEX DEBUG === {"user_id":4,"user_name":"Khách hàng"} 
+[2026-10-12 11:38:23] local.INFO: === LATEST RESERVATION === {"found":"YES","reservation":{"id":1,"full_name":"Ng Van A","table_id":2}} 
+[2026-10-12 11:38:32] local.INFO: === CART INDEX DEBUG === {"user_id":4,"user_name":"Khách hàng"} 
+[2026-10-12 11:38:32] local.INFO: === LATEST RESERVATION === {"found":"YES","reservation":{"id":1,"full_name":"Ng Van A","table_id":2}} 
+[2026-10-12 11:38:43] local.INFO: === CART INDEX DEBUG === {"user_id":4,"user_name":"Khách hàng"} 
+[2026-10-12 11:38:43] local.INFO: === LATEST RESERVATION === {"found":"YES","reservation":{"id":1,"full_name":"Ng Van A","table_id":2}} 
+[2026-10-12 11:47:02] local.INFO: === CART INDEX DEBUG === {"user_id":4,"user_name":"Khách hàng"} 
+[2026-10-12 11:47:02] local.INFO: === LATEST RESERVATION === {"found":"YES","reservation":{"id":1,"full_name":"Ng Van A","table_id":2}} 
+[2026-10-12 11:48:11] local.INFO: === CART INDEX DEBUG === {"user_id":4,"user_name":"Khách hàng"} 
+[2026-10-12 11:48:11] local.INFO: === LATEST RESERVATION === {"found":"YES","reservation":{"id":1,"full_name":"Ng Van A","table_id":2}} 
+[2026-10-12 11:51:35] local.INFO: === CART INDEX DEBUG === {"user_id":4,"user_name":"Khách hàng"} 
+[2026-10-12 11:51:35] local.INFO: === LATEST RESERVATION === {"found":"YES","reservation":{"id":1,"full_name":"Ng Van A","table_id":2}} 
+[2026-10-12 11:51:45] local.INFO: === CART INDEX DEBUG === {"user_id":4,"user_name":"Khách hàng"} 
+[2026-10-12 11:51:45] local.INFO: === LATEST RESERVATION === {"found":"YES","reservation":{"id":1,"full_name":"Ng Van A","table_id":2}} 
+[2026-10-12 11:51:49] local.INFO: === CART INDEX DEBUG === {"user_id":4,"user_name":"Khách hàng"} 
+[2026-10-12 11:51:49] local.INFO: === LATEST RESERVATION === {"found":"YES","reservation":{"id":1,"full_name":"Ng Van A","table_id":2}} 
+[2026-10-12 11:52:01] local.INFO: === CART INDEX DEBUG === {"user_id":4,"user_name":"Khách hàng"} 
+[2026-10-12 11:52:01] local.INFO: === LATEST RESERVATION === {"found":"YES","reservation":{"id":1,"full_name":"Ng Van A","table_id":2}} 
+[2026-10-12 11:55:43] local.INFO: === CART INDEX DEBUG === {"user_id":4,"user_name":"Khách hàng"} 
+[2026-10-12 11:55:43] local.INFO: === LATEST RESERVATION === {"found":"YES","reservation":{"id":1,"full_name":"Ng Van A","table_id":2}} 
+[2026-10-12 11:55:52] local.INFO: === CART INDEX DEBUG === {"user_id":4,"user_name":"Khách hàng"} 
+[2026-10-12 11:55:52] local.INFO: === LATEST RESERVATION === {"found":"YES","reservation":{"id":1,"full_name":"Ng Van A","table_id":2}} 
+[2026-10-12 11:55:57] local.INFO: === CART INDEX DEBUG === {"user_id":4,"user_name":"Khách hàng"} 
+[2026-10-12 11:55:57] local.INFO: === LATEST RESERVATION === {"found":"YES","reservation":{"id":1,"full_name":"Ng Van A","table_id":2}} 
+[2026-10-12 11:56:06] local.INFO: === CART INDEX DEBUG === {"user_id":4,"user_name":"Khách hàng"} 
+[2026-10-12 11:56:06] local.INFO: === LATEST RESERVATION === {"found":"NO","reservation":null} 
+[2026-10-12 11:56:22] local.ERROR: MAIL ERROR: View [emails.booking_confirmation] not found.  
+[2026-10-12 11:56:22] local.INFO: === CART INDEX DEBUG === {"user_id":4,"user_name":"Khách hàng"} 
+[2026-10-12 11:56:22] local.INFO: === LATEST RESERVATION === {"found":"YES","reservation":{"id":2,"full_name":"Ng Van A","table_id":1}} 
+[2026-10-12 11:56:37] local.ERROR: MAIL ERROR (deposit confirmed): View [emails.booking_confirmation] not found.  
+[2026-10-12 11:57:24] local.INFO: === CART INDEX DEBUG === {"user_id":4,"user_name":"Khách hàng"} 
+[2026-10-12 11:57:24] local.INFO: === LATEST RESERVATION === {"found":"YES","reservation":{"id":2,"full_name":"Ng Van A","table_id":1}} 
+[2026-10-12 11:57:37] local.INFO: === CART INDEX DEBUG === {"user_id":4,"user_name":"Khách hàng"} 
+[2026-10-12 11:57:37] local.INFO: === LATEST RESERVATION === {"found":"YES","reservation":{"id":2,"full_name":"Ng Van A","table_id":1}} 
+[2026-10-12 11:57:42] local.INFO: === CART INDEX DEBUG === {"user_id":4,"user_name":"Khách hàng"} 
+[2026-10-12 11:57:42] local.INFO: === LATEST RESERVATION === {"found":"NO","reservation":null} 
+[2026-10-12 11:57:55] local.INFO: === CART INDEX DEBUG === {"user_id":4,"user_name":"Khách hàng"} 
+[2026-10-12 11:57:55] local.INFO: === LATEST RESERVATION === {"found":"NO","reservation":null} 
+[2026-10-12 11:58:03] local.INFO: === CART INDEX DEBUG === {"user_id":4,"user_name":"Khách hàng"} 
+[2026-10-12 11:58:03] local.INFO: === LATEST RESERVATION === {"found":"NO","reservation":null} 
+[2026-10-12 11:58:16] local.INFO: === CART INDEX DEBUG === {"user_id":4,"user_name":"Khách hàng"} 
+[2026-10-12 11:58:16] local.INFO: === LATEST RESERVATION === {"found":"NO","reservation":null} 
+[2026-10-12 11:59:22] local.INFO: === CART INDEX DEBUG === {"user_id":4,"user_name":"Khách hàng"} 
+[2026-10-12 11:59:22] local.INFO: === LATEST RESERVATION === {"found":"NO","reservation":null} 
+[2026-10-12 11:59:51] local.ERROR: MAIL ERROR: View [emails.booking_confirmation] not found.  
+[2026-10-12 11:59:51] local.INFO: === CART INDEX DEBUG === {"user_id":4,"user_name":"Khách hàng"} 
+[2026-10-12 11:59:51] local.INFO: === LATEST RESERVATION === {"found":"YES","reservation":{"id":3,"full_name":"Ng Van A","table_id":1}} 
+[2026-10-12 11:59:59] local.INFO: === CART INDEX DEBUG === {"user_id":4,"user_name":"Khách hàng"} 
+[2026-10-12 11:59:59] local.INFO: === LATEST RESERVATION === {"found":"YES","reservation":{"id":3,"full_name":"Ng Van A","table_id":1}} 
+[2026-10-12 12:00:09] local.INFO: === CART INDEX DEBUG === {"user_id":4,"user_name":"Khách hàng"} 
+[2026-10-12 12:00:09] local.INFO: === LATEST RESERVATION === {"found":"YES","reservation":{"id":3,"full_name":"Ng Van A","table_id":1}} 
+[2026-10-12 12:00:21] local.INFO: === CART INDEX DEBUG === {"user_id":4,"user_name":"Khách hàng"} 
+[2026-10-12 12:00:21] local.INFO: === LATEST RESERVATION === {"found":"YES","reservation":{"id":3,"full_name":"Ng Van A","table_id":1}} 
+[2026-10-12 12:32:52] local.INFO: === CART INDEX DEBUG === {"user_id":4,"user_name":"Khách hàng"} 
+[2026-10-12 12:32:52] local.INFO: === LATEST RESERVATION === {"found":"NO","reservation":null} 
+[2026-10-12 12:34:29] local.INFO: === CART INDEX DEBUG === {"user_id":5,"user_name":"LE YEN NHI"} 
+[2026-10-12 12:34:29] local.INFO: === LATEST RESERVATION === {"found":"NO","reservation":null} 
+[2026-10-12 12:34:51] local.ERROR: MAIL ERROR: View [emails.booking_confirmation] not found.  
+[2026-10-12 12:34:51] local.INFO: === CART INDEX DEBUG === {"user_id":5,"user_name":"LE YEN NHI"} 
+[2026-10-12 12:34:51] local.INFO: === LATEST RESERVATION === {"found":"YES","reservation":{"id":1,"full_name":"Ng Van A","table_id":2}} 
+[2026-10-12 12:36:17] local.ERROR: MAIL ERROR (deposit confirmed): View [emails.booking_confirmation] not found.  
+[2026-10-12 12:36:53] local.INFO: === CART INDEX DEBUG === {"user_id":5,"user_name":"LE YEN NHI"} 
+[2026-10-12 12:36:53] local.INFO: === LATEST RESERVATION === {"found":"YES","reservation":{"id":1,"full_name":"Ng Van A","table_id":2}} 
+[2026-10-12 12:37:05] local.INFO: === CART INDEX DEBUG === {"user_id":5,"user_name":"LE YEN NHI"} 
+[2026-10-12 12:37:05] local.INFO: === LATEST RESERVATION === {"found":"YES","reservation":{"id":1,"full_name":"Ng Van A","table_id":2}} 
+[2026-10-12 12:40:27] local.INFO: === CART INDEX DEBUG === {"user_id":5,"user_name":"LE YEN NHI"} 
+[2026-10-12 12:40:27] local.INFO: === LATEST RESERVATION === {"found":"NO","reservation":null} 
+[2026-10-12 12:40:51] local.ERROR: MAIL ERROR: View [emails.booking_confirmation] not found.  
+[2026-10-12 12:40:51] local.INFO: === CART INDEX DEBUG === {"user_id":5,"user_name":"LE YEN NHI"} 
+[2026-10-12 12:40:51] local.INFO: === LATEST RESERVATION === {"found":"YES","reservation":{"id":2,"full_name":"Nhi","table_id":2}} 

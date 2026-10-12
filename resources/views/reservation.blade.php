@@ -295,6 +295,7 @@
 
                         <div class="table-selection-grid">
                             @foreach($tables as $table)
+                                @php $isUnavailable = in_array($table->id, $bookedTableIds); @endphp
                                 <div class="table-item" id="table-container-{{ $table->id }}">
 
                                     <input 
@@ -302,7 +303,7 @@
                                         name="table_id"
                                         value="{{ $table->id }}"
                                         id="table{{ $table->id }}"
-                                        {{ $table->status !== 'empty' ? 'disabled' : '' }}
+                                        {{ $isUnavailable ? 'disabled' : '' }}
                                     >
 
                                     <label for="table{{ $table->id }}" id="label-{{ $table->id }}">
@@ -312,7 +313,7 @@
                                         </div>
 
                                         <div id="status-text-{{ $table->id }}">
-                                            @if($table->status === 'empty')
+                                            @if($table->status === 'empty' && !$isUnavailable)
                                                  <small style="color:#D4AF37;">(Sẵn sàng)</small>
 
                                             @elseif($table->status === 'reserved')
@@ -329,6 +330,18 @@
                                                           data-id="{{ $table->id }}">
                                                           60
                                                     </span>s)
+                                                </small>
+
+                                            @elseif($table->status === 'serving' || $table->status === 'occupied')
+                                                <small class="status-serving">
+                                                    <i class="fa fa-cutlery"></i>
+                                                    Đang phục vụ
+                                                </small>
+
+                                            @elseif($isUnavailable)
+                                                <small class="status-reserved">
+                                                    <i class="fa fa-lock"></i>
+                                                    Đã đặt
                                                 </small>
 
                                             @else
@@ -733,7 +746,6 @@
         const timers = document.querySelectorAll('.cleaning-timer');
 
         timers.forEach(timer => {
-            const tableId = timer.getAttribute('data-id');
             const startTimeStr = timer.getAttribute('data-start');
             if (!startTimeStr) return;
 
@@ -747,18 +759,7 @@
 
                 if (secondsLeft <= 0) {
                     clearInterval(updateCountdown);
-                    
-                    document.getElementById('status-text-' + tableId).innerHTML = '<small style="color:#D4AF37;">(Sẵn sàng)</small>';
-                    
-                    const input = document.getElementById('table' + tableId);
-                    if (input) {
-                        input.disabled = false;
-                    }
-
-                    const label = document.getElementById('label-' + tableId);
-                    if (label) {
-                        label.style.cursor = 'pointer';
-                    }
+                    window.location.reload();
                 } else {
                     timer.innerText = secondsLeft;
                 }

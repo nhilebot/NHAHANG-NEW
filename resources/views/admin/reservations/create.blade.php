@@ -180,13 +180,14 @@
                 <span class="section-label">Lựa Chọn Vị Trí Bàn (Bắt buộc)</span>
                 <div class="table-selection-grid">
                     @foreach($tables as $table)
+                    @php $isUnavailable = in_array($table->id, $bookedTableIds ?? []); @endphp
                     <div class="table-item">
                         <input type="radio" name="table_id" value="{{ $table->id }}" id="table{{ $table->id }}" 
-                               {{ $table->status !== 'empty' ? 'disabled' : '' }} required>
+                               {{ $isUnavailable ? 'disabled' : '' }} required>
                         <label for="table{{ $table->id }}" id="label-{{ $table->id }}">
     <strong>{{ $table->name }}</strong>
     <div id="status-text-{{ $table->id }}">
-        @if($table->status === 'empty')
+        @if($table->status === 'empty' && !$isUnavailable)
             <small style="color: #D4AF37;">(Sẵn sàng)</small>
         @elseif($table->status === 'cleaning')
             @php
@@ -199,6 +200,8 @@
             <small style="color: #e74c3c;" class="cleaning-wrapper" data-id="{{ $table->id }}" data-left="{{ $secondsLeft }}">
                 🧹 Dọn dẹp (<span id="timer-{{ $table->id }}">{{ $secondsLeft }}</span>s)
             </small>
+        @elseif($isUnavailable)
+            <small style="color: #999;">(Đã đặt)</small>
         @else
             <small style="color: #999;">(Đã đặt)</small>
         @endif
