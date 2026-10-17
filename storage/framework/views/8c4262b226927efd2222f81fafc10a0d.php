@@ -42,8 +42,7 @@
     <div class="card shadow border-0">
         <div class="card-header bg-white py-3">
             <h5 class="m-0 font-weight-bold text-primary">📋 Danh sách Đặt bàn - Quản lý Phục vụ</h5>
-        </di@if($res->status != 'completed')v>
-
+        </div>
         <div class="card-body">
             <?php if(session('success')): ?>
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -112,15 +111,19 @@
                                    <div class="btn-group btn-group-sm shadow-sm">
     
     <?php if($res->status == 'pending_deposit'): ?>
-        <button 
-            type="submit" 
-            name="status" 
-            value="pending" 
-            class="btn btn-warning text-dark"
-            onclick="return confirm('Xác nhận đã nhận cọc <?php echo e(number_format($res->deposit_amount ?? 0, 0, ',', '.')); ?>đ qua <?php echo e($res->payment_method == 'BANK' ? 'chuyển khoản' : 'tại quầy'); ?>?')"
-        >
-            <i class="fas fa-coins"></i> Xác nhận cọc <?php echo e(number_format($res->deposit_amount ?? 0, 0, ',', '.')); ?>đ
-        </button>
+        <?php if($res->payment_status === 'deposit_submitted'): ?>
+            <button
+                type="submit"
+                name="status"
+                value="pending"
+                class="btn btn-warning text-dark"
+                onclick="return confirm('Xác nhận đã nhận cọc <?php echo e(number_format($res->deposit_amount ?? 0, 0, ',', '.')); ?>đ qua <?php echo e($res->payment_method == 'BANK' ? 'chuyển khoản' : 'tại quầy'); ?>?')"
+            >
+                <i class="fas fa-coins"></i> Xác nhận cọc <?php echo e(number_format($res->deposit_amount ?? 0, 0, ',', '.')); ?>đ
+            </button>
+        <?php else: ?>
+            <span class="text-muted small">Chờ khách xác nhận chuyển khoản</span>
+        <?php endif; ?>
 
     
     <?php elseif($res->status == 'pending'): ?>
@@ -141,16 +144,9 @@
         </button>
 
     
-    <?php elseif($res->status == 'served'): ?>
-        <?php
-            $due = max(0, (int) $res->total_price - (int) ($res->deposit_amount ?? 0));
-            $payUrl = route('staff.reservations.pay', $res->id);
-        ?>
-        <button type="submit" name="payment_method" value="cash" formaction="<?php echo e($payUrl); ?>" class="btn btn-success"
-                onclick="return confirm('Thu <?php echo e(number_format($due, 0, ',', '.')); ?>đ (đã trừ cọc) bằng tiền mặt?')">💰 Tiền mặt</button>
-        <button type="submit" name="payment_method" value="transfer" formaction="<?php echo e($payUrl); ?>" class="btn btn-dark"
-                onclick="return confirm('Xác nhận đã nhận <?php echo e(number_format($due, 0, ',', '.')); ?>đ (đã trừ cọc) qua chuyển khoản?')">💳 CK</button>
-    <?php endif; ?>
+<?php elseif($res->status == 'served'): ?>
+    <a href="<?php echo e(route('staff.reservations.checkout', $res->id)); ?>" class="btn btn-success">💰 Thanh toán</a>
+<?php endif; ?>
 
     
     <?php if(in_array($res->status, \App\Models\Reservation::PAID_STATUSES, true)): ?>
@@ -175,5 +171,8 @@
         </div>
     </div>
 </div>
+<?php if(session('auto_print')): ?>
+<script>window.addEventListener('load', () => window.print());</script>
+<?php endif; ?>
 <?php $__env->stopSection(); ?>
 <?php echo $__env->make('layouts.admin', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\laragon\www\restaurant-fixed\resources\views/staff/reservations.blade.php ENDPATH**/ ?>

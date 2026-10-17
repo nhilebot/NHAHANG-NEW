@@ -29,7 +29,7 @@ class OrderConfirmed extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Xác Nhận Đơn Hàng & Đặt Bàn',
+            subject: 'Thông tin đơn hàng - Aurora Garden',
         );
     }
 
@@ -39,7 +39,7 @@ class OrderConfirmed extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.order_confirmed', // Sẽ tạo file này ở Bước 3
+            view: 'emails.order_confirmed',
         );
     }
 

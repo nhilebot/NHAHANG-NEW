@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>@yield('page_title', 'Quản trị') – Nhà hàng Việt</title>
+<title>@yield('page_title', 'Quản trị') – Nhà hàng Aurora Garden</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{{ asset('admin_assets/style.css') }}">
@@ -63,7 +63,7 @@
 
     .logo-text {
         font-family: 'Playfair Display', serif;
-        font-size: 1.25rem;
+        /* font-size: 1.25rem; */
         font-weight: 700;
         color: var(--gold-accent);
         text-transform: uppercase;
@@ -471,7 +471,7 @@
         </a>
       </div>
       <div>
-        <div class="logo-text">Nhà hàng Việt</div>
+        <div class="logo-text">Aurora Garden </div>
         <div class="logo-sub">Quản trị hệ thống</div>
       </div>
     </div>
@@ -574,7 +574,16 @@
       {{-- ═══ STAFF ═══ --}}
     @if($role === 'staff' || auth()->user()->isStaff())
 
-    <div class="sidebar-section-label">Phục vụ nhà hàng</div>
+   {{-- DASHBOARD --}}
+<a class="nav-item {{ Request::routeIs('staff.dashboard') ? 'active' : '' }}"
+   href="{{ route('staff.dashboard') }}">
+    <div class="nav-item-left">
+        <div class="nav-icon">🏠</div>
+        Dashboard
+    </div>
+</a>
+
+<div class="sidebar-section-label">Phục vụ nhà hàng</div>
 
     {{-- BÀN ĂN --}}
     <div>

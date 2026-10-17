@@ -1,6 +1,6 @@
 @extends('shared')
 
-@section('title', 'Thực đơn Đồ uống - Restaurant')
+@section('title', 'Thực đơn Đồ uống - Aurora Garden')
 
 @section('head')
 <style>

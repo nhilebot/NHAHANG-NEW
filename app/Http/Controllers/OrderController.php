@@ -283,6 +283,13 @@ public function edit($id)
         ]);
 
         $order = Order::with('orderItems')->findOrFail($id);
+        $isReservationOrder = $order->reservation_id !== null;
+        if (!$isReservationOrder && is_numeric($order->table_number)) {
+            $isReservationOrder = Reservation::where('user_id', $order->user_id)
+                ->where('table_id', (int) $order->table_number)
+                ->whereIn('status', Reservation::ACTIVE_STATUSES)
+                ->exists();
+        }
         
         // Lưu lại trạng thái cũ của hóa đơn trước khi cập nhật dữ liệu mới
         $oldStatus = $order->status; 
@@ -293,7 +300,7 @@ public function edit($id)
 
         // 🔥 LOGIC NGHIỆP VỤ: Kích hoạt gửi Gmail khi Admin duyệt thanh toán thành công
         // Nếu đơn hàng cũ ở trạng thái chờ tiền (pending_payment) và được duyệt sang trạng thái hợp lệ (paid hoặc pending)
-        if ($oldStatus === 'pending_payment' && ($newStatus === 'paid' || $newStatus === 'pending')) {
+        if (!$isReservationOrder && $oldStatus === 'pending_payment' && ($newStatus === 'paid' || $newStatus === 'pending')) {
             
             // Tái cấu trúc danh sách món ăn từ mối quan hệ orderItems trong Database để truyền sang Mail
             $cartToEmail = [];
@@ -310,7 +317,8 @@ public function edit($id)
                 'invoice' => $order->code,
                 'total'   => $order->total_price,
                 'table'   => $order->table_number,
-                'cart'    => $cartToEmail
+                'cart'    => $cartToEmail,
+                'status'  => $newStatus,
             ];
 
             // Tìm thông tin email của tài khoản khách hàng để thực hiện gửi
@@ -319,14 +327,21 @@ public function edit($id)
             if ($customerEmail) {
                 try {
                     \Illuminate\Support\Facades\Mail::to($customerEmail)->send(new \App\Mail\OrderConfirmed($mailData));
-                } catch (\Exception $e) {
-                    \Log::error('Lỗi khi Admin duyệt đơn gửi email tự động thất bại: ' . $e->getMessage());
+                } catch (\Throwable $e) {
+                    \Log::error('Standalone bank order email failed.', [
+                        'order_id' => $order->id,
+                        'exception' => $e,
+                    ]);
                 }
+            } else {
+                \Log::warning('Standalone bank order email skipped because the customer has no email address.', [
+                    'order_id' => $order->id,
+                ]);
             }
         }
 
         return redirect()->route('admin.orders.show', $id)
-                         ->with('success', 'Cập nhật trạng thái và gửi email xác nhận thành công!');
+                         ->with('success', 'Đã cập nhật trạng thái đơn hàng.');
     }
 
 // Xoá đơn

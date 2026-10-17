@@ -35,7 +35,8 @@
                             <span class="icon-bar"></span>
                         </button>
                         <a class="navbar-brand" href="{{ url('/') }}" style="padding: 0px 0px; display: flex; align-items: center;">
-                            <img class="nav-logo" src="{{ asset('images/logo.png') }}" alt="Món Việt Logo" style="height: 100px; width: auto; filter: drop-shadow(0px 0px 2px rgba(0,0,0,0.5)); margin-right: -10px;">
+
+<img class="nav-logo" src="{{ asset('images/logo.png') }}" alt="Món Việt Logo" style="height: 60px; width: auto; filter: drop-shadow(0px 0px 2px rgba(0,0,0,0.5)); margin-right: -10px; margin-left: 100px;">
                         </a>
                     </div>
                     <div class="collapse navbar-collapse nav-flex" id="bs-example-navbar-collapse-1">
@@ -128,7 +129,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-4 footer-section">
-                            <img src="{{ asset('images/logo.png') }}" alt="Món Việt Logo" style="height: 115px; width: auto; filter: drop-shadow(0px 0px 2px rgba(0,0,0,0.5)); margin-right: -10px;">
+<img class="nav-logo" src="{{ asset('images/logo.png') }}" alt="Món Việt Logo" style="height: 60px; width: auto; filter: drop-shadow(0px 0px 2px rgba(0,0,0,0.5)); margin-right: -10px; margin-left: 100px;">
                     <p class="footer-desc">
                         Khởi nguồn từ niềm đam mê ẩm thực, chúng tôi mang đến những trải nghiệm chuẩn vị và đậm đà nhất, vươn mình trở thành chuỗi nhà hàng hàng đầu.
                     </p>
@@ -146,7 +147,7 @@
                 <div class="col-md-4 footer-section text-right">
                     <h3 class="footer-title">LIÊN HỆ</h3>
                     <p>Hotline: 0899911390</p>
-                    <p>Email: contact@restaurant.com</p>
+                    <p>Email: contact@AuroraGarden.com</p>
                     <div class="footer-social">
                         <p>Theo dõi chúng tôi trên</p>
                         <a href="#"><i class="fa fa-instagram"></i></a>

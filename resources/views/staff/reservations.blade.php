@@ -43,8 +43,7 @@
     <div class="card shadow border-0">
         <div class="card-header bg-white py-3">
             <h5 class="m-0 font-weight-bold text-primary">📋 Danh sách Đặt bàn - Quản lý Phục vụ</h5>
-        </di@if($res->status != 'completed')v>
-
+        </div>
         <div class="card-body">
             @if(session('success'))
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -110,15 +109,19 @@
                                    <div class="btn-group btn-group-sm shadow-sm">
     {{-- 0. Xác nhận cọc (bước mới, đứng trước "Duyệt đơn") --}}
     @if($res->status == 'pending_deposit')
-        <button 
-            type="submit" 
-            name="status" 
-            value="pending" 
-            class="btn btn-warning text-dark"
-            onclick="return confirm('Xác nhận đã nhận cọc {{ number_format($res->deposit_amount ?? 0, 0, ',', '.') }}đ qua {{ $res->payment_method == 'BANK' ? 'chuyển khoản' : 'tại quầy' }}?')"
-        >
-            <i class="fas fa-coins"></i> Xác nhận cọc {{ number_format($res->deposit_amount ?? 0, 0, ',', '.') }}đ
-        </button>
+        @if($res->payment_status === 'deposit_submitted')
+            <button
+                type="submit"
+                name="status"
+                value="pending"
+                class="btn btn-warning text-dark"
+                onclick="return confirm('Xác nhận đã nhận cọc {{ number_format($res->deposit_amount ?? 0, 0, ',', '.') }}đ qua {{ $res->payment_method == 'BANK' ? 'chuyển khoản' : 'tại quầy' }}?')"
+            >
+                <i class="fas fa-coins"></i> Xác nhận cọc {{ number_format($res->deposit_amount ?? 0, 0, ',', '.') }}đ
+            </button>
+        @else
+            <span class="text-muted small">Chờ khách xác nhận chuyển khoản</span>
+        @endif
 
     {{-- 1. Duyệt đơn --}}
     @elseif($res->status == 'pending')
@@ -139,16 +142,9 @@
         </button>
 
     {{-- 5. Thanh toán --}}
-    @elseif($res->status == 'served')
-        @php
-            $due = max(0, (int) $res->total_price - (int) ($res->deposit_amount ?? 0));
-            $payUrl = route('staff.reservations.pay', $res->id);
-        @endphp
-        <button type="submit" name="payment_method" value="cash" formaction="{{ $payUrl }}" class="btn btn-success"
-                onclick="return confirm('Thu {{ number_format($due, 0, ',', '.') }}đ (đã trừ cọc) bằng tiền mặt?')">💰 Tiền mặt</button>
-        <button type="submit" name="payment_method" value="transfer" formaction="{{ $payUrl }}" class="btn btn-dark"
-                onclick="return confirm('Xác nhận đã nhận {{ number_format($due, 0, ',', '.') }}đ (đã trừ cọc) qua chuyển khoản?')">💳 CK</button>
-    @endif
+@elseif($res->status == 'served')
+    <a href="{{ route('staff.reservations.checkout', $res->id) }}" class="btn btn-success">💰 Thanh toán</a>
+@endif
 
     {{-- 6. Dọn bàn khi đã thanh toán xong --}}
     @if(in_array($res->status, \App\Models\Reservation::PAID_STATUSES, true))
@@ -173,4 +169,7 @@
         </div>
     </div>
 </div>
+@if(session('auto_print'))
+<script>window.addEventListener('load', () => window.print());</script>
+@endif
 @endsection

@@ -148,6 +148,7 @@ Route::delete('/orders/{id}', [OrderController::class, 'destroy'])->name('orders
     //    Admin cũng được vào nhờ logic trong CheckRole
     // =========================================================
     Route::middleware('role:staff')->prefix('staff')->name('staff.')->group(function () {
+        Route::get('/dashboard', [\App\Http\Controllers\StaffDashboardController::class, 'index'])->name('dashboard');
         Route::post('/tables', [TableController::class, 'store'])
     ->name('tables.store');
         // DS hóa đơn
@@ -160,6 +161,7 @@ Route::delete('/orders/{id}', [OrderController::class, 'destroy'])->name('orders
         Route::get('/reservations', [ReservationController::class, 'adminIndex'])->name('reservations.index');
         Route::post('/reservations/{id}/update-status', [ReservationController::class, 'updateStatus'])->name('reservations.updateStatus');
         Route::post('/reservations/{id}/pay', [ReservationController::class, 'pay'])->name('reservations.pay');
+        Route::get('/reservations/{id}/checkout', [ReservationController::class, 'checkout'])->name('reservations.checkout');
 
         // Quản lý bàn (Staff xem & cập nhật trạng thái bàn)
         Route::get('/tables', [TableController::class, 'index'])->name('tables.index');     

@@ -265,9 +265,9 @@
     $depositAmount = (int) round($total * $depositPercent / 100);
     $remainingAmount = $total - $depositAmount;
 
-    $bankID = 'MB'; 
-    $accountNo = '0343970743'; 
-    $accountName = 'Le Yen Nhi'; 
+    $bankID      = config('services.bank.id');
+    $accountNo   = config('services.bank.account');
+    $accountName = config('services.bank.name'); 
     $info = "Thanh toan " . ($reservation['table'] ?? '0'); 
     $infoEncoded = urlencode($info);
     $nameEncoded = urlencode($accountName);
@@ -528,8 +528,8 @@
         <div class="modal-content premium-bill">
             <div class="modal-body p-4">
                 <div class="bill-header-gold">
-                    <img src="<?php echo e(asset('images/logo.png')); ?>" alt="Món Việt Logo" style="height: 115px; width: auto;">
-                    <h5 class="bill-title-luxury">MÓN VIỆT</h5>
+                    <img src="<?php echo e(asset('images/logo.png')); ?>" alt="Aurora Garden" style="height: 115px; width: auto;">
+                    <!-- <h5 class="bill-title-luxury">Aurora Garden</h5> -->
                     <p class="small text-muted mb-0" style="font-size: 12px;">Đỉnh Cao Ẩm Thực Truyền Thống</p>
                 </div>
                 

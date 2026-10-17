@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Mail;
 use App\Mail\BookingConfirmation;
+use App\Mail\BookingPendingDeposit;
 use Illuminate\Http\Request;
 use App\Models\Menu;
 use App\Models\Reservation;
@@ -121,13 +122,15 @@ public function store(Request $request)
     // KHÔNG khóa bàn ở bước này: bàn chỉ được khóa khi khách bấm "xác nhận thanh toán"
     // ở trang giỏ hàng (CartController::checkout).
 
-    // 🔥 Email lúc này chỉ nên là "đã ghi nhận yêu cầu, chờ xác nhận cọc" — KHÔNG phải "đặt bàn thành công"
+    // At this point the booking is only a request awaiting payment and staff verification.
     try {
         $reservation->refresh()->load('table');
-        Mail::to($reservation->email)->send(new BookingConfirmation($reservation)); 
-        // cân nhắc đổi nội dung mail hoặc tạo Mail class riêng (VD: BookingPendingDeposit)
-    } catch (\Exception $e) {
-        \Log::error('MAIL ERROR: ' . $e->getMessage());
+        Mail::to($reservation->email)->send(new BookingPendingDeposit($reservation));
+    } catch (\Throwable $e) {
+        \Log::error('Booking pending-deposit email failed.', [
+            'reservation_id' => $reservation->id,
+            'exception' => $e,
+        ]);
     }
 
     return redirect()->route('cart.index')->with('success', 'Ghi nhận yêu cầu đặt bàn! Vui lòng hoàn tất cọc để giữ bàn.');
@@ -236,6 +239,12 @@ public function store(Request $request)
                     throw new \DomainException("Không thể chuyển trạng thái từ '{$oldStatus}' sang '{$newStatus}'.");
                 }
 
+                if ($oldStatus === 'pending_deposit'
+                    && $newStatus === 'pending'
+                    && $reservation->payment_status !== 'deposit_submitted') {
+                    throw new \DomainException('Khách chưa xác nhận đã chuyển khoản tiền cọc.');
+                }
+
                 $chefStatuses = is_array($reservation->chef_statuses) ? $reservation->chef_statuses : [];
 
                 foreach (($reservation->cart_data ?? []) as $item) {
@@ -291,8 +300,15 @@ public function store(Request $request)
             try {
                 Mail::to($reservation->email)->send(new BookingConfirmation($reservation->load('table')));
             } catch (\Throwable $e) {
-                \Log::error('MAIL ERROR (deposit confirmed): ' . $e->getMessage());
+                \Log::error('Booking confirmation email failed.', [
+                    'reservation_id' => $reservation->id,
+                    'exception' => $e,
+                ]);
             }
+        } elseif ($sendDepositMail) {
+            \Log::warning('Booking confirmation email skipped because the reservation has no email address.', [
+                'reservation_id' => $reservation->id,
+            ]);
         }
 
         return back()->with('success', 'Đã cập nhật trạng thái đơn đặt bàn.');
@@ -302,6 +318,30 @@ public function store(Request $request)
      * Staff/Admin xác nhận thanh toán tại quầy.
      * Số tiền thực thu = tổng bill - tiền cọc đã nhận. Chỉ thực hiện được khi đơn ở trạng thái 'served'.
      */
+    public function checkout($id)
+{
+    $reservation = Reservation::with('table')->findOrFail($id);
+
+    if ($reservation->status !== 'served') {
+        return redirect()->route('staff.reservations.index')
+            ->with('error', 'Chỉ thanh toán được khi bàn đã lên món xong.');
+    }
+
+    $total = (int) $reservation->total_price;
+    $due   = max(0, $total - min((int) ($reservation->deposit_amount ?? 0), $total));
+
+    $qrUrl = 'https://img.vietqr.io/image/'
+        . config('services.bank.id') . '-' . config('services.bank.account') . '-compact2.png'
+        . '?amount=' . $due
+        . '&addInfo=' . urlencode('HD' . str_pad($reservation->id, 5, '0', STR_PAD_LEFT))
+        . '&accountName=' . urlencode(config('services.bank.name'));
+
+    return view('staff.reservations.checkout', [
+        'res'   => $reservation,
+        'due'   => $due,
+        'qrUrl' => $qrUrl,
+    ]);
+}
     public function pay(Request $request, $id)
     {
         $data = $request->validate([
@@ -334,7 +374,11 @@ public function store(Request $request)
             return back()->with('error', $e->getMessage());
         }
 
-        return back()->with('success', 'Đã xác nhận thanh toán.');
+        $billRoute = request()->is('admin/*') ? 'admin.bills.show' : 'staff.bills.show';
+
+return redirect()->route($billRoute, $id)
+    ->with('success', 'Đã xác nhận thanh toán.')
+    ->with('auto_print', true);
     }
 
     /** Trả bàn về trống nếu không còn đơn nào đang hoạt động trên bàn đó. */

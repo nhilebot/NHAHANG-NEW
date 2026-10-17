@@ -422,13 +422,18 @@ public function getCart()
             'cart'    => $cartToEmail
         ];
 
-        if ($pm === 'COD') {
+        if ($pm === 'COD' && !$latestReservation) {
             // Thanh toán tại bàn -> Gửi mail xác nhận thông tin đặt món ngay lập tức
             try {
                 \Illuminate\Support\Facades\Mail::to(auth()->user()->email)->send(new \App\Mail\OrderConfirmed($mailData));
-            } catch (\Exception $e) {
-                \Log::error('Gửi mail đơn hàng COD thất bại: ' . $e->getMessage());
+            } catch (\Throwable $e) {
+                \Log::error('Standalone COD order email failed.', [
+                    'order_id' => $order->id,
+                    'exception' => $e,
+                ]);
             }
+            $successMessage = 'Thanh toán tại bàn được ghi nhận! Đơn hàng đã được chuyển tới nhà bếp.';
+        } elseif ($pm === 'COD') {
             $successMessage = 'Thanh toán tại bàn được ghi nhận! Đơn hàng đã được chuyển tới nhà bếp.';
         } else {
             // Chuyển khoản QR ngân hàng -> KHÔNG gửi mail tại đây, chờ duyệt tiền ở trang Admin

@@ -1,6 +1,6 @@
 @extends('shared')
 
-@section('title', '{{ $menu->name }} - Restaurant')
+@section('title', '{{ $menu->name }} - Aurora Garden')
 
 @section('head')
 <style>

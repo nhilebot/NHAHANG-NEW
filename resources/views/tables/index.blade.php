@@ -1,6 +1,6 @@
 @extends('shared')
 
-@section('title', 'Xác nhận đơn hàng - Restaurant')
+@section('title', 'Xác nhận đơn hàng - Aurora Garden')
 
 @section('head')
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">

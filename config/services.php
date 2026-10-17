@@ -33,4 +33,9 @@ return [
     'gemini' => [
     'key' => env('GEMINI_API_KEY'), // Đảm bảo chữ GEMINI_API_KEY ở đây khớp với file .env
 ],
+'bank' => [
+    'id'      => env('BANK_ID', 'MB'),
+    'account' => env('BANK_ACCOUNT'),
+    'name'    => env('BANK_ACCOUNT_NAME'),
+],
 ];

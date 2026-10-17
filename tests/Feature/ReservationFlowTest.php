@@ -2,6 +2,9 @@
 
 namespace Tests\Feature;
 
+use App\Mail\BookingConfirmation;
+use App\Mail\BookingPendingDeposit;
+use App\Models\Cart;
 use App\Models\Menu;
 use App\Models\Order;
 use App\Models\Reservation;
@@ -13,6 +16,7 @@ use Database\Seeders\RoleSeeder;
 use Database\Seeders\TableSeeder;
 use Database\Seeders\UserSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
 
 class ReservationFlowTest extends TestCase
@@ -35,6 +39,7 @@ class ReservationFlowTest extends TestCase
         $r = new Reservation();
         $r->user_id = $this->customer->id;
         $r->full_name = 'Khach';
+        $r->email = $this->customer->email;
         $r->phone = '0900000000';
         $r->reservation_date = now()->toDateString();
         $r->reservation_time = '19:00';
@@ -46,6 +51,37 @@ class ReservationFlowTest extends TestCase
         $r->cart_data = [['id' => Menu::first()->id, 'name' => 'Mon', 'price' => 100000, 'quantity' => 5]];
         $r->save();
         return $r;
+    }
+
+    public function test_online_reservation_sends_pending_deposit_email_without_confirming_booking(): void
+    {
+        Mail::fake();
+        $menu = Menu::first();
+        Cart::create(['user_id' => $this->customer->id, 'menu_id' => $menu->id, 'quantity' => 2]);
+
+        $this->actingAs($this->customer)
+            ->post('/reservation/store', [
+                'full_name' => $this->customer->name,
+                'phone' => '0900000000',
+                'reservation_date' => now()->addDay()->toDateString(),
+                'reservation_time' => '19:00',
+                'table_id' => Table::first()->id,
+            ])
+            ->assertRedirect(route('cart.index'));
+
+        $reservation = Reservation::latest()->firstOrFail();
+        $this->assertSame('pending_deposit', $reservation->status);
+        $this->assertSame('unpaid', $reservation->payment_status);
+        $this->assertSame((int) round($menu->price * 2 * 0.2), (int) $reservation->deposit_amount);
+
+        Mail::assertSent(BookingPendingDeposit::class, function (BookingPendingDeposit $mail) use ($reservation) {
+            $html = $mail->render();
+
+            return $mail->booking->is($reservation)
+                && str_contains($html, 'chưa phải xác nhận đặt bàn chính thức')
+                && str_contains($html, '20%');
+        });
+        Mail::assertNotSent(BookingConfirmation::class);
     }
 
     public function test_invalid_status_value_is_rejected(): void
@@ -68,7 +104,10 @@ class ReservationFlowTest extends TestCase
 
     public function test_deposit_confirmation_sets_payment_info(): void
     {
+        Mail::fake();
         $r = $this->makeReservation('pending_deposit');
+        $r->payment_status = 'deposit_submitted';
+        $r->save();
         $this->actingAs($this->staff)->post("/staff/reservations/{$r->id}/update-status", ['status' => 'pending'])
              ->assertSessionHas('success');
 
@@ -76,11 +115,37 @@ class ReservationFlowTest extends TestCase
         $this->assertSame('pending', $r->status);
         $this->assertSame('deposit_paid', $r->payment_status);
         $this->assertNotNull($r->deposit_paid_at);
+        Mail::assertSent(BookingConfirmation::class, function (BookingConfirmation $mail) use ($r) {
+            $html = $mail->render();
+
+            return $mail->booking->is($r)
+                && str_contains($html, 'đã được xác nhận chính thức')
+                && str_contains($html, '400.000đ');
+        });
+        Mail::assertNotSent(BookingPendingDeposit::class);
+    }
+
+    public function test_staff_cannot_confirm_deposit_before_customer_submits_transfer(): void
+    {
+        Mail::fake();
+        $r = $this->makeReservation('pending_deposit');
+
+        $this->actingAs($this->staff)
+            ->post("/staff/reservations/{$r->id}/update-status", ['status' => 'pending'])
+            ->assertSessionHas('error');
+
+        $r->refresh();
+        $this->assertSame('pending_deposit', $r->status);
+        $this->assertSame('unpaid', $r->payment_status);
+        $this->assertNull($r->deposit_paid_at);
+        Mail::assertNotSent(BookingConfirmation::class);
     }
 
     public function test_full_happy_path_with_deposit_deducted_at_payment(): void
     {
         $r = $this->makeReservation('pending_deposit', 500000, 100000);
+        $r->payment_status = 'deposit_submitted';
+        $r->save();
         $url = fn ($p) => "/staff/reservations/{$r->id}/$p";
 
         foreach (['pending', 'confirmed', 'arrived', 'serving'] as $st) {

@@ -94,15 +94,26 @@
         width: 100%; float: none !important; margin: 0 !important; padding: 6px 16px;
     }
     .nav-logo { height: 52px !important; margin: 0 !important; }
-    .navbar-toggle {
+    /* FIX: bootstrap.css biến .row thành flex → nút ☰/logo và menu bị xếp CÙNG HÀNG,
+       menu bị đẩy ra ngoài màn hình (rộng 0px). Trên điện thoại cho .row trong navbar xếp dọc. */
+    nav.navbar-fixed-top .row { display: block !important; }
+
+    /* FIX: selector phải mạnh bằng bootstrap (.navbar-default .navbar-toggle…)
+       thì mới thắng được màu #ddd khi hover/focus (nền xám nhạt + vạch trắng = mất nút) */
+    .navbar-default .navbar-toggle {
         float: none !important; margin: 0 !important;
         min-width: 48px; min-height: 48px; border-radius: 12px;
         border: 1px solid rgba(255,255,255,.35); background: transparent;
     }
-    .navbar-toggle .icon-bar { background: #fff; width: 22px; }
+    .navbar-default .navbar-toggle:hover,
+    .navbar-default .navbar-toggle:focus,
+    .navbar-default .navbar-toggle:active { background: rgba(212,175,55,.18); border-color: var(--lx-gold); outline: 0; }
+    .navbar-default .navbar-toggle .icon-bar { background: #fff; width: 22px; }
 
     .navbar-collapse.nav-flex {
         position: static !important;
+        /* FIX: custom.css đặt .navbar-collapse { flex: 1 } → flex-basis 0 làm width:100% bị bỏ qua */
+        flex: 0 0 100% !important;
         width: 100% !important; height: auto !important; max-height: 75vh;
         overflow-y: auto !important;
         background: #161616;
@@ -123,7 +134,13 @@
         position: static; float: none; width: 100%; margin: 0;
         background: #222; border: 0; box-shadow: none; border-radius: 0;
     }
-    .navbar-collapse.nav-flex .dropdown-menu > li > a { color: #fff; padding: 14px 28px; display: flex; align-items: center; gap: 10px; }
+    .navbar-collapse.nav-flex .dropdown-menu > li > a { color: #fff !important; padding: 14px 28px !important; display: flex !important; align-items: center; justify-content: center; gap: 10px; }
+    .navbar-default .navbar-nav > .open > a,
+    .navbar-default .navbar-nav > .open > a:hover,
+    .navbar-default .navbar-nav > .open > a:focus { background: #222 !important; color: #fff !important; }
+    /* FIX: menu con (tài khoản) chỉ mở khi chạm vào; chữ trắng trên nền tối (trước đó bị #1A2228 → không đọc được) */
+    .navbar-collapse.nav-flex .nav > li.dropdown > .dropdown-menu { display: none !important; }
+    .navbar-collapse.nav-flex .nav > li.dropdown.open > .dropdown-menu { display: block !important; }
 
     /* ---- Thẻ món ăn / khối nội dung: bo góc, bóng nhẹ ---- */
     .card, .panel, .menu-card, .product-card, .breeze-card, .bill-card {
@@ -156,7 +173,7 @@
     /* ---- Trang chi tiết món: tên món viền mảnh, giá + đánh giá xuống dòng gọn ---- */
     .info-section h1 {
         display: inline-block; max-width: 100%;
-        border: 1px solid var(--lx-gold) !important; border-radius: 12px;
+        /* border: 1px solid var(--lx-gold) !important; border-radius: 12px; */
         padding: 8px 18px !important; font-size: 28px; line-height: 1.25;
     }
     .price-tag { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; font-size: 26px; white-space: normal; }
@@ -203,4 +220,51 @@
         display: block; position: sticky; left: 0;
         font-size: 12px; color: #A0AEC0; text-align: center; padding: 4px 0 8px;
     }
+
+    /* ---- Trang "Hóa đơn của quý khách": cân lại khung QR (căn giữa, vừa khung) ----
+       (có "body" phía trước để thắng <style> riêng của trang, vốn nạp sau file này) */
+    body .order-container { padding: 24px 14px; }
+    body .order-container .page-title { font-size: 26px; }
+    body .order-container .bill-info { padding: 16px; }
+    body .order-container .table-responsive { overflow: visible; border: 0; }
+    body .order-container .table-order tfoot th { white-space: normal; }
+    body .order-container .table-order tfoot .total-amount-text { font-size: 1.25rem !important; }
+    body .order-container .btn-checkout { letter-spacing: 1px; padding: 14px 12px; }
+    body .order-container .payment-methods-box { padding: 16px; }
+    body .order-container .bank-transfer-card { padding: 16px; }
+    body .order-container .bank-transfer-header { flex-direction: column; align-items: center; text-align: center; gap: 8px; }
+    body .order-container #qr-inline-area { padding: 16px; }
+    body .order-container #qr-inline-area img {
+        display: block; margin: 0 auto 16px !important;
+        width: 100%; max-width: 220px; height: auto; box-sizing: border-box;
+    }
+    body .order-container .bank-info-box { display: block; width: 100%; box-sizing: border-box; }
+
+    /* ---- Trang "Đơn hàng của bạn" (tables/index): bớt lề, thông tin xếp 1 cột, bảng món thành thẻ ----
+       (có "body" phía trước để thắng <style> riêng của trang) */
+    body .cart-container { margin: 12px auto; padding: 16px 14px; }
+    body .cart-container .customer-info { padding: 12px; }
+    body .cart-container .info-grid { grid-template-columns: 1fr; gap: 4px; }
+    body .cart-container .info-item strong { width: 105px; }
+    body .cart-container .cart-table,
+    body .cart-container .cart-table tbody,
+    body .cart-container .cart-table tr { display: block; width: 100%; }
+    body .cart-container .cart-table thead { display: none; }
+    body .cart-container .cart-table tbody tr {
+        border: 1px solid var(--lx-line); border-radius: var(--lx-radius);
+        margin-bottom: 12px; padding: 10px 14px; background: #fff; box-shadow: var(--lx-shadow);
+    }
+    body .cart-container .cart-table td {
+        display: flex; justify-content: space-between; align-items: center;
+        border: 0; padding: 8px 0; text-align: right !important;
+    }
+    body .cart-container .cart-table td:first-child { display: block; text-align: left !important; }
+    body .cart-container .cart-table td:nth-child(2)::before { content: "Số lượng"; }
+    body .cart-container .cart-table td:nth-child(3)::before { content: "Đơn giá"; }
+    body .cart-container .cart-table td::before { color: var(--lx-muted); font-size: 13px; font-weight: 600; }
+    body .cart-container .quantity-control { justify-content: flex-end !important; }
+
+    /* ---- Trang hồ sơ: ô chọn ảnh ẩn không được hiện, cột ảnh không vượt khung ---- */
+    input[hidden] { display: none !important; }
+    body .profile-left { max-width: 100%; min-width: 0; }
 }

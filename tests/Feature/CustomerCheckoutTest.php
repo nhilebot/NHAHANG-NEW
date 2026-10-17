@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Mail\OrderConfirmed;
 use App\Models\Cart;
 use App\Models\Menu;
 use App\Models\Order;
@@ -15,6 +16,7 @@ use Database\Seeders\RoleSeeder;
 use Database\Seeders\TableSeeder;
 use Database\Seeders\UserSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
 
 class CustomerCheckoutTest extends TestCase
@@ -23,6 +25,7 @@ class CustomerCheckoutTest extends TestCase
 
     public function test_checkout_synchronizes_the_exact_cart_with_reservation_and_admin_order(): void
     {
+        Mail::fake();
         $this->seed([RoleSeeder::class, UserSeeder::class, CategorySeeder::class, MenuSeeder::class, TableSeeder::class]);
 
         $customer = User::where('email', 'customer@gmail.com')->first();
@@ -71,6 +74,8 @@ class CustomerCheckoutTest extends TestCase
         );
 
         $reservation->refresh();
+        $this->assertSame('pending_deposit', $reservation->status);
+        $this->assertSame('deposit_submitted', $reservation->payment_status);
         $this->assertSame([2, 1], array_column($reservation->cart_data, 'quantity'));
         $this->assertEquals($order->total_price, $reservation->total_price);
         $this->assertSame(
@@ -91,5 +96,51 @@ class CustomerCheckoutTest extends TestCase
             ->assertOk()
             ->assertSee($firstMenu->name)
             ->assertSee($secondMenu->name);
+
+        $this->actingAs($admin)
+            ->put("/orders/{$order->id}", ['status' => 'paid'])
+            ->assertRedirect(route('admin.orders.show', $order->id));
+
+        $reservation->refresh();
+        $this->assertSame('pending_deposit', $reservation->status);
+        $this->assertSame('deposit_submitted', $reservation->payment_status);
+        Mail::assertNotSent(OrderConfirmed::class);
+    }
+
+    public function test_standalone_bank_order_email_is_kept_after_admin_approval(): void
+    {
+        Mail::fake();
+        $this->seed([RoleSeeder::class, UserSeeder::class, CategorySeeder::class, MenuSeeder::class, TableSeeder::class]);
+
+        $customer = User::where('email', 'customer@gmail.com')->first();
+        $admin = User::where('email', 'admin@gmail.com')->first();
+        $menu = Menu::first();
+        $order = Order::create([
+            'user_id' => $customer->id,
+            'code' => '123456',
+            'table_number' => 'Mang về',
+            'total_price' => $menu->price,
+            'status' => 'pending_payment',
+            'name' => $customer->name,
+            'phone' => $customer->phone ?? '0900000000',
+        ]);
+        $order->orderItems()->create([
+            'menu_id' => $menu->id,
+            'product_name' => $menu->name,
+            'quantity' => 1,
+            'price' => $menu->price,
+        ]);
+
+        $this->actingAs($admin)
+            ->put("/orders/{$order->id}", ['status' => 'paid'])
+            ->assertRedirect(route('admin.orders.show', $order->id));
+
+        Mail::assertSent(OrderConfirmed::class, function (OrderConfirmed $mail) {
+            $html = $mail->render();
+
+            return str_contains($html, 'Thông tin đơn món')
+                && str_contains($html, 'Đã xác nhận thanh toán')
+                && !str_contains($html, 'xác nhận đặt bàn chính thức');
+        });
     }
 }

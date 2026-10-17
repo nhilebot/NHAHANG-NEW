@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Xác Nhận Đơn Hàng</title>
+    <title>Thông tin đơn hàng</title>
     <style>
         body { font-family: Arial, sans-serif; background-color: #f9f8f6; color: #1a2228; padding: 20px; }
         .email-container { background: #ffffff; max-width: 600px; margin: 0 auto; border-radius: 8px; border-top: 5px solid #D4AF37; padding: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
@@ -21,17 +21,19 @@
 
 <div class="email-container">
     <h2>NHÀ HÀNG AURORA GARDEN</h2>
-    <p style="text-align: center; font-size: 13px; color: #718096; margin-top: -10px;">Cảm ơn quý khách đã đặt bàn và thực đơn tại nhà hàng chúng tôi!</p>
+    <p style="text-align: center; font-size: 13px; color: #718096; margin-top: -10px;">Thông tin đơn món của quý khách tại nhà hàng chúng tôi.</p>
     
     <div class="divider"></div>
 
     <div class="info-box">
         <p><strong>Mã phiếu hóa đơn:</strong> {{ $mailData['invoice'] }}</p>
         <p><strong>Vị trí phục vụ:</strong> Bàn số {{ $mailData['table'] ?? 'Chưa xếp' }}</p>
-        <p><strong>Trạng thái thanh toán:</strong> Đã xác nhận hệ thống thành công</p>
+        <p><strong>Trạng thái đơn hàng:</strong>
+            {{ ($mailData['status'] ?? null) === 'paid' ? 'Đã xác nhận thanh toán' : 'Đã ghi nhận đơn hàng' }}
+        </p>
     </div>
 
-    <h3>Chi Tiết Thực Đơn Đã Đặt:</h3>
+    <h3>Chi tiết món đã đặt:</h3>
     <table>
         <thead>
             <tr>

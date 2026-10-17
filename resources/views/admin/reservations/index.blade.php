@@ -63,10 +63,14 @@
                                     @csrf
                                     <div class="btn-group btn-group-sm shadow-sm">
                                         @if($res->status == 'pending_deposit')
-                                            <button type="submit" name="status" value="pending" class="btn btn-warning text-dark"
-                                                onclick="return confirm('Xác nhận đã nhận cọc {{ number_format($res->deposit_amount ?? 0, 0, ',', '.') }}đ?')">
-                                                Xác nhận cọc {{ number_format($res->deposit_amount ?? 0, 0, ',', '.') }}đ
-                                            </button>
+                                            @if($res->payment_status === 'deposit_submitted')
+                                                <button type="submit" name="status" value="pending" class="btn btn-warning text-dark"
+                                                    onclick="return confirm('Xác nhận đã nhận cọc {{ number_format($res->deposit_amount ?? 0, 0, ',', '.') }}đ?')">
+                                                    Xác nhận cọc {{ number_format($res->deposit_amount ?? 0, 0, ',', '.') }}đ
+                                                </button>
+                                            @else
+                                                <span class="text-muted small">Chờ khách xác nhận chuyển khoản</span>
+                                            @endif
                                         @elseif($res->status == 'pending')
                                             <button type="submit" name="status" value="confirmed" class="btn btn-info text-white">Duyệt đơn</button>
                                         @elseif($res->status == 'confirmed')
