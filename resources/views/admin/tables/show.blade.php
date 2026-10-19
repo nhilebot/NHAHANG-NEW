@@ -137,12 +137,12 @@
 
         <div class="info-card">
             <div class="info-label">Ngày tạo</div>
-            <div class="info-value">{{ $table->created_at->format('d/m/Y H:i') }}</div>
+            <div class="info-value">{{ optional($table->created_at)->format('d/m/Y H:i') }}</div>
         </div>
 
         <div class="info-card">
             <div class="info-label">Cập nhật lần cuối</div>
-            <div class="info-value">{{ $table->updated_at->format('d/m/Y H:i') }}</div>
+            <div class="info-value">{{ optional($table->updated_at)->format('d/m/Y H:i') }}</div>
         </div>
     </div>
 

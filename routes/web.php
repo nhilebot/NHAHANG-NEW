@@ -98,7 +98,6 @@ Route::get('/bills', [App\Http\Controllers\AdminBillController::class, 'index'])
 Route::get('/bills/{id}', [App\Http\Controllers\AdminBillController::class, 'show'])
     ->name('bills.show');
         Route::get('/', [AdminController::class, 'index'])->name('index');
-    Route::get('/create', [AdminController::class, 'create'])->name('create');
     // Route::get('/employees', [AdminUserController::class, 'index'])->name('employees.index');
     // Quản lý Nhân viên (Employees) - Đổi tên cho khớp với Blade
     Route::prefix('employees')->name('employees.')->group(function () {
@@ -111,7 +110,7 @@ Route::get('/bills/{id}', [App\Http\Controllers\AdminBillController::class, 'sho
 });
         // Quản lý danh mục, người dùng, bàn
         Route::resource('categories', AdminCategoryController::class);
-        Route::resource('users', AdminUserController::class);
+        Route::resource('users', AdminUserController::class)->except('show');
         Route::resource('tables', AdminTableController::class);
         // Hiển thị form tạo đơn đặt bàn mới
 Route::get('/reservations/create', [ReservationController::class, 'create'])->name('reservations.create');
