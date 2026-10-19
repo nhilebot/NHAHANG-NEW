@@ -89,10 +89,7 @@ Route::get('/order-history', [App\Http\Controllers\OrderController::class, 'hist
     Route::post('/menu/{menuId}/comment', [CommentController::class, 'store'])->name('comment.store');
     Route::delete('/comment/{id}', [CommentController::class, 'destroy'])->name('comment.destroy');
 
-    // =========================================================
     // A. HỆ THỐNG ADMIN — role_id = 2
-    //    Admin được phép vào tất cả các trang của Staff (role:3)
-    // =========================================================
     Route::middleware('role:admin')->prefix('admin')->name('admin.')->group(function () {
         // Quản lý hóa đơn
 Route::get('/bills', [App\Http\Controllers\AdminBillController::class, 'index'])
@@ -156,46 +153,58 @@ Route::delete('/orders/{id}', [OrderController::class, 'destroy'])->name('orders
     // B. HỆ THỐNG STAFF — role_id = 3
     //    Admin cũng được vào nhờ logic trong CheckRole
     // =========================================================
-    Route::middleware('role:staff')->prefix('staff')->name('staff.')->group(function () {
+   Route::middleware('role:staff')->prefix('staff')->name('staff.')->group(function () {
+
+    // 🟢 Tuyến đường xem lịch (Không bị chặn)
+    Route::get('/schedule', [\App\Http\Controllers\StaffDashboardController::class, 'schedule'])->name('schedule');
+
+    // 🔴 Nhóm nghiệp vụ vận hành bàn ăn, order, hóa đơn (Bị ràng buộc bởi check.shift)
+    Route::middleware('check.shift')->group(function () {
+
         Route::get('/dashboard', [\App\Http\Controllers\StaffDashboardController::class, 'index'])->name('dashboard');
-        Route::post('/tables', [TableController::class, 'store'])
-    ->name('tables.store');
-        // DS hóa đơn
-        Route::get('/bills', [AdminBillController::class, 'index'])
-    ->name('bills.index');
-    // chi tiết hóa đơn
-    Route::get('/bills/{id}', [AdminBillController::class, 'show'])
-    ->name('bills.show');
-        // Danh sách đặt bàn
+
+        // Bàn ăn
+        Route::get('/tables', [TableController::class, 'index'])->name('tables.index');
+        Route::post('/tables', [TableController::class, 'store'])->name('tables.store');
+        Route::get('/tables/create', [AdminTableController::class, 'create'])->name('tables.create');
+        Route::get('/tables/{table}/edit', [TableController::class, 'edit'])->name('tables.edit');
+        Route::put('/tables/{table}', [TableController::class, 'update'])->name('tables.update');
+
+        // Đặt bàn & Order
         Route::get('/reservations', [ReservationController::class, 'adminIndex'])->name('reservations.index');
+        Route::get('/reservations/create', [ReservationController::class, 'create'])->name('reservations.create');
+        Route::post('/reservations/store', [ReservationController::class, 'staffStore'])->name('reservations.store');
         Route::post('/reservations/{id}/update-status', [ReservationController::class, 'updateStatus'])->name('reservations.updateStatus');
         Route::post('/reservations/{id}/pay', [ReservationController::class, 'pay'])->name('reservations.pay');
         Route::get('/reservations/{id}/checkout', [ReservationController::class, 'checkout'])->name('reservations.checkout');
-
-        // Quản lý bàn (Staff xem & cập nhật trạng thái bàn)
-        Route::get('/tables', [TableController::class, 'index'])->name('tables.index');     
-        Route::get('/tables/create', [AdminTableController::class, 'create'])->name('tables.create');
-        // 🔥 BỔ SUNG 2 DÒNG NÀY ĐỂ STAFF ĐƯỢC PHÉP SỬA BÀN:
-Route::get('/tables/{table}/edit', [TableController::class, 'edit'])->name('tables.edit');
-Route::put('/tables/{table}', [TableController::class, 'update'])->name('tables.update');
         Route::get('/reservations/{id}/edit-items', [StaffOrderController::class, 'editItems'])->name('reservations.edit_items');
-        Route::get('/reservations/create', [ReservationController::class, 'create'])->name('reservations.create');
-       Route::post('/reservations/store', [ReservationController::class, 'staffStore'])->name('reservations.store');
         Route::post('/reservations/{id}/update-items', [StaffOrderController::class, 'update'])->name('reservations.update_items');
-        // Tạo & gửi đơn cho bếp
+
+        // Order gửi bếp
         Route::controller(StaffOrderController::class)->name('order.')->group(function () {
             Route::get('/reservations/{id}/order/create', 'create')->name('create');
             Route::post('/reservations/{id}/order/store', 'store')->name('store');
             Route::post('/reservations/{id}/order/send-kitchen', 'sendToKitchen')->name('sendToKitchen');
             Route::post('/reservations/{id}/order/update', 'update')->name('update');
         });
+
+        // Hóa đơn
+        Route::get('/bills', [AdminBillController::class, 'index'])->name('bills.index');
+        Route::get('/bills/{id}', [AdminBillController::class, 'show'])->name('bills.show');
     });
+});
 
     // =========================================================
     // C. HỆ THỐNG CHEF (Đầu bếp) — role_id = 4
     //    Chỉ xem đơn bếp, cập nhật trạng thái từng món
     // =========================================================
-    Route::middleware('role:chef')->prefix('chef')->name('chef.')->group(function () {
+Route::middleware('role:chef')->prefix('chef')->name('chef.')->group(function () {
+
+    // 🟢 Route xem lịch làm việc cá nhân (Không bị bọc check.shift)
+    Route::get('/schedule', [\App\Http\Controllers\OrderController::class, 'chefSchedule'])->name('schedule');
+
+    // 🔴 Nhóm thao tác bếp (Bắt buộc đúng ca trực mới được vào)
+    Route::middleware('check.shift')->group(function () {
         Route::get('/dashboard', [OrderController::class, 'chefIndex'])->name('index');
 
         // Bắt đầu / hoàn thành toàn bộ đơn
@@ -205,6 +214,8 @@ Route::put('/tables/{table}', [TableController::class, 'update'])->name('tables.
         // Cập nhật trạng thái từng món
         Route::post('/item/{reservationId}/{menuId}/status', [OrderController::class, 'updateItemStatus'])->name('item.status');
     });
+
+});
 
 });
 

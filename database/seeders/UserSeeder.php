@@ -15,7 +15,7 @@ class UserSeeder extends Seeder
             [Role::ADMIN,    'Admin',        'admin@gmail.com',    '0900000001'],
             [Role::STAFF,    'Staff',        'staff@gmail.com',    '0900000002'],
             [Role::CHEF,     'Chef',         'chef@gmail.com',     '0900000003'],
-            [Role::CUSTOMER, 'Khách hàng',   'leyennhi22122006@gmail.com', '0900000004'],
+            [Role::CUSTOMER, 'Yến Nhi',   'leyennhi22122006@gmail.com', '0900000004'],
         ];
 
         foreach ($users as [$roleId, $name, $email, $phone]) {

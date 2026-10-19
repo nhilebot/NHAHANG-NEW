@@ -594,7 +594,13 @@
         Dashboard
     </div>
 </a>
-
+<a class="nav-item {{ Request::routeIs('staff.schedule') ? 'active' : '' }}"
+   href="{{ route('staff.schedule') }}">
+    <div class="nav-item-left">
+        <div class="nav-icon">🗓️</div>
+        Lịch làm việc
+    </div>
+</a>
 <div class="sidebar-section-label">Phục vụ nhà hàng</div>
 
     {{-- BÀN ĂN --}}
@@ -671,6 +677,10 @@
       @if($role === 'chef')
         <a class="nav-item {{ Request::routeIs('chef.index') ? 'active' : '' }}" href="{{ route('chef.index') }}">
           <div class="nav-item-left"><div class="nav-icon">🔥</div>Màn hình bếp</div>
+          <span class="nav-arrow">›</span>
+        </a>
+        <a class="nav-item {{ Request::routeIs('chef.schedule') ? 'active' : '' }}" href="{{ route('chef.schedule') }}">
+          <div class="nav-item-left"><div class="nav-icon">🗓️</div>Lịch làm việc</div>
           <span class="nav-arrow">›</span>
         </a>
       @endif

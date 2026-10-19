@@ -69,5 +69,6 @@ class Kernel extends HttpKernel
         'isChef' => \App\Http\Middleware\CheckChef::class,
         'isStaff' => \App\Http\Middleware\CheckStaff::class,
         'role' => \App\Http\Middleware\CheckRole::class,
+        'check.shift' => \App\Http\Middleware\CheckEmployeeShift::class,
     ];
 }

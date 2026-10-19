@@ -39,8 +39,11 @@ class ReservationController extends Controller
         // Chỉ khóa bàn theo reservation khi khách đã xác nhận thanh toán (hoặc đã qua bước cọc).
         $busyTableIds = Reservation::blockingTable()->pluck('table_id')->toArray();
         $bookedTableIds = array_unique(array_merge($occupiedTableIds, $busyTableIds));
+        $paymentTableIds = Reservation::whereIn('status', Reservation::PAID_STATUSES)
+            ->pluck('table_id')
+            ->toArray();
 
-        return view('reservation', compact('menus', 'tables', 'bookedTableIds'));
+        return view('reservation', compact('menus', 'tables', 'bookedTableIds', 'paymentTableIds'));
     }
 
     /**

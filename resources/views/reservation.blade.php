@@ -316,6 +316,12 @@
                                             @if($table->status === 'empty' && !$isUnavailable)
                                                  <small style="color:#D4AF37;">(Sẵn sàng)</small>
 
+                                            @elseif(in_array($table->id, $paymentTableIds))
+                                                <small class="status-reserved">
+                                                    <i class="fa fa-lock"></i>
+                                                    Đã đặt
+                                                </small>
+
                                             @elseif($table->status === 'reserved')
                                                 <small class="status-reserved">
                                                     <i class="fa fa-lock"></i>

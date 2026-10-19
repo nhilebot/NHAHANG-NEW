@@ -53,13 +53,12 @@ public static function calcDeposit(int $total): int
     public const PAID_STATUSES   = ['paid_cash', 'paid_transfer'];
     public const ACTIVE_STATUSES = ['pending_deposit', 'pending', 'confirmed', 'arrived', 'serving', 'ready', 'served', 'paid_cash', 'paid_transfer'];
 
-    /** Trạng thái đơn đang chiếm bàn (không tính pending_deposit — xem scopeBlockingTable). */
-    public const TABLE_HOLDING_STATUSES = ['pending', 'confirmed', 'arrived', 'serving', 'ready', 'served'];
+    /** Bàn chỉ được giải phóng sau khi hoàn tất thanh toán và dọn bàn. */
+    public const TABLE_HOLDING_STATUSES = ['pending', 'confirmed', 'arrived', 'serving', 'ready', 'served', 'paid_cash', 'paid_transfer'];
 
     /**
-     * Đơn đang GIỮ bàn: đã qua bước xác nhận cọc, HOẶC khách đã bấm
-     * "xác nhận thanh toán" (payment_status = deposit_submitted) dù admin chưa duyệt cọc.
-     * Đơn mới chỉ ở trang đặt bàn / giỏ hàng (chưa bấm xác nhận) KHÔNG giữ bàn.
+     * Đơn đã xác nhận, đang phục vụ hoặc đã thanh toán tiếp tục giữ bàn cho tới khi dọn xong.
+     * pending_deposit chỉ giữ bàn sau khi khách bấm xác nhận thanh toán cọc.
      */
     public function scopeBlockingTable($query)
     {

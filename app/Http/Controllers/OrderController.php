@@ -351,4 +351,39 @@ public function destroy($id)
     return redirect()->route('admin.index')
                      ->with('success', 'Đã xoá đơn hàng!');
 }
+/**
+     * Hiển thị lịch làm việc trong tuần của Đầu bếp đang đăng nhập
+     */
+    public function chefSchedule()
+    {
+        $user = auth()->user();
+
+        // 7 ngày trong tuần
+        $days = [
+            'T2' => 'Thứ Hai',
+            'T3' => 'Thứ Ba',
+            'T4' => 'Thứ Tư',
+            'T5' => 'Thứ Năm',
+            'T6' => 'Thứ Sáu',
+            'T7' => 'Thứ Bảy',
+            'CN' => 'Chủ Nhật',
+        ];
+
+        // Lấy lịch ca của Chef
+        $myShifts = $user->shifts ?? [];
+
+        // Cấu hình nhãn, giờ và màu sắc
+        $shiftConfigs = [
+            'morning'   => ['label' => 'Ca Sáng',  'time' => '06:00 – 13:00', 'color' => '#1d4ed8', 'bg' => '#eff6ff', 'badge' => '🌅'],
+            'afternoon' => ['label' => 'Ca Chiều', 'time' => '13:00 – 20:00', 'color' => '#854d0e', 'bg' => '#fefce8', 'badge' => '🌇'],
+            'full'      => ['label' => 'Cả Ngày',  'time' => '06:00 – 20:00', 'color' => '#7e22ce', 'bg' => '#fdf4ff', 'badge' => '⭐'],
+            'off'       => ['label' => 'Nghỉ',     'time' => 'Không có ca',   'color' => '#94a3b8', 'bg' => '#f1f5f9', 'badge' => '☕'],
+        ];
+
+        // Highlight thứ hôm nay
+        $todayMap = [1 => 'T2', 2 => 'T3', 3 => 'T4', 4 => 'T5', 5 => 'T6', 6 => 'T7', 0 => 'CN'];
+        $todayKey = $todayMap[now()->dayOfWeek] ?? 'T2';
+
+        return view('chef.schedule', compact('days', 'myShifts', 'shiftConfigs', 'todayKey'));
+    }
 }

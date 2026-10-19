@@ -25,13 +25,13 @@ class CartSeeder extends Seeder
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],
-            [
-                'user_id' => \App\Models\User::where('email', 'leyennhi22122006@gmail.com')->value('id'),
-                'menu_id' => 10,
-                'quantity' => 3,
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
-            ],
+            // [
+            //     'user_id' => \App\Models\User::where('email', 'leyennhi22122006@gmail.com')->value('id'),
+            //     'menu_id' => 10,
+            //     'quantity' => 3,
+            //     'created_at' => Carbon::now(),
+            //     'updated_at' => Carbon::now(),
+            // ],
         ]);
     }
 }

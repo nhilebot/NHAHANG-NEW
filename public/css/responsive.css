@@ -110,23 +110,24 @@
     .navbar-default .navbar-toggle:active { background: rgba(212,175,55,.18); border-color: var(--lx-gold); outline: 0; }
     .navbar-default .navbar-toggle .icon-bar { background: #fff; width: 22px; }
 
+    /* Menu sổ xuống: bảng gọn nằm bên TRÁI, ngay dưới thanh điều hướng (không trải hết bề ngang) */
     .navbar-collapse.nav-flex {
-        position: static !important;
-        /* FIX: custom.css đặt .navbar-collapse { flex: 1 } → flex-basis 0 làm width:100% bị bỏ qua */
-        flex: 0 0 100% !important;
-        width: 100% !important; height: auto !important; max-height: 75vh;
+        position: absolute !important; top: 100%; left: 0; right: auto;
+        flex: none !important;
+        width: 270px !important; max-width: 86vw; height: auto !important; max-height: 75vh;
         overflow-y: auto !important;
         background: #161616;
         flex-direction: column !important;
         border-top: 1px solid rgba(212,175,55,.35);
+        border-radius: 0 0 16px 0;
         box-shadow: 0 16px 32px rgba(0,0,0,.35);
     }
     .nav-spacer { display: none !important; }
     .navbar-collapse.nav-flex ul { width: 100%; flex: none !important; gap: 0 !important; margin: 0 !important; display: block !important; }
     .navbar-collapse.nav-flex ul > li { display: block !important; }
     .navbar-collapse.nav-flex ul > li > a {
-        display: flex !important; align-items: center; justify-content: center;
-        min-height: 52px; padding: 12px 20px !important;
+        display: flex !important; align-items: center; justify-content: flex-start;
+        min-height: 52px; padding: 12px 22px !important;
         border-bottom: 1px solid rgba(255,255,255,.07);
         letter-spacing: 1.2px; font-size: 14px;
     }
@@ -134,7 +135,7 @@
         position: static; float: none; width: 100%; margin: 0;
         background: #222; border: 0; box-shadow: none; border-radius: 0;
     }
-    .navbar-collapse.nav-flex .dropdown-menu > li > a { color: #fff !important; padding: 14px 28px !important; display: flex !important; align-items: center; justify-content: center; gap: 10px; }
+    .navbar-collapse.nav-flex .dropdown-menu > li > a { color: #fff !important; padding: 14px 36px !important; display: flex !important; align-items: center; justify-content: flex-start; gap: 10px; }
     .navbar-default .navbar-nav > .open > a,
     .navbar-default .navbar-nav > .open > a:hover,
     .navbar-default .navbar-nav > .open > a:focus { background: #222 !important; color: #fff !important; }
@@ -267,4 +268,52 @@
     /* ---- Trang hồ sơ: ô chọn ảnh ẩn không được hiện, cột ảnh không vượt khung ---- */
     input[hidden] { display: none !important; }
     body .profile-left { max-width: 100%; min-width: 0; }
+
+    /* =====================================================================
+       ẢNH: giữ đúng TỈ LỆ như trên laptop (thấy trọn ảnh, không bị cắt hẹp)
+       (có "body" phía trước để thắng <style> riêng của từng trang)
+       ===================================================================== */
+    /* Banner các trang thực đơn (laptop 1280x600) */
+    body .menu-banner { height: auto; aspect-ratio: 1280 / 600; }
+    body .menu-banner .banner-img { height: 100%; }
+    body .banner-overlay .section-title { font-size: 22px !important; margin: 0 0 4px; }
+    body .banner-overlay .section-subtitle { font-size: 11px; line-height: 1.35; margin: 0; padding: 0 16px; }
+
+    /* Ảnh bìa các trang beer / bread / featured / pricing / reservation (laptop 1280x570) */
+    body .background_content { height: auto; aspect-ratio: 1280 / 570; }
+    body .background_content h1 { font-size: 1.5em; width: 80%; top: 22%; }
+    body .background_content h1 span { border-bottom-width: 4px; }
+    /* Hai nút "Xem menu / Đặt bàn ngay" nằm gọn giữa ảnh bìa */
+    body .background_content .action-buttons {
+        margin-top: 0; height: 100%; gap: 10px; flex-wrap: nowrap; align-items: center;
+    }
+    body .background_content .btn-main { min-width: 0; padding: 10px 16px; font-size: 12px; letter-spacing: 1px; }
+
+    /* Thanh menu trên điện thoại cao ~64px và cố định ở đầu trang → đẩy ảnh bìa đầu trang xuống dưới thanh menu,
+       để không bị thanh menu che mất phần trên của ảnh */
+    body main > .starter_container,
+    body main .menu-banner:first-child,
+    body main > .background_content:first-child { margin-top: 64px; }
+
+    /* Ảnh hero trang chủ (laptop ~2.2 : 1) */
+    body .starter_container { height: auto; aspect-ratio: 972 / 440; }
+    body .starter_container .fill { height: 100%; }
+    body .follow_container { top: 30%; }
+    body .follow_container h2, body .top-title { font-size: 26px !important; }
+
+    /* Ảnh món "Có thể bạn sẽ thích" (laptop 264x180) */
+    body .related-img { height: auto; aspect-ratio: 264 / 180; }
+
+    /* 4 ảnh giới thiệu trang chủ (laptop 250x220): 2 cột, giữ tỉ lệ 250:220 */
+    .img-section { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
+    .img-section img { width: calc(50% - 3px); height: auto; aspect-ratio: 250 / 220; object-fit: fill; }
+    .img-section-space { display: none; }
+
+    /* =====================================================================
+       FOOTER: đường kẻ mảnh ngăn các khối  (logo ─── MENU ─── LIÊN HỆ)
+       ===================================================================== */
+    .sub_footer .footer-section:not(:last-child) {
+        border-bottom: 1px solid rgba(255, 255, 255, .22);
+        padding-bottom: 22px; margin-bottom: 22px;
+    }
 }
