@@ -7,6 +7,23 @@ use Illuminate\Database\Eloquent\Model;
 
 class Reservation extends Model
 {
+    // Phần trăm cọc khi đặt bàn CÓ kèm món
+const DEPOSIT_PERCENT = 20;
+// Cọc cố định khi đặt bàn KHÔNG kèm món (VNĐ)
+const TABLE_ONLY_DEPOSIT = 100000;
+
+/**
+ * Tính tiền cọc từ tổng tiền món.
+ * - Tổng = 0 (không đặt món)  -> cọc cố định 100.000đ
+ * - Tổng > 0                  -> cọc 20% tổng bill
+ */
+public static function calcDeposit(int $total): int
+{
+    if ($total <= 0) {
+        return self::TABLE_ONLY_DEPOSIT;
+    }
+    return (int) round($total * self::DEPOSIT_PERCENT / 100);
+}
     // Định nghĩa các trạng thái
     // app/Models/Reservation.php
     const STATUS_PREPARING = 'preparing'; // Đang chuẩn bị

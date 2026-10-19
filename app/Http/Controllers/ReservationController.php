@@ -74,10 +74,8 @@ public function store(Request $request)
         }
     }
 
-    // 🔥 MỌI ĐƠN ĐẶT BÀN ONLINE ĐỀU PHẢI QUA XÁC NHẬN CỌC TRƯỚC
-    // Áp dụng ngay cả khi table_price chưa tính (bạn xác nhận trước đó: áp dụng cho mọi đơn, kể cả không có món)
-    $depositPercent = 20;
-    $depositAmount  = (int) round($totalAmount * $depositPercent / 100);
+    // Có món -> 20%, không món -> 100.000đ cố định
+$depositAmount = Reservation::calcDeposit($totalAmount);
 
     try {
         $reservation = DB::transaction(function () use ($request, $cartData, $totalAmount, $depositAmount) {
@@ -514,56 +512,98 @@ return redirect()->route($route)
         return view('staff.reservations.edit-items', compact('reservation', 'menus', 'cartItems'));
     }
 
-    public function updateItems(Request $request, $id)
-    {
-        $reservation = Reservation::findOrFail($id);
-        $newCartData = [];
-        $totalPrice  = 0;
+    /**
+ * Staff/Admin lưu danh sách món của một đặt bàn (khách đã đến order).
+ * - Lưu món vào reservation.cart_data + cập nhật total_price
+ * - Món mới được đánh dấu 'pending' để bếp nhận, món cũ giữ nguyên trạng thái bếp
+ * - Nếu bấm "Lưu & gửi xuống bếp": chuyển đặt bàn sang 'serving' để bếp thấy
+ */
+public function updateItems(Request $request, $id)
+{
+    try {
+        DB::transaction(function () use ($request, $id) {
+            // Khóa dòng để 2 nhân viên không sửa cùng lúc
+            $reservation = Reservation::lockForUpdate()->findOrFail($id);
 
-        foreach ($request->items ?? [] as $item) {
-            $menu = Menu::find($item['id']);
-            if (!$menu) continue;
+            // Chỉ cho order khi khách đã đến hoặc đang phục vụ
+            if (!in_array($reservation->status, ['arrived', 'serving'], true)) {
+                throw new \DomainException('Chỉ order món được khi khách đã đến bàn.');
+            }
 
-            $qty          = (int) $item['quantity'];
-            $price        = (float) $menu->price;
-            $newCartData[] = [
-                'id'       => $menu->id,
-                'name'     => $menu->name,
-                'price'    => $price,
-                'quantity' => $qty,
-                'image'    => $menu->image,
-            ];
-            $totalPrice += $price * $qty;
-        }
+            // 1. Dựng lại danh sách món từ form (lấy giá từ DB, không tin giá từ form)
+            $newCartData = [];
+            $totalPrice  = 0;
+            foreach ($request->items ?? [] as $item) {
+                $menu = Menu::find($item['id']);
+                $qty  = (int) ($item['quantity'] ?? 0);
+                if (!$menu || $qty <= 0) continue;
 
-        $reservation->update(['cart_data' => $newCartData, 'total_price' => $totalPrice]);
+                $newCartData[] = [
+                    'id'       => $menu->id,
+                    'name'     => $menu->name,
+                    'price'    => (float) $menu->price,
+                    'quantity' => $qty,
+                    'image'    => $menu->image,
+                ];
+                $totalPrice += $menu->price * $qty;
+            }
 
-        // Đồng bộ sang Order
-        $order = Order::where('user_id', $reservation->user_id)
-                      ->where('table_number', $reservation->table_id)
-                      ->latest()->first();
+            // 2. Trạng thái bếp: món mới = pending, món cũ giữ nguyên
+            $chef    = is_array($reservation->chef_statuses) ? $reservation->chef_statuses : [];
+            $newChef = [];
+            foreach ($newCartData as $cd) {
+                $newChef[$cd['id']] = $chef[$cd['id']] ?? 'pending';
+            }
 
-        if ($order) {
-            $order->update(['total_price' => $totalPrice]);
-            $order->items()->delete();
-            foreach ($newCartData as $data) {
+            $reservation->cart_data     = $newCartData;
+            $reservation->total_price   = $totalPrice;
+            $reservation->chef_statuses = $newChef;
+
+            // 3. Gửi xuống bếp: chỉ khi bấm nút "gửi bếp", đang 'arrived', có món,
+            //    và máy trạng thái cho phép arrived -> serving
+            if ($request->boolean('send_to_kitchen')
+                && $reservation->status === 'arrived'
+                && count($newCartData) > 0
+                && Reservation::canTransition('arrived', 'serving')) {
+                $reservation->status = 'serving';
+            }
+            $reservation->save();
+
+            // 4. Đồng bộ bảng order_items theo reservation (màn hình staff/bếp đọc từ đây)
+            OrderItem::where('reservation_id', $reservation->id)->delete();
+            foreach ($newCartData as $cd) {
                 OrderItem::create([
-                    'order_id'     => $order->id,
-                    'menu_id'      => $data['id'],
-                    'product_name' => $data['name'],
-                    'quantity'     => $data['quantity'],
-                    'price'        => $data['price'],
+                    'reservation_id' => $reservation->id,
+                    'order_id'       => null,
+                    'menu_id'        => $cd['id'],
+                    'product_name'   => $cd['name'],
+                    'quantity'       => $cd['quantity'],
+                    'price'          => $cd['price'],
                 ]);
             }
-        }
 
-        // Redirect thông minh theo role
-        if (auth()->user()->isAdmin()) {
-            return redirect()->route('admin.reservations.index')->with('success', 'Admin đã cập nhật thực đơn thành công!');
-        }
-
-        return redirect()->route('staff.reservations.index')->with('success', 'Đã lưu thay đổi thực đơn!');
+            // 5. Nếu đã có hóa đơn (Order) liên kết thì cập nhật luôn cho khớp
+            if ($order = $reservation->linkedOrder()) {
+                $order->update(['total_price' => $totalPrice]);
+                $order->items()->delete();
+                foreach ($newCartData as $cd) {
+                    OrderItem::create([
+                        'order_id'     => $order->id,
+                        'menu_id'      => $cd['id'],
+                        'product_name' => $cd['name'],
+                        'quantity'     => $cd['quantity'],
+                        'price'        => $cd['price'],
+                    ]);
+                }
+            }
+        });
+    } catch (\DomainException $e) {
+        return back()->with('error', $e->getMessage());
     }
+
+    $route = auth()->user()->isAdmin() ? 'admin.reservations.index' : 'staff.reservations.index';
+    return redirect()->route($route)->with('success', 'Đã lưu order.');
+}
   public function create()
     {
         Table::releaseExpiredCleaning();

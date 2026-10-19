@@ -60,13 +60,16 @@ class CartController extends Controller
                 ->where('table_id', $latestReservation->table_id)
                 ->where('id', '!=', $latestReservation->id)
                 ->exists();
-        $canCheckout = !$latestReservation || (
-            $latestReservation->status === 'pending_deposit'
-            && $latestReservation->payment_status === 'unpaid'
-            && $reservationTable
-            && $reservationTable->status === 'empty'
-            && !$hasTableConflict
-        );
+// Chưa có đặt bàn -> phải đi đặt bàn trước, chưa được cọc
+$needReservation = !$latestReservation;
+
+// Chỉ được cọc khi: đã có đặt bàn, đang chờ cọc, chưa trả, bàn còn trống, không bị trùng
+$canCheckout = $latestReservation
+    && $latestReservation->status === 'pending_deposit'
+    && $latestReservation->payment_status === 'unpaid'
+    && $reservationTable
+    && $reservationTable->status === 'empty'
+    && !$hasTableConflict;
         $checkoutUnavailableMessage = null;
         if ($latestReservation && !$canCheckout) {
             if ($latestReservation->status !== 'pending_deposit'
@@ -129,7 +132,8 @@ class CartController extends Controller
             'total',
             'reservation',
             'canCheckout',
-            'checkoutUnavailableMessage'
+            'checkoutUnavailableMessage',
+            'needReservation'
         ));
     }
 
@@ -279,9 +283,9 @@ public function getCart()
             ->where('user_id', $userId)
             ->get();
 
-        if ($cartItems->isEmpty()) {
-            return redirect()->back()->with('error', 'Giỏ hàng của bạn đang trống.');
-        }
+        // if ($cartItems->isEmpty()) {
+        //     return redirect()->back()->with('error', 'Giỏ hàng của bạn đang trống.');
+        // }
 
         // 2. KIỂM TRA TỒN KHO (STOCK) TRƯỚC KHI XỬ LÝ
         foreach ($cartItems as $item) {
@@ -315,7 +319,13 @@ public function getCart()
             ->whereIn('status', Reservation::ACTIVE_STATUSES)
             ->latest()
             ->first();
-        $tableId = $latestReservation->table_id ?? null;
+       // Bắt buộc phải có đặt bàn (kèm bàn) mới được cọc.
+// Chặn ở server để khách không gửi form trực tiếp lách qua giao diện.
+if (!$latestReservation || !$latestReservation->table_id) {
+    return redirect()->route('reservation.index')
+        ->with('error', 'Vui lòng nhập thông tin đặt bàn trước khi thanh toán cọc.');
+}
+$tableId = $latestReservation->table_id;
 
         // Checkout chỉ được gắn với yêu cầu đặt bàn chưa xác nhận cọc và bàn còn trống.
         if ($latestReservation) {
@@ -353,7 +363,7 @@ public function getCart()
                 'cart_data' => $cartData,
                 'total_price' => $totalAmount,
             ];
-            $reservationUpdate['deposit_amount'] = (int) round($totalAmount * 20 / 100);
+            $reservationUpdate['deposit_amount'] = Reservation::calcDeposit($totalAmount);
             $latestReservation->update($reservationUpdate);
             $latestReservation->chef_statuses = array_fill_keys(array_column($cartData, 'id'), 'pending');
             $latestReservation->save();
@@ -371,74 +381,42 @@ public function getCart()
             }
         }
 
-        // 6. XÁC ĐỊNH TRẠNG THÁI ĐƠN HÀNG BAN ĐẦU THEO NGHIỆP VỤ
-        // Nếu chọn chuyển khoản BANK -> Chờ thanh toán (pending_payment)
-        // Nếu chọn trả tại bàn COD -> Chờ duyệt món (pending)
-        $orderStatus = ($pm === 'BANK') ? 'pending_payment' : 'pending';
+// 6-8. Chỉ tạo Order khi khách có đặt món trước.
+// Đặt bàn không món: chỉ cọc giữ bàn, Order sẽ do staff tạo khi khách đến gọi món.
+if ($cartItems->isNotEmpty()) {
+    $orderStatus = ($pm === 'BANK') ? 'pending_payment' : 'pending';
 
-        // 7. Tạo bản ghi Đơn hàng (Order) vào Database
-        $order = \App\Models\Order::create([
-            'user_id'         => $userId,
-            'reservation_id'  => $latestReservation->id ?? null, // liên kết chắc chắn với đơn đặt bàn
-            'code'            => $orderCode,
-            'total_price'     => $totalAmount,
-            'status'          => $orderStatus,
-            'payment_method'  => $pm,
-            'table_number'    => $tableId,
-            'name'            => auth()->user()->name,
-            'phone'           => auth()->user()->phone,
-            'notes'           => $request->order_notes ?? null,
+    $order = \App\Models\Order::create([
+        'user_id'        => $userId,
+        'reservation_id' => $latestReservation->id,
+        'code'           => $orderCode,
+        'total_price'    => $totalAmount,
+        'status'         => $orderStatus,
+        'payment_method' => $pm,
+        'table_number'   => $tableId,
+        'name'           => auth()->user()->name,
+        'phone'          => auth()->user()->phone,
+        'notes'          => $request->order_notes ?? null,
+    ]);
+
+    foreach ($cartItems as $item) {
+        \App\Models\OrderItem::create([
+            'order_id'     => $order->id,
+            'menu_id'      => $item->menu_id,
+            'quantity'     => $item->quantity,
+            'price'        => $item->menu->price,
+            'product_name' => $item->menu->name,
         ]);
 
-        // 8. Lưu OrderItem & TRỪ TỒN KHO TRONG DATABASE VẬT LÝ
-        $cartToEmail = []; // Chuẩn bị mảng dữ liệu sạch phục vụ gửi Mail
-        foreach ($cartItems as $item) {
-            $price = $item->menu->price;
-            \App\Models\OrderItem::create([
-                'order_id'     => $order->id,
-                'menu_id'      => $item->menu_id,
-                'quantity'     => $item->quantity,
-                'price'        => $price,
-                'product_name' => $item->menu->name,
-            ]);
+        // Trừ tồn kho món đã đặt
+        $item->menu->decrement('stock', $item->quantity);
+    }
+}
 
-            // Cập nhật giảm số lượng hàng tồn kho của món ăn
-            $item->menu->decrement('stock', $item->quantity);
-
-            // Gom thông tin món phục vụ cấu trúc Mail nhận dữ liệu
-            $cartToEmail[] = [
-                'name'     => $item->menu->name,
-                'quantity' => $item->quantity,
-                'price'    => $price,
-                'total'    => $price * $item->quantity
-            ];
-        }
-
-        // 9. GỬI MAIL THEO PHƯƠNG THỨC THANH TOÁN ĐÃ CHỌN
-        $mailData = [
-            'invoice' => $order->code,
-            'total'   => $order->total_price,
-            'table'   => $order->table_number,
-            'cart'    => $cartToEmail
-        ];
-
-        if ($pm === 'COD' && !$latestReservation) {
-            // Thanh toán tại bàn -> Gửi mail xác nhận thông tin đặt món ngay lập tức
-            try {
-                \Illuminate\Support\Facades\Mail::to(auth()->user()->email)->send(new \App\Mail\OrderConfirmed($mailData));
-            } catch (\Throwable $e) {
-                \Log::error('Standalone COD order email failed.', [
-                    'order_id' => $order->id,
-                    'exception' => $e,
-                ]);
-            }
-            $successMessage = 'Thanh toán tại bàn được ghi nhận! Đơn hàng đã được chuyển tới nhà bếp.';
-        } elseif ($pm === 'COD') {
-            $successMessage = 'Thanh toán tại bàn được ghi nhận! Đơn hàng đã được chuyển tới nhà bếp.';
-        } else {
-            // Chuyển khoản QR ngân hàng -> KHÔNG gửi mail tại đây, chờ duyệt tiền ở trang Admin
-            $successMessage = 'Đặt món thành công! Vui lòng hoàn tất chuyển khoản qua mã QR để đơn hàng được nhà bếp xử lý.';
-        }
+// 9. Thông báo cho khách (mail xác nhận chỉ gửi sau khi staff duyệt cọc)
+$successMessage = $cartItems->isNotEmpty()
+    ? 'Đặt món thành công! Vui lòng hoàn tất chuyển khoản qua mã QR để đơn hàng được nhà bếp xử lý.'
+    : 'Đã ghi nhận đặt cọc giữ bàn! Nhân viên sẽ xác nhận sau khi nhận được tiền.';
 
         // 10. Dọn sạch dữ liệu giỏ hàng sau khi đã chuyển thành đơn hàng thành công
        Cart::where('user_id', $userId)->delete();
@@ -544,7 +522,11 @@ public function history()
         }
 
         // 2. Cập nhật Bảng Đặt Bàn (Reservations)
-        $reservation = \App\Models\Reservation::where('user_id', $userId)->latest()->first();
+        $reservation = \App\Models\Reservation::where('user_id', $userId)
+    ->where('status', 'pending_deposit')
+    ->where('payment_status', 'unpaid')
+    ->latest()
+    ->first();
         
         if ($reservation) {
             // Cập nhật lại mảng JSON và tổng tiền
@@ -554,7 +536,7 @@ public function history()
 ];
 // Đơn chưa cọc: tiền cọc luôn = 20% tổng mới
 if ($reservation->status === 'pending_deposit') {
-    $payload['deposit_amount'] = (int) round($totalPrice * 20 / 100);
+    $payload['deposit_amount'] = Reservation::calcDeposit($totalPrice);
 }
 $reservation->update($payload);
 

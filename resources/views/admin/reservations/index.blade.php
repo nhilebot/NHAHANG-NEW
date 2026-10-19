@@ -2,109 +2,452 @@
 
 @section('admin_content')
 <style>
-    /* CSS Badge Tiếng Việt */
-    .badge-status {
-        padding: 6px 14px; font-weight: 600; font-size: 0.85rem;
-        border-radius: 50px; display: inline-flex; align-items: center; gap: 6px;
+    .reservation-page {
+        font-family: 'Be Vietnam Pro', sans-serif;
+        color: #1a2228;
     }
-    .st-pending { background-color: #fff4e5; color: #664d03; }   
-    .st-confirmed { background-color: #e7f6f8; color: #087990; } 
-    .st-arrived { background-color: #e7f0ff; color: #0d6efd; }   
-    .st-serving { background-color: #fff9db; color: #856404; }   
-    .st-served { background-color: #e0f7fa; color: #006064; }    
-    .st-success { background-color: #e9f7ef; color: #198754; }   
-    .st-danger { background-color: #fdf2f2; color: #dc3545; }    
+
+    .reservation-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-bottom: 22px;
+    }
+
+    .reservation-header h4 {
+        font-weight: 700;
+        margin: 0;
+        color: #1a2228;
+    }
+
+    .reservation-subtitle {
+        color: #718096;
+        font-size: 13px;
+        margin-top: 5px;
+    }
+
+    .reservation-card {
+        border: 1px solid #e2e8f0;
+        border-radius: 14px;
+        background: #fff;
+        box-shadow: 0 4px 18px rgba(0,0,0,.04);
+        overflow: hidden;
+    }
+
+    .reservation-card-header {
+        padding: 18px 22px;
+        border-bottom: 1px solid #e2e8f0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .reservation-card-header h5 {
+        margin: 0;
+        font-size: 16px;
+        font-weight: 700;
+    }
+
+    .reservation-table {
+        width: 100%;
+        min-width: 950px;
+        border-collapse: separate;
+        border-spacing: 0;
+        margin: 0;
+    }
+
+    .reservation-table thead th {
+        background: #f8fafc;
+        color: #64748b;
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        padding: 15px 16px;
+        border-bottom: 1px solid #e2e8f0;
+        white-space: nowrap;
+    }
+
+    .reservation-table tbody td {
+        padding: 18px 16px;
+        vertical-align: middle;
+        border-bottom: 1px solid #edf2f7;
+        font-size: 13px;
+    }
+
+    .reservation-table tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+    .reservation-table tbody tr:hover {
+        background: #fafcff;
+    }
+
+    .customer-name {
+        font-weight: 700;
+        font-size: 14px;
+        color: #1a2228;
+        margin-bottom: 5px;
+    }
+
+    .reservation-muted {
+        color: #718096;
+        font-size: 12px;
+        margin-top: 4px;
+    }
+
+    .table-label {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: #eff6ff;
+        color: #1d4ed8;
+        padding: 7px 10px;
+        border-radius: 8px;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    .badge-status {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 7px 11px;
+        border-radius: 50px;
+        font-size: 11px;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    .st-pending { background: #fff4e5; color: #92400e; }
+    .st-confirmed { background: #e7f6f8; color: #087990; }
+    .st-arrived { background: #e7f0ff; color: #1d4ed8; }
+    .st-serving { background: #fff9db; color: #856404; }
+    .st-served { background: #e0f7fa; color: #006064; }
+    .st-success { background: #e9f7ef; color: #198754; }
+    .st-danger { background: #fdf2f2; color: #dc3545; }
+    .st-neutral { background: #edf2f7; color: #475569; }
+
+    .reservation-actions {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 6px;
+        min-width: 180px;
+    }
+
+    .reservation-actions .btn {
+        font-size: 11px;
+        padding: 7px 10px;
+        border-radius: 7px;
+        font-weight: 600;
+    }
+
+    .btn-reservation-edit {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+        margin-top: 9px;
+        padding: 6px 9px;
+        font-size: 11px;
+        border: 1px solid #cbd5e1;
+        color: #2563eb;
+        border-radius: 7px;
+        text-decoration: none;
+        background: white;
+    }
+
+    .btn-reservation-edit:hover {
+        background: #eff6ff;
+        color: #1d4ed8;
+    }
+
+    .empty-reservations {
+        text-align: center;
+        padding: 45px 20px !important;
+        color: #718096;
+    }
+
+    .empty-reservations .empty-icon {
+        display: block;
+        font-size: 34px;
+        margin-bottom: 10px;
+    }
+
+    @media (max-width: 768px) {
+        .reservation-header {
+            align-items: flex-start;
+        }
+
+        .reservation-header .btn {
+            width: 100%;
+        }
+
+        .reservation-card-header {
+            padding: 15px;
+        }
+    }
 </style>
 
-<div class="container-fluid py-4">
-    <div class="card shadow border-0">
-        <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
-            <h5 class="m-0 font-weight-bold text-primary">🗓️ Quản lý Đặt bàn & Phục vụ</h5>
-<a href="{{ route('admin.reservations.create') }}" class="btn btn-primary btn-sm">+ Đặt bàn tại chỗ</a>
+@php
+    $role = auth()->user()->isAdmin() ? 'admin' : 'staff';
+
+    $statusClasses = [
+        'pending_deposit' => 'st-pending',
+        'pending'         => 'st-pending',
+        'confirmed'       => 'st-confirmed',
+        'arrived'         => 'st-arrived',
+        'preparing'       => 'st-serving',
+        'serving'         => 'st-serving',
+        'ready'           => 'st-served',
+        'served'          => 'st-served',
+        'completed'       => 'st-success',
+        'cancelled'       => 'st-danger',
+    ];
+@endphp
+
+<div class="reservation-page">
+
+    <div class="reservation-header">
+        <div>
+            <h4>🗓️ Quản lý Đặt bàn & Phục vụ</h4>
+            <div class="reservation-subtitle">
+                Theo dõi đặt bàn, gọi món, thanh toán và tình trạng phục vụ khách hàng.
+            </div>
         </div>
 
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-hover align-middle">
-                    <thead class="table-light">
-                        <tr>
-                            <th>Khách hàng</th>
-                            <th>Thông tin bàn</th>
-                            <th>Trạng thái hiện tại</th>
-                            <th class="text-center">Thao tác nghiệp vụ</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse($reservations as $res)
-                        <tr>
-                            <td>
-                                <strong>{{ $res->full_name }}</strong>
-                                <div class="small text-muted">{{ $res->phone }}</div>
-                            </td>
-                            <td>
-                                 <span class="badge bg-info text-white fs-6">
-                                    <div class="table-name"> {{ $res->table->name }} - {{ $res->table->capacity }} Ghế </div>
-                                </span>
-                                <div class="small mt-1 text-primary fw-bold">{{ $res->reservation_time }}</div>
-                                <a href="{{ route('staff.reservations.edit_items', $res->id) }}" class="btn btn-outline-primary btn-sm mt-2">
-                                    <i class="fas fa-file-invoice"></i> Chỉnh sửa đơn
-                                </a>
-                            </td>
-                            <td>
-                                <span class="badge">{{ \App\Helpers\StatusHelper::getTextWithEmoji($res->status) }}</span>
-                            </td>
-                            <td class="text-center">
-                                @php
-                                    $roleId = auth()->user()->role_id ?? 0;
-                                    $prefix = auth()->user()->isAdmin() ? 'admin' : 'staff';
-                                @endphp
+        <a href="{{ route('admin.reservations.create') }}"
+           class="btn btn-primary">
+            <i class="fas fa-plus"></i> Đặt bàn tại chỗ
+        </a>
+    </div>
 
-                                <form action="{{ route($prefix . '.reservations.updateStatus', $res->id) }}" method="POST">
+    <div class="reservation-card">
+        <div class="reservation-card-header">
+            <h5><i class="fas fa-clipboard-list text-primary"></i> Danh sách đặt bàn & phục vụ</h5>
+            <span class="reservation-muted">
+    Tổng số: {{ $reservations->count() }} đơn
+</span>
+        </div>
+
+        <div class="table-responsive">
+            <table class="reservation-table">
+                <thead>
+                    <tr>
+                        <th>Khách hàng</th>
+                        <th>Thông tin bàn</th>
+                        <th>Thời gian</th>
+                        <th>Trạng thái</th>
+                        <th class="text-center">Thao tác nghiệp vụ</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @forelse($reservations as $res)
+                        @php
+                            $status = $res->status;
+                            $isPaid = in_array(
+                                $status,
+                                \App\Models\Reservation::PAID_STATUSES,
+                                true
+                            );
+
+                            $statusClass = $statusClasses[$status] ?? 'st-neutral';
+                        @endphp
+
+                        <tr>
+                            {{-- THÔNG TIN KHÁCH --}}
+                            <td>
+                                <div class="customer-name">
+                                    {{ $res->full_name }}
+                                </div>
+
+                                <div>
+                                    <i class="fas fa-phone text-muted"></i>
+                                    {{ $res->phone }}
+                                </div>
+
+                                @if($res->email)
+                                    <div class="reservation-muted">
+                                        <i class="fas fa-envelope"></i>
+                                        {{ $res->email }}
+                                    </div>
+                                @endif
+
+                                <div class="reservation-muted">
+                                    Mã đặt bàn: #{{ $res->id }}
+                                </div>
+                            </td>
+
+                            {{-- THÔNG TIN BÀN --}}
+                            <td>
+                                <div class="table-label">
+                                    <i class="fas fa-chair"></i>
+                                    {{ $res->table->name ?? 'Chưa xếp bàn' }}
+                                </div>
+
+                                @if($res->table)
+                                    <div class="reservation-muted">
+                                        {{ $res->table->capacity }} ghế
+                                    </div>
+                                @endif
+
+                                @if(!in_array($status, ['completed', 'cancelled'], true))
+                                    @if(!$isPaid)
+                                        <a href="{{ route('staff.reservations.edit_items', $res->id) }}"
+                                           class="btn-reservation-edit">
+                                            <i class="fas fa-pen-to-square"></i>
+                                            Chỉnh sửa đơn
+                                        </a>
+                                    @endif
+                                @endif
+                            </td>
+
+                            {{-- THỜI GIAN --}}
+                            <td>
+                                <div>
+                                    <i class="far fa-calendar-alt text-primary"></i>
+                                    {{ $res->reservation_date ?? '—' }}
+                                </div>
+                                <div class="reservation-muted">
+                                    <i class="far fa-clock"></i>
+                                    {{ $res->reservation_time ?? '—' }}
+                                </div>
+                            </td>
+
+                            {{-- TRẠNG THÁI --}}
+                            <td>
+                                <span class="badge-status {{ $statusClass }}">
+                                    {{ \App\Helpers\StatusHelper::getTextWithEmoji($status) }}
+                                </span>
+
+                                @if($isPaid)
+                                    <div class="reservation-muted">
+                                        <i class="fas fa-check-circle text-success"></i>
+                                        Đã thanh toán
+                                    </div>
+                                @endif
+                            </td>
+
+                            {{-- CÁC NÚT NGHIỆP VỤ --}}
+                            <td>
+                                <form action="{{ route($role . '.reservations.updateStatus', $res->id) }}"
+                                      method="POST">
                                     @csrf
-                                    <div class="btn-group btn-group-sm shadow-sm">
-                                        @if($res->status == 'pending_deposit')
+
+                                    <div class="reservation-actions">
+                                        @if($status === 'pending_deposit')
                                             @if($res->payment_status === 'deposit_submitted')
-                                                <button type="submit" name="status" value="pending" class="btn btn-warning text-dark"
-                                                    onclick="return confirm('Xác nhận đã nhận cọc {{ number_format($res->deposit_amount ?? 0, 0, ',', '.') }}đ?')">
-                                                    Xác nhận cọc {{ number_format($res->deposit_amount ?? 0, 0, ',', '.') }}đ
+                                                <button type="submit"
+                                                        name="status"
+                                                        value="pending"
+                                                        class="btn btn-warning"
+                                                        onclick="return confirm('Xác nhận đã nhận tiền cọc {{ number_format($res->deposit_amount ?? 0, 0, ',', '.') }}đ?')">
+                                                    <i class="fas fa-check"></i>
+                                                    Xác nhận cọc
                                                 </button>
                                             @else
-                                                <span class="text-muted small">Chờ khách xác nhận chuyển khoản</span>
+                                                <span class="reservation-muted">
+                                                    Chờ xác nhận chuyển khoản
+                                                </span>
                                             @endif
-                                        @elseif($res->status == 'pending')
-                                            <button type="submit" name="status" value="confirmed" class="btn btn-info text-white">Duyệt đơn</button>
-                                        @elseif($res->status == 'confirmed')
-                                            <button type="submit" name="status" value="arrived" class="btn btn-primary">Khách nhận bàn</button>
-                                        @elseif($res->status == 'arrived')
-                                            <button type="submit" name="status" value="serving" class="btn btn-warning">Báo bếp nấu</button>
-                                        @elseif($res->status == 'serving' || $res->status == 'ready')
-                                            <button type="submit" name="status" value="served" class="btn btn-info text-white">Đã lên món</button>
-                                        @elseif($res->status == 'served')
-                                            @php $payUrl = route($prefix . '.reservations.pay', $res->id); @endphp
-                                            <button type="submit" name="payment_method" value="cash" formaction="{{ $payUrl }}" class="btn btn-success">💰 Tiền mặt</button>
-                                            <button type="submit" name="payment_method" value="transfer" formaction="{{ $payUrl }}" class="btn btn-dark">💳 CK</button>
+
+                                        @elseif($status === 'pending')
+                                            <button type="submit" name="status" value="confirmed"
+                                                    class="btn btn-info text-white">
+                                                <i class="fas fa-check"></i> Duyệt đơn
+                                            </button>
+
+                                        @elseif($status === 'confirmed')
+                                            <button type="submit" name="status" value="arrived"
+                                                    class="btn btn-primary">
+                                                <i class="fas fa-chair"></i> Khách nhận bàn
+                                            </button>
+
+                                        @elseif($status === 'arrived')
+                                            <button type="submit" name="status" value="serving"
+                                                    class="btn btn-warning">
+                                                <i class="fas fa-fire"></i> Báo bếp nấu
+                                            </button>
+
+                                        @elseif(in_array($status, ['serving', 'ready'], true))
+                                            <button type="submit" name="status" value="served"
+                                                    class="btn btn-info text-white">
+                                                <i class="fas fa-concierge-bell"></i> Đã lên món
+                                            </button>
+
+                                        @elseif($status === 'served')
+                                            @php
+                                                $payUrl = route($role . '.reservations.pay', $res->id);
+                                            @endphp
+
+                                            <button type="submit" name="payment_method" value="cash"
+                                                    formaction="{{ $payUrl }}"
+                                                    class="btn btn-success"
+                                                    onclick="return confirm('Xác nhận thanh toán bằng tiền mặt?')">
+                                                <i class="fas fa-money-bill-wave"></i> Tiền mặt
+                                            </button>
+
+                                            <button type="submit" name="payment_method" value="transfer"
+                                                    formaction="{{ $payUrl }}"
+                                                    class="btn btn-dark"
+                                                    onclick="return confirm('Xác nhận thanh toán chuyển khoản?')">
+                                                <i class="fas fa-credit-card"></i> Chuyển khoản
+                                            </button>
                                         @endif
 
-                                        @if(in_array($res->status, \App\Models\Reservation::PAID_STATUSES, true))
-                                            <button type="submit" name="status" value="completed" class="btn btn-secondary">🏁 Dọn bàn & Xong</button>
+                                        @if($isPaid && $status !== 'completed')
+                                            <button type="submit" name="status" value="completed"
+                                                    class="btn btn-secondary"
+                                                    onclick="return confirm('Xác nhận hoàn tất và chuyển bàn sang trạng thái dọn dẹp?')">
+                                                <i class="fas fa-broom"></i> Dọn bàn & Xong
+                                            </button>
                                         @endif
                                     </div>
 
-                                    @if(in_array($res->status, ['pending_deposit', 'pending', 'confirmed', 'arrived'], true))
-                                        <div class="mt-2">
-                                            <button type="submit" name="status" value="cancelled" class="btn btn-sm btn-link text-danger" onclick="return confirm('Hủy đơn này?')">Hủy đơn</button>
+                                    @if(in_array($status, [
+                                        'pending_deposit',
+                                        'pending',
+                                        'confirmed',
+                                        'arrived'
+                                    ], true))
+                                        <div class="text-center mt-2">
+                                            <button type="submit"
+                                                    name="status"
+                                                    value="cancelled"
+                                                    class="btn btn-sm btn-link text-danger"
+                                                    onclick="return confirm('Bạn có chắc muốn hủy đơn đặt bàn này?')">
+                                                <i class="fas fa-times"></i> Hủy đơn
+                                            </button>
                                         </div>
                                     @endif
                                 </form>
                             </td>
                         </tr>
-                        @empty
-                        <tr><td colspan="4" class="text-center py-4 text-muted">Hiện không có yêu cầu nào.</td></tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
+                    @empty
+                        <tr>
+                            <td colspan="5" class="empty-reservations">
+                                <span class="empty-icon">📅</span>
+                                <strong>Chưa có đơn đặt bàn nào</strong>
+                                <div class="reservation-muted">
+                                    Các yêu cầu đặt bàn sẽ hiển thị tại đây.
+                                </div>
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
         </div>
+
+        @if(method_exists($reservations, 'links'))
+            <div class="p-3">
+                {{ $reservations->links() }}
+            </div>
+        @endif
     </div>
 </div>
 @endsection

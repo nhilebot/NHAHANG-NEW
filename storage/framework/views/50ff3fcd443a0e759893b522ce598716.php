@@ -261,8 +261,8 @@
 <?php $__env->startSection('content'); ?>
 
 <?php
-    $depositPercent = 20;
-    $depositAmount = (int) round($total * $depositPercent / 100);
+    // Dùng chung công thức với controller: có món 20%, không món 100.000đ
+$depositAmount = \App\Models\Reservation::calcDeposit((int) $total);
     $remainingAmount = $total - $depositAmount;
 
     $bankID      = config('services.bank.id');
@@ -447,7 +447,7 @@
         <th></th>
     </tr>
     <tr>
-        <th colspan="3" class="text-right" style="font-size: 14px; color:#D4AF37;">Tiền cọc cần thanh toán (20%):</th>
+        <th colspan="3" class="text-right" style="font-size: 14px; color:#D4AF37;">Tiền cọc cần thanh toán:</th>
         <th class="text-right" style="color:#D4AF37; font-size: 1.2rem; font-weight:700;" id="deposit-total-text">
             <?php echo e(number_format($depositAmount, 0, ',', '.')); ?> VNĐ
         </th>
@@ -464,62 +464,73 @@
             </table>
         </div>
 
-<?php if(count($cart)): ?>
+
 <?php if($canCheckout): ?>
-<form id="checkoutForm" action="<?php echo e(route('cart.checkout')); ?>" method="POST">
-    <?php echo csrf_field(); ?>
-    <input type="hidden" name="total_price" value="<?php echo e($total); ?>">
-    <input type="hidden" name="deposit_amount" id="deposit_amount_input" value="<?php echo e($depositAmount); ?>">
-    <input type="hidden" name="table_number" value="<?php echo e($reservation['table_id']); ?>">
-    <input type="hidden" name="order_notes" value="<?php echo e($reservation['notes'] ?? ''); ?>">
+    
+    <form id="checkoutForm" action="<?php echo e(route('cart.checkout')); ?>" method="POST">
+        <?php echo csrf_field(); ?>
+        <input type="hidden" name="total_price" value="<?php echo e($total); ?>">
+        <input type="hidden" name="deposit_amount" id="deposit_amount_input" value="<?php echo e($depositAmount); ?>">
+        <input type="hidden" name="table_number" value="<?php echo e($reservation['table_id']); ?>">
+        <input type="hidden" name="order_notes" value="<?php echo e($reservation['notes'] ?? ''); ?>">
 
-    <div class="payment-methods-box mt-2">
-        <h5>
-            <i class="fas fa-gem mr-2" style="color: #D4AF37;"></i> Phương Thức Đặt Cọc
-        </h5>
+        <div class="payment-methods-box mt-2">
+            <h5>
+                <i class="fas fa-gem mr-2" style="color: #D4AF37;"></i> Phương Thức Đặt Cọc
+            </h5>
 
-        
-        <input type="hidden" name="payment_method" value="BANK">
+            
+            <input type="hidden" name="payment_method" value="BANK">
 
-        <div class="bank-transfer-card">
-            <div class="bank-transfer-header">
-                <i class="fas fa-qrcode"></i>
-                <div>
-                    <h6>Chuyển Khoản Ngân Hàng</h6>
-                    <small>Quét mã QR bên dưới để đặt cọc giữ bàn</small>
+            <div class="bank-transfer-card">
+                <div class="bank-transfer-header">
+                    <i class="fas fa-qrcode"></i>
+                    <div>
+                        <h6>Chuyển Khoản Ngân Hàng</h6>
+                        <small>Quét mã QR bên dưới để đặt cọc giữ bàn</small>
+                    </div>
                 </div>
-            </div>
 
-            <div id="qr-inline-area" style="display:block; text-align:center;">
-                <h6 class="font-weight-bold mb-3">MÃ QR THANH TOÁN TỰ ĐỘNG</h6>
-                <img id="qr-payment-img" src="<?php echo e($qrUrl); ?>" alt="QR Code Payment" class="img-fluid mb-3">
-                <div class="bank-info-box">
-                    <p class="small mb-1">Chủ tài khoản: <strong style="color:#1A2228;"><?php echo e($accountName); ?></strong></p>
-                    <p class="small mb-0">Nội dung CK: <strong style="color:#D4AF37;"><?php echo e($info); ?></strong></p>
+                <div id="qr-inline-area" style="display:block; text-align:center;">
+                    <h6 class="font-weight-bold mb-3">MÃ QR THANH TOÁN TỰ ĐỘNG</h6>
+                    <img id="qr-payment-img" src="<?php echo e($qrUrl); ?>" alt="QR Code Payment" class="img-fluid mb-3">
+                    <div class="bank-info-box">
+                        <p class="small mb-1">Chủ tài khoản: <strong style="color:#1A2228;"><?php echo e($accountName); ?></strong></p>
+                        <p class="small mb-0">Nội dung CK: <strong style="color:#D4AF37;"><?php echo e($info); ?></strong></p>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="text-center mt-5">
-       <button type="button" class="btn-checkout" data-toggle="modal" data-target="#billModal">
-    Xác nhận đặt cọc <span id="checkout-deposit-text"><?php echo e(number_format($depositAmount, 0, ',', '.')); ?></span>đ
-</button>
-    </div>
-</form> 
-<?php else: ?>
-<?php endif; ?>
-<?php else: ?>
-<div style="background: #FCFBF8; border: 2px solid #E2E8F0; border-radius: 12px; padding: 40px 30px; text-align: center; margin: 40px 0;">
-    <p style="font-size: 18px; color: #1A2228; margin-bottom: 10px; font-weight: 600;">✨ Chỉ Đặt Bàn (Không Có Thực Đơn)</p>
-    <p style="color: #718096; margin-bottom: 25px;">Quý khách có thể thêm món ăn hoặc tiếp tục chỉ với đặt bàn.</p>
-    <div class="row" style="gap: 15px; justify-content: center; flex-wrap: wrap;">
-        <a href="<?php echo e(route('menu.index')); ?>" class="btn-checkout" style="width: auto; max-width: 300px; text-decoration: none; display: inline-block;">
-            <i class="fas fa-plus-circle mr-2"></i> THÊM MÓN ĂN
+        <div class="text-center mt-5">
+            <button type="button" class="btn-checkout" data-toggle="modal" data-target="#billModal">
+                Xác nhận đặt cọc <span id="checkout-deposit-text"><?php echo e(number_format($depositAmount, 0, ',', '.')); ?></span>đ
+            </button>
+        </div>
+    </form>
+
+<?php elseif($needReservation): ?>
+    
+    <div style="background:#FCFBF8; border:2px solid #E2E8F0; border-radius:12px; padding:35px 30px; text-align:center; margin:30px 0;">
+        <p style="font-size:17px; color:#1A2228; font-weight:600; margin-bottom:8px;">
+            <i class="fas fa-calendar-check mr-2" style="color:#D4AF37;"></i>Bạn chưa chọn bàn
+        </p>
+        <p style="color:#718096; margin-bottom:20px;">
+            Vui lòng nhập thông tin đặt bàn (bàn, ngày, giờ) trước khi đặt cọc.
+        </p>
+        <a href="<?php echo e(route('reservation.index')); ?>" class="btn-checkout"
+           style="width:auto; max-width:320px; text-decoration:none; display:inline-block;">
+            ĐẶT BÀN NGAY
         </a>
+        <?php if (! (count($cart))): ?>
+            <a href="<?php echo e(route('menu.index')); ?>" class="btn-checkout"
+               style="width:auto; max-width:320px; text-decoration:none; display:inline-block; background:#1A2228; margin-left:10px;">
+                THÊM MÓN ĂN
+            </a>
+        <?php endif; ?>
     </div>
-</div>
 <?php endif; ?>
+
     </div>
 </div>
 
@@ -578,7 +589,7 @@
 </div>
 <div class="total-highlight" style="margin-top: 8px; background:#FFFDF8; color:#1A2228; border:1px dashed #D4AF37;">
     <div class="d-flex justify-content-between" style="font-size:13px;">
-        <span>Đặt cọc (20%)</span><strong style="color:#D4AF37;" id="bill-deposit"><?php echo e(number_format($depositAmount, 0, ',', '.')); ?>đ</strong>
+        <span>Đặt cọc</span><strong style="color:#D4AF37;" id="bill-deposit"><?php echo e(number_format($depositAmount, 0, ',', '.')); ?>đ</strong>
     </div>
     <div class="d-flex justify-content-between" style="font-size:13px; color:#718096;">
         <span>Còn lại tại quầy</span><span id="bill-remaining"><?php echo e(number_format($remainingAmount, 0, ',', '.')); ?>đ</span>
@@ -699,8 +710,9 @@ function buildQrUrl(amount) {
         total += parseInt(input.value) * parseInt(input.dataset.price);
     });
 
-    const depositPercent = 20;
-    const depositAmount = Math.round(total * depositPercent / 100);
+    // Phải khớp Reservation::calcDeposit() ở PHP: có món 20%, không món 100.000đ
+const TABLE_ONLY_DEPOSIT = <?php echo e(\App\Models\Reservation::TABLE_ONLY_DEPOSIT); ?>;
+const depositAmount = total > 0 ? Math.round(total * 20 / 100) : TABLE_ONLY_DEPOSIT;
     const remainingAmount = total - depositAmount;
 
     document.getElementById('grand-total-text').innerText = new Intl.NumberFormat('vi-VN').format(total) + ' VNĐ';
@@ -711,8 +723,10 @@ function buildQrUrl(amount) {
 
     refreshBill(total, depositAmount, remainingAmount);
 
-    document.querySelector('input[name="total_price"]').value = total;
-    document.getElementById('deposit_amount_input').value = depositAmount;
+        const totalInput = document.querySelector('input[name="total_price"]');
+    if (totalInput) totalInput.value = total;
+    const depositInput = document.getElementById('deposit_amount_input');
+    if (depositInput) depositInput.value = depositAmount;
 
     const qrImg = document.getElementById('qr-payment-img');
     if (qrImg) {

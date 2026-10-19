@@ -474,6 +474,10 @@
             <button type="submit" class="btn-save">
                 ✅ Xác nhận lưu và chuyển xuống bếp
             </button>
+            {{-- Nút lưu nháp giữ nguyên. Nút này lưu và gửi order xuống bếp. --}}
+<button type="submit" name="send_to_kitchen" value="1" class="btn btn-warning">
+    Lưu & gửi xuống bếp
+</button>
         </div>
     </div>
 </form>

@@ -543,6 +543,18 @@
           <div class="nav-item-left"><div class="nav-icon">🛎️ </div>Order & phục vụ</div>
           <!-- <span class="nav-arrow">›</span> -->
         </a>
+                <div class="sidebar-section-label">Quản lý kho</div>
+        <div>
+          <a class="nav-item <?php echo e(Request::routeIs('admin.inventory.*') ? 'active' : ''); ?>" href="#" onclick="toggleSub(event,'inventory-sub',this)">
+            <div class="nav-item-left"><div class="nav-icon">📦</div>Kho nguyên liệu</div>
+            <span class="nav-arrow <?php echo e(Request::routeIs('admin.inventory.*') ? 'rotate-90':''); ?>">›</span>
+          </a>
+          <div class="sub-menu" id="inventory-sub" style="display:<?php echo e(Request::routeIs('admin.inventory.*') ? 'flex':'none'); ?>">
+            <a class="sub-item <?php echo e(Request::routeIs('admin.inventory.ingredients.*') ? 'active':''); ?>" href="<?php echo e(route('admin.inventory.ingredients.index')); ?>">Nguyên liệu</a>
+            <a class="sub-item <?php echo e(Request::routeIs('admin.inventory.categories.*') ? 'active':''); ?>" href="<?php echo e(route('admin.inventory.categories.index')); ?>">Nhóm nguyên liệu</a>
+            <a class="sub-item <?php echo e(Request::routeIs('admin.inventory.suppliers.*') ? 'active':''); ?>" href="<?php echo e(route('admin.inventory.suppliers.index')); ?>">Nhà cung cấp</a>
+          </div>
+        </div>
         <div class="sidebar-section-label">Thanh toán</div>
       <a class="nav-item <?php echo e(Request::routeIs('admin.bills.*') ? 'active' : ''); ?>"
    href="<?php echo e(route('admin.bills.index')); ?>">

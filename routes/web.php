@@ -131,6 +131,15 @@ Route::post('/reservations/store', [ReservationController::class, 'staffStore'])
             Route::delete('/{id}', [AdminMenuController::class, 'destroy'])->name('destroy');
         });
 // Quản lý đơn hàng (Admin)
+        // QUẢN LÝ KHO NGUYÊN LIỆU (chỉ Admin)
+        Route::prefix('inventory')->name('inventory.')->group(function () {
+            Route::get('/', fn () => redirect()->route('admin.inventory.ingredients.index'))->name('index');
+
+            Route::resource('categories', \App\Http\Controllers\Admin\Inventory\IngredientCategoryController::class)
+                ->except('show');
+            Route::resource('suppliers', \App\Http\Controllers\Admin\Inventory\SupplierController::class);
+            Route::resource('ingredients', \App\Http\Controllers\Admin\Inventory\IngredientController::class);
+        });
 Route::get('/orders', [OrderController::class, 'adminIndex'])->name('orders.index');
 Route::get('/orders/{id}', [OrderController::class, 'show'])->name('orders.show');      // đã có
 Route::get('/orders/{id}/edit', [OrderController::class, 'edit'])->name('orders.edit');

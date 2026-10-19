@@ -84,16 +84,26 @@
                                         <div class="small text-muted"><i class="fas fa-phone fa-xs"></i> {{ $res->phone }}</div>
                                     </div>
 
-                                    <div class="customer-actions">
-                                        {{-- NÚT CHỈNH SỬA MÓN: Chỉ hiện khi chưa hoàn tất để tránh sai lệch kế toán --}}
-                                        @if($res->status != 'completed')
-                                            <a href="{{ route('staff.reservations.edit_items', $res->id) }}" 
-                                               class="btn btn-sm btn-light border text-primary" 
-                                               title="Chỉnh sửa món">
-                                                <i class="fas fa-pen-to-square"></i>
-                                            </a>
-                                        @endif
-                                    </div>
+                                    
+<div class="customer-actions">
+    {{-- Ẩn bút sửa khi đã thanh toán hoặc đã hoàn tất --}}
+    @php
+        $isPaid = in_array(
+            $res->status,
+            \App\Models\Reservation::PAID_STATUSES,
+            true
+        );
+    @endphp
+
+    @if(!$isPaid && $res->status !== 'completed')
+        <a href="{{ route('staff.reservations.edit_items', $res->id) }}"
+           class="btn btn-sm btn-light border text-primary"
+           title="Chỉnh sửa món">
+            <i class="fas fa-pen-to-square"></i>
+        </a>
+    @endif
+</div>
+
                                 </div>
                             </td>
 

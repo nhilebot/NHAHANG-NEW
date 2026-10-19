@@ -85,16 +85,26 @@
                                         <div class="small text-muted"><i class="fas fa-phone fa-xs"></i> <?php echo e($res->phone); ?></div>
                                     </div>
 
-                                    <div class="customer-actions">
-                                        
-                                        <?php if($res->status != 'completed'): ?>
-                                            <a href="<?php echo e(route('staff.reservations.edit_items', $res->id)); ?>" 
-                                               class="btn btn-sm btn-light border text-primary" 
-                                               title="Chỉnh sửa món">
-                                                <i class="fas fa-pen-to-square"></i>
-                                            </a>
-                                        <?php endif; ?>
-                                    </div>
+                                    
+<div class="customer-actions">
+    
+    <?php
+        $isPaid = in_array(
+            $res->status,
+            \App\Models\Reservation::PAID_STATUSES,
+            true
+        );
+    ?>
+
+    <?php if(!$isPaid && $res->status !== 'completed'): ?>
+        <a href="<?php echo e(route('staff.reservations.edit_items', $res->id)); ?>"
+           class="btn btn-sm btn-light border text-primary"
+           title="Chỉnh sửa món">
+            <i class="fas fa-pen-to-square"></i>
+        </a>
+    <?php endif; ?>
+</div>
+
                                 </div>
                             </td>
 
