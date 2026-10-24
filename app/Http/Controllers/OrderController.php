@@ -15,6 +15,8 @@ use Illuminate\Validation\Rule;
 
 class OrderController extends Controller
 {
+    private const ORDER_CONFIRMATION_EMAIL_ENABLED = false; // true để bật gửi email xác nhận đơn hàng cho khách, false để tắt
+
     /**
      * Khách đặt hàng online (không qua đặt bàn)
      */
@@ -69,16 +71,24 @@ class OrderController extends Controller
     /**
      * Lịch sử đơn hàng của khách
      */
-    public function history()
-    {
-       // Chỉ trả đơn CỦA CHÍNH người đăng nhập (tránh lộ đơn của khách khác)
-       $orders = Order::with(['items.menu'])
-                      ->where('user_id', Auth::id())
-                      ->latest()
-                      ->paginate(20);
     
-    return view('orders.history', compact('orders'));
-    }
+public function history()
+{
+    $orders = \App\Models\Order::with(['items.menu', 'table'])
+        ->where('user_id', \Illuminate\Support\Facades\Auth::id())
+        ->latest()
+        ->get();
+
+    $reservations = \App\Models\Reservation::where(
+        'user_id',
+        \Illuminate\Support\Facades\Auth::id()
+    )
+        ->latest()
+        ->get();
+
+    return view('orders.history', compact('orders', 'reservations'));
+}
+
 
     /**
      * Chi tiết đơn hàng — FIX: Admin có thể xem bất kỳ đơn nào
@@ -359,7 +369,7 @@ public function edit($id)
             // Tìm thông tin email của tài khoản khách hàng để thực hiện gửi
             $customerEmail = $order->user->email ?? null;
 
-            if ($customerEmail) {
+            if (self::ORDER_CONFIRMATION_EMAIL_ENABLED && $customerEmail) {
                 try {
                     \Illuminate\Support\Facades\Mail::to($customerEmail)->send(new \App\Mail\OrderConfirmed($mailData));
                 } catch (\Throwable $e) {
@@ -368,7 +378,7 @@ public function edit($id)
                         'exception' => $e,
                     ]);
                 }
-            } else {
+            } elseif (self::ORDER_CONFIRMATION_EMAIL_ENABLED) {
                 \Log::warning('Standalone bank order email skipped because the customer has no email address.', [
                     'order_id' => $order->id,
                 ]);
@@ -408,12 +418,8 @@ public function destroy($id)
         $myShifts = $user->shifts ?? [];
 
         // Cấu hình nhãn, giờ và màu sắc
-        $shiftConfigs = [
-            'morning'   => ['label' => 'Ca Sáng',  'time' => '06:00 – 13:00', 'color' => '#1d4ed8', 'bg' => '#eff6ff', 'badge' => '🌅'],
-            'afternoon' => ['label' => 'Ca Chiều', 'time' => '13:00 – 20:00', 'color' => '#854d0e', 'bg' => '#fefce8', 'badge' => '🌇'],
-            'full'      => ['label' => 'Cả Ngày',  'time' => '06:00 – 20:00', 'color' => '#7e22ce', 'bg' => '#fdf4ff', 'badge' => '⭐'],
-            'off'       => ['label' => 'Nghỉ',     'time' => 'Không có ca',   'color' => '#94a3b8', 'bg' => '#f1f5f9', 'badge' => '☕'],
-        ];
+        // Nhãn, giờ, màu của từng ca lấy từ config/shifts.php (qua ShiftSchedule)
+        $shiftConfigs = \App\Support\ShiftSchedule::viewConfigs();
 
         // Highlight thứ hôm nay
         $todayMap = [1 => 'T2', 2 => 'T3', 3 => 'T4', 4 => 'T5', 5 => 'T6', 6 => 'T7', 0 => 'CN'];

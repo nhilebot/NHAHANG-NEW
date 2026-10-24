@@ -32,7 +32,7 @@
         border: 1px solid #e2e8f0;
         border-radius: 14px;
         background: #fff;
-        box-shadow: 0 4px 18px rgba(0,0,0,.04);
+        box-shadow: 0 4px 18px rgba(0, 0, 0, .04);
         overflow: hidden;
     }
 
@@ -54,7 +54,7 @@
 
     .reservation-table {
         width: 100%;
-        min-width: 950px;
+        min-width: 1050px;
         border-collapse: separate;
         border-spacing: 0;
         margin: 0;
@@ -96,7 +96,7 @@
     .reservation-muted {
         color: #718096;
         font-size: 12px;
-        margin-top: 4px;
+        margin-top: 5px;
     }
 
     .table-label {
@@ -122,30 +122,96 @@
         white-space: nowrap;
     }
 
-    .st-pending { background: #fff4e5; color: #92400e; }
+    .st-pending   { background: #fff4e5; color: #92400e; }
     .st-confirmed { background: #e7f6f8; color: #087990; }
-    .st-arrived { background: #e7f0ff; color: #1d4ed8; }
-    .st-serving { background: #fff9db; color: #856404; }
-    .st-served { background: #e0f7fa; color: #006064; }
-    .st-success { background: #e9f7ef; color: #198754; }
-    .st-danger { background: #fdf2f2; color: #dc3545; }
-    .st-neutral { background: #edf2f7; color: #475569; }
+    .st-arrived   { background: #e7f0ff; color: #1d4ed8; }
+    .st-serving   { background: #fff9db; color: #856404; }
+    .st-served    { background: #e0f7fa; color: #006064; }
+    .st-success   { background: #e9f7ef; color: #198754; }
+    .st-danger    { background: #fdf2f2; color: #dc3545; }
+    .st-neutral   { background: #edf2f7; color: #475569; }
 
+    /* ===== Nhóm nút thao tác ===== */
     .reservation-actions {
         display: flex;
-        flex-wrap: wrap;
+        flex-direction: column;
+        gap: 8px;
+        width: 100%;
+        min-width: 180px;
+        max-width: 200px;
+        margin: 0 auto;
+    }
+
+    .reservation-actions .btn,
+    .cancellation-review-actions .btn {
+        display: inline-flex;
+        align-items: center;
         justify-content: center;
         gap: 6px;
-        min-width: 180px;
-    }
-
-    .reservation-actions .btn {
-        font-size: 11px;
-        padding: 7px 10px;
-        border-radius: 7px;
+        width: 100%;
+        height: 36px;
+        margin: 0;
+        padding: 0 12px;
+        border-radius: 8px;
+        font-size: 12.5px;
         font-weight: 600;
+        line-height: 1;
+        white-space: nowrap;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, .06);
+        transition: transform .12s ease, box-shadow .12s ease, filter .12s ease;
     }
 
+    .reservation-actions .btn:hover,
+    .cancellation-review-actions .btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, .12);
+        filter: brightness(1.04);
+    }
+
+    .reservation-actions .btn i {
+        font-size: 12px;
+        flex-shrink: 0;
+    }
+
+    /* 2 nút thanh toán cạnh nhau */
+    .reservation-pay-group {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+    }
+
+    .reservation-pay-group .btn {
+        padding: 0 6px;
+        font-size: 12px;
+    }
+
+    /* Nút phụ: Hủy đặt bàn */
+    .reservation-actions .btn-cancel-soft {
+        height: 32px;
+        background: #fff;
+        color: #dc3545;
+        border: 1px solid #fecaca;
+        font-size: 12px;
+        font-weight: 600;
+        box-shadow: none;
+    }
+
+    .reservation-actions .btn-cancel-soft:hover {
+        background: #fef2f2;
+        border-color: #f87171;
+        color: #b91c1c;
+        box-shadow: none;
+    }
+
+    .reservation-actions .reservation-muted {
+        margin: 0;
+        padding: 8px 10px;
+        text-align: center;
+        background: #f8fafc;
+        border-radius: 8px;
+    }
+
+    /* Chỉnh sửa đơn */
     .btn-reservation-edit {
         display: inline-flex;
         align-items: center;
@@ -158,12 +224,78 @@
         color: #2563eb;
         border-radius: 7px;
         text-decoration: none;
-        background: white;
+        background: #fff;
     }
 
     .btn-reservation-edit:hover {
         background: #eff6ff;
         color: #1d4ed8;
+    }
+
+    /* ===== Thẻ yêu cầu hủy của khách ===== */
+    .cancellation-review-box {
+        width: 100%;
+        max-width: 200px;
+        margin: 10px auto 0;
+        padding: 10px;
+        background: #fff7ed;
+        border: 1px solid #fed7aa;
+        border-left: 3px solid #f97316;
+        border-radius: 8px;
+        box-sizing: border-box;
+    }
+
+    .cancellation-review-title {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        color: #c2410c;
+        font-size: 12px;
+        font-weight: 700;
+        margin-bottom: 4px;
+    }
+
+    .cancellation-review-reason {
+        font-size: 11.5px;
+        color: #64748b;
+        margin-bottom: 8px;
+        line-height: 1.4;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .cancellation-review-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 6px;
+    }
+
+    .cancellation-review-actions .btn {
+        height: 30px;
+        padding: 0 6px;
+        font-size: 12px;
+    }
+
+    .cancellation-result {
+        max-width: 200px;
+        margin: 10px auto 0;
+        padding: 7px 10px;
+        border-radius: 8px;
+        font-size: 12px;
+        font-weight: 600;
+        text-align: center;
+    }
+
+    .cancellation-result.approved {
+        color: #166534;
+        background: #f0fdf4;
+    }
+
+    .cancellation-result.rejected {
+        color: #475569;
+        background: #f1f5f9;
     }
 
     .empty-reservations {
@@ -189,6 +321,10 @@
 
         .reservation-card-header {
             padding: 15px;
+        }
+
+        .reservation-table {
+            min-width: 1050px;
         }
     }
 </style>
@@ -222,16 +358,22 @@
 
         <a href="{{ route('admin.reservations.create') }}"
            class="btn btn-primary">
-            <i class="fas fa-plus"></i> Đặt bàn tại chỗ
+            <i class="fas fa-plus"></i>
+            Đặt bàn tại chỗ
         </a>
     </div>
 
     <div class="reservation-card">
+
         <div class="reservation-card-header">
-            <h5><i class="fas fa-clipboard-list text-primary"></i> Danh sách đặt bàn & phục vụ</h5>
+            <h5>
+                <i class="fas fa-clipboard-list text-primary"></i>
+                Danh sách đặt bàn & phục vụ
+            </h5>
+
             <span class="reservation-muted">
-    Tổng số: {{ $reservations->count() }} đơn
-</span>
+                Tổng số: {{ $reservations->count() }} đơn
+            </span>
         </div>
 
         <div class="table-responsive">
@@ -248,8 +390,10 @@
 
                 <tbody>
                     @forelse($reservations as $res)
+
                         @php
                             $status = $res->status;
+
                             $isPaid = in_array(
                                 $status,
                                 \App\Models\Reservation::PAID_STATUSES,
@@ -260,7 +404,7 @@
                         @endphp
 
                         <tr>
-                            {{-- THÔNG TIN KHÁCH --}}
+                            {{-- THÔNG TIN KHÁCH HÀNG --}}
                             <td>
                                 <div class="customer-name">
                                     {{ $res->full_name }}
@@ -296,14 +440,15 @@
                                     </div>
                                 @endif
 
-                                @if(!in_array($status, ['completed', 'cancelled'], true))
-                                    @if(!$isPaid)
-                                        <a href="{{ route('staff.reservations.edit_items', $res->id) }}"
-                                           class="btn-reservation-edit">
-                                            <i class="fas fa-pen-to-square"></i>
-                                            Chỉnh sửa đơn
-                                        </a>
-                                    @endif
+                                @if(
+                                    !in_array($status, ['completed', 'cancelled'], true)
+                                    && !$isPaid
+                                )
+                                    <a href="{{ route('staff.reservations.edit_items', $res->id) }}"
+                                       class="btn-reservation-edit">
+                                        <i class="fas fa-pen-to-square"></i>
+                                        Chỉnh sửa đơn
+                                    </a>
                                 @endif
                             </td>
 
@@ -313,6 +458,7 @@
                                     <i class="far fa-calendar-alt text-primary"></i>
                                     {{ $res->reservation_date ?? '—' }}
                                 </div>
+
                                 <div class="reservation-muted">
                                     <i class="far fa-clock"></i>
                                     {{ $res->reservation_time ?? '—' }}
@@ -331,16 +477,26 @@
                                         Đã thanh toán
                                     </div>
                                 @endif
+
+                                @if(($res->payment_status ?? null) === 'deposit_submitted')
+                                    <div class="reservation-muted">
+                                        <i class="fas fa-clock text-warning"></i>
+                                        Khách đã gửi thông tin cọc
+                                    </div>
+                                @endif
                             </td>
 
-                            {{-- CÁC NÚT NGHIỆP VỤ --}}
+                            {{-- THAO TÁC NGHIỆP VỤ --}}
                             <td>
                                 <form action="{{ route($role . '.reservations.updateStatus', $res->id) }}"
                                       method="POST">
                                     @csrf
 
                                     <div class="reservation-actions">
+
+                                        {{-- 1. CHỜ XÁC NHẬN CỌC --}}
                                         @if($status === 'pending_deposit')
+
                                             @if($res->payment_status === 'deposit_submitted')
                                                 <button type="submit"
                                                         name="status"
@@ -351,88 +507,183 @@
                                                     Xác nhận cọc
                                                 </button>
                                             @else
-                                                <span class="reservation-muted">
-                                                    Chờ xác nhận chuyển khoản
-                                                </span>
+                                                <div class="reservation-muted">
+                                                    <i class="fas fa-clock"></i>
+                                                    Chờ khách cọc
+                                                </div>
                                             @endif
 
+                                        {{-- 2. DUYỆT ĐẶT BÀN --}}
                                         @elseif($status === 'pending')
-                                            <button type="submit" name="status" value="confirmed"
+
+                                            <button type="submit"
+                                                    name="status"
+                                                    value="confirmed"
                                                     class="btn btn-info text-white">
-                                                <i class="fas fa-check"></i> Duyệt đơn
+                                                <i class="fas fa-check-circle"></i>
+                                                Duyệt đặt bàn
                                             </button>
 
+                                        {{-- 3. KHÁCH NHẬN BÀN --}}
                                         @elseif($status === 'confirmed')
-                                            <button type="submit" name="status" value="arrived"
+
+                                            <button type="submit"
+                                                    name="status"
+                                                    value="arrived"
                                                     class="btn btn-primary">
-                                                <i class="fas fa-chair"></i> Khách nhận bàn
+                                                <i class="fas fa-chair"></i>
+                                                Khách nhận bàn
                                             </button>
 
+                                        {{-- 4. BÁO BẾP NẤU --}}
                                         @elseif($status === 'arrived')
-                                            <button type="submit" name="status" value="serving"
+
+                                            <button type="submit"
+                                                    name="status"
+                                                    value="serving"
                                                     class="btn btn-warning">
-                                                <i class="fas fa-fire"></i> Báo bếp nấu
+                                                <i class="fas fa-fire"></i>
+                                                Báo bếp nấu
                                             </button>
 
+                                        {{-- 5. XÁC NHẬN LÊN MÓN --}}
                                         @elseif(in_array($status, ['serving', 'ready'], true))
-                                            <button type="submit" name="status" value="served"
+
+                                            <button type="submit"
+                                                    name="status"
+                                                    value="served"
                                                     class="btn btn-info text-white">
-                                                <i class="fas fa-concierge-bell"></i> Đã lên món
+                                                <i class="fas fa-concierge-bell"></i>
+                                                Xác nhận lên món
                                             </button>
 
+                                        {{-- 6. THANH TOÁN --}}
                                         @elseif($status === 'served')
+
                                             @php
                                                 $payUrl = route($role . '.reservations.pay', $res->id);
                                             @endphp
 
-                                            <button type="submit" name="payment_method" value="cash"
-                                                    formaction="{{ $payUrl }}"
-                                                    class="btn btn-success"
-                                                    onclick="return confirm('Xác nhận thanh toán bằng tiền mặt?')">
-                                                <i class="fas fa-money-bill-wave"></i> Tiền mặt
-                                            </button>
+                                            <div class="reservation-pay-group">
+                                                <button type="submit"
+                                                        name="payment_method"
+                                                        value="cash"
+                                                        formaction="{{ $payUrl }}"
+                                                        class="btn btn-success"
+                                                        onclick="return confirm('Xác nhận thanh toán bằng tiền mặt?')">
+                                                    <i class="fas fa-money-bill-wave"></i>
+                                                    Tiền mặt
+                                                </button>
 
-                                            <button type="submit" name="payment_method" value="transfer"
-                                                    formaction="{{ $payUrl }}"
-                                                    class="btn btn-dark"
-                                                    onclick="return confirm('Xác nhận thanh toán chuyển khoản?')">
-                                                <i class="fas fa-credit-card"></i> Chuyển khoản
-                                            </button>
+                                                <button type="submit"
+                                                        name="payment_method"
+                                                        value="transfer"
+                                                        formaction="{{ $payUrl }}"
+                                                        class="btn btn-dark"
+                                                        onclick="return confirm('Xác nhận thanh toán chuyển khoản?')">
+                                                    <i class="fas fa-credit-card"></i>
+                                                    CK
+                                                </button>
+                                            </div>
+
                                         @endif
 
-                                        @if($isPaid && $status !== 'completed')
-                                            <button type="submit" name="status" value="completed"
+                                        {{-- 7. HOÀN TẤT VÀ DỌN BÀN --}}
+                                        @if($isPaid && !in_array($status, ['completed', 'cancelled'], true))
+                                            <button type="submit"
+                                                    name="status"
+                                                    value="completed"
                                                     class="btn btn-secondary"
                                                     onclick="return confirm('Xác nhận hoàn tất và chuyển bàn sang trạng thái dọn dẹp?')">
-                                                <i class="fas fa-broom"></i> Dọn bàn & Xong
+                                                <i class="fas fa-broom"></i>
+                                                Dọn bàn & hoàn tất
                                             </button>
                                         @endif
-                                    </div>
 
-                                    @if(in_array($status, [
-                                        'pending_deposit',
-                                        'pending',
-                                        'confirmed',
-                                        'arrived'
-                                    ], true))
-                                        <div class="text-center mt-2">
+                                        {{-- 8. NÚT PHỤ: HỦY ĐẶT BÀN BỞI NHÂN VIÊN --}}
+                                        @if(in_array($status, [
+                                            'pending_deposit',
+                                            'pending',
+                                            'confirmed',
+                                            'arrived'
+                                        ], true))
                                             <button type="submit"
                                                     name="status"
                                                     value="cancelled"
-                                                    class="btn btn-sm btn-link text-danger"
+                                                    class="btn btn-cancel-soft"
                                                     onclick="return confirm('Bạn có chắc muốn hủy đơn đặt bàn này?')">
-                                                <i class="fas fa-times"></i> Hủy đơn
+                                                <i class="fas fa-times-circle"></i>
+                                                Hủy đặt bàn
                                             </button>
-                                        </div>
-                                    @endif
+                                        @endif
+
+                                    </div>
                                 </form>
+
+                                {{-- YÊU CẦU HỦY DO KHÁCH GỬI --}}
+                                @if(($res->cancellation_status ?? null) === 'pending')
+
+                                    <div class="cancellation-review-box">
+                                        <div class="cancellation-review-title">
+                                            <i class="fas fa-exclamation-circle"></i>
+                                            Khách xin hủy
+                                        </div>
+
+                                        <div class="cancellation-review-reason"
+                                             title="{{ $res->cancellation_reason ?: 'Không cung cấp' }}">
+                                            <strong>Lý do:</strong>
+                                            {{ $res->cancellation_reason ?: 'Không cung cấp' }}
+                                        </div>
+
+                                        <form action="{{ route($role . '.reservations.reviewCancellation', $res->id) }}"
+                                              method="POST"
+                                              onsubmit="return confirm('Bạn có chắc muốn xử lý yêu cầu hủy này?')">
+                                            @csrf
+
+                                            <div class="cancellation-review-actions">
+                                                <button type="submit"
+                                                        name="decision"
+                                                        value="approve"
+                                                        class="btn btn-success">
+                                                    <i class="fas fa-check"></i>
+                                                    Duyệt hủy
+                                                </button>
+
+                                                <button type="submit"
+                                                        name="decision"
+                                                        value="reject"
+                                                        class="btn btn-danger">
+                                                    <i class="fas fa-times"></i>
+                                                    Từ chối
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+
+                                @elseif(($res->cancellation_status ?? null) === 'approved')
+
+                                    <div class="cancellation-result approved">
+                                        <i class="fas fa-check-circle"></i>
+                                        Đã duyệt yêu cầu hủy
+                                    </div>
+
+                                @elseif(($res->cancellation_status ?? null) === 'rejected')
+
+                                    <div class="cancellation-result rejected">
+                                        <i class="fas fa-times-circle"></i>
+                                        Đã từ chối yêu cầu hủy
+                                    </div>
+
+                                @endif
                             </td>
                         </tr>
+
                     @empty
                         <tr>
                             <td colspan="5" class="empty-reservations">
                                 <span class="empty-icon">📅</span>
                                 <strong>Chưa có đơn đặt bàn nào</strong>
+
                                 <div class="reservation-muted">
                                     Các yêu cầu đặt bàn sẽ hiển thị tại đây.
                                 </div>
@@ -448,6 +699,7 @@
                 {{ $reservations->links() }}
             </div>
         @endif
+
     </div>
 </div>
 @endsection

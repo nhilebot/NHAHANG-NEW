@@ -1,0 +1,145 @@
+/* =======================================================
+   FOOTER (.site-footer)
+   Biến màu --ft-* được khai báo ở :root trong custom.css
+   (dùng chung với thanh menu).
+======================================================= */
+
+.site-footer {
+    flex-shrink: 0;
+    background: var(--ft-bg);
+    color: var(--ft-text);
+    font-size: 14px;
+    line-height: 1.7;
+    border-top: 3px solid var(--ft-gold);
+}
+
+.site-footer a { text-decoration: none; transition: color .2s ease, background .2s ease, border-color .2s ease, transform .2s ease; }
+.site-footer ul { list-style: none; margin: 0; padding: 0; }
+
+/* ---- Dải kêu gọi đặt bàn ---- */
+.ft-cta {
+    background: linear-gradient(120deg, var(--ft-bg-soft), #221e1a);
+    border-bottom: 1px solid var(--ft-line);
+}
+.ft-cta-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 28px 0;
+}
+.ft-cta-title { margin: 0 0 4px; color: var(--ft-heading); font-size: 22px; font-weight: 600; }
+.ft-cta-sub   { margin: 0; color: var(--ft-text); }
+.ft-cta-btn {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 28px;
+    border-radius: 50px;
+    background: var(--ft-gold);
+    color: #1a1408 !important;
+    font-weight: 700;
+    letter-spacing: .3px;
+    box-shadow: 0 6px 18px rgba(201, 164, 92, .25);
+}
+.ft-cta-btn:hover { transform: translateY(-2px); background: #dcb86f; }
+
+/* ---- Lưới 4 cột ---- */
+.ft-main { padding: 54px 0 34px; }
+.ft-grid {
+    display: grid;
+    grid-template-columns: 1.5fr .9fr 1fr 1.3fr;
+    gap: 40px;
+}
+
+.ft-logo { display: block; height: 96px; width: auto; margin: -10px 0 8px -8px; }
+.ft-desc { margin: 0 0 20px; max-width: 330px; }
+
+.ft-title {
+    position: relative;
+    margin: 0 0 22px;
+    padding-bottom: 12px;
+    color: var(--ft-heading);
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+}
+.ft-title::after {
+    content: "";
+    position: absolute;
+    left: 0; bottom: 0;
+    width: 34px; height: 2px;
+    background: var(--ft-gold);
+}
+
+/* Liên kết */
+.ft-links li { margin-bottom: 10px; }
+.ft-links a { color: var(--ft-text); display: inline-flex; align-items: center; gap: 8px; }
+.ft-links a::before {
+    content: "›";
+    color: var(--ft-gold);
+    font-size: 18px;
+    line-height: 1;
+    transition: transform .2s ease;
+}
+.ft-links a:hover { color: var(--ft-gold); }
+.ft-links a:hover::before { transform: translateX(3px); }
+
+/* Giờ mở cửa + liên hệ */
+.ft-info li { display: flex; gap: 12px; margin-bottom: 14px; }
+.ft-info .ft-ico {
+    flex: 0 0 34px;
+    width: 34px; height: 34px;
+    display: inline-flex; align-items: center; justify-content: center;
+    border-radius: 50%;
+    background: var(--ft-gold-soft);
+    color: var(--ft-gold);
+    font-size: 14px;
+}
+.ft-info small { display: block; color: #8a847c; font-size: 12px; line-height: 1.4; }
+.ft-info strong, .ft-info a { color: var(--ft-heading); font-weight: 600; }
+.ft-info a:hover { color: var(--ft-gold); }
+
+/* Mạng xã hội */
+.ft-social { display: flex; gap: 10px; }
+.ft-social a {
+    width: 38px; height: 38px;
+    display: inline-flex; align-items: center; justify-content: center;
+    border-radius: 50%;
+    border: 1px solid var(--ft-line);
+    color: var(--ft-heading);
+    font-size: 15px;
+}
+.ft-social a:hover { background: var(--ft-gold); border-color: var(--ft-gold); color: #1a1408; transform: translateY(-3px); }
+
+/* ---- Thanh bản quyền ---- */
+.ft-bottom { border-top: 1px solid var(--ft-line); }
+.ft-bottom-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px 20px;
+    padding: 18px 0;
+    font-size: 13px;
+    color: #8a847c;
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 991px) {
+    .ft-grid { grid-template-columns: 1fr 1fr; gap: 36px 30px; }
+}
+@media (max-width: 575px) {
+    .ft-cta-inner { flex-direction: column; text-align: center; padding: 24px 0; }
+    .ft-cta-btn { width: 100%; justify-content: center; }
+    .ft-main { padding: 38px 0 18px; }
+    .ft-grid { grid-template-columns: 1fr; gap: 30px; }
+    .ft-brand { text-align: center; }
+    .ft-brand .ft-logo { margin: 0 auto 8px; }
+    .ft-brand .ft-desc { margin-left: auto; margin-right: auto; }
+    .ft-brand .ft-social { justify-content: center; }
+    .ft-bottom-inner { flex-direction: column; text-align: center; }
+    .ft-social a { width: 44px; height: 44px; }   /* dễ bấm trên điện thoại */
+}

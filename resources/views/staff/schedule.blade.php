@@ -210,27 +210,16 @@
     <div class="legend-card">
         <div class="legend-title">ℹ️ Quy định khung giờ làm việc</div>
         <div class="legend-grid">
+            {{-- Các ca lấy từ config/shifts.php, đổi giờ ở đó là bảng này tự cập nhật --}}
+            @foreach(collect($shiftConfigs)->except('off') as $key => $cfg)
             <div class="legend-item">
-                <span style="font-size:1.4rem;">🌅</span>
+                <span style="font-size:1.4rem;">{{ $cfg['badge'] }}</span>
                 <div>
-                    <div style="font-weight:700;font-size:0.85rem;color:#1d4ed8;">Ca Sáng</div>
-                    <div style="font-size:0.75rem;color:#64748b;">06:00 – 13:00 (7 tiếng)</div>
+                    <div style="font-weight:700;font-size:0.85rem;color:{{ $cfg['color'] }};">{{ $cfg['label'] }}{{ $key === 'full' ? ' (Full)' : '' }}</div>
+                    <div style="font-size:0.75rem;color:#64748b;">{{ $cfg['time'] }} ({{ $cfg['hours'] }} tiếng)</div>
                 </div>
             </div>
-            <div class="legend-item">
-                <span style="font-size:1.4rem;">🌇</span>
-                <div>
-                    <div style="font-weight:700;font-size:0.85rem;color:#854d0e;">Ca Chiều</div>
-                    <div style="font-size:0.75rem;color:#64748b;">13:00 – 20:00 (7 tiếng)</div>
-                </div>
-            </div>
-            <div class="legend-item">
-                <span style="font-size:1.4rem;">⭐</span>
-                <div>
-                    <div style="font-weight:700;font-size:0.85rem;color:#7e22ce;">Cả Ngày (Full)</div>
-                    <div style="font-size:0.75rem;color:#64748b;">06:00 – 20:00 (14 tiếng)</div>
-                </div>
-            </div>
+            @endforeach
             <div class="legend-item">
                 <span style="font-size:1.4rem;">☕</span>
                 <div>

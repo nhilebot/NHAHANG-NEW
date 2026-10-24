@@ -2,6 +2,10 @@
 @section('topbar_title', 'Quản lý nhân viên')
 
 @section('admin_content')
+@php
+    // Cấu hình ca lấy từ config/shifts.php (nhãn ngắn, giờ, màu). Đổi giờ ở đó là trang này tự cập nhật.
+    $shiftCfg = \App\Support\ShiftSchedule::viewConfigs();
+@endphp
 <style>
     /* ─── TABS ─── */
     .emp-tabs { display:flex; gap:8px; margin-bottom:24px; }
@@ -152,7 +156,7 @@
                                         @foreach($days as $i => $day)
                                         @php
                                             $current = $userShifts[$day] ?? 'off';
-                                            $labels = ['morning'=>'Sáng','afternoon'=>'Chiều','full'=>'Full','off'=>'Nghỉ'];
+                                            $labels = collect($shiftCfg)->map(fn($c) => $c['short'])->all(); // nhãn ngắn trên nút ca
                                         @endphp
                                         <div class="shift-cell">
                                             <div class="shift-day">{{ $day }}</div>
@@ -243,9 +247,10 @@
                     Ghi chú lịch ca:
                 </div>
                 <div style="display:flex;flex-direction:column;gap:5px;">
-                    <span style="font-size:.78rem;"><span style="display:inline-block;width:40px;text-align:center;background:#eff6ff;color:#1d4ed8;border-radius:4px;padding:1px 4px;font-weight:600;">Sáng</span> &nbsp;6:00 – 13:00</span>
-                    <span style="font-size:.78rem;"><span style="display:inline-block;width:40px;text-align:center;background:#fefce8;color:#854d0e;border-radius:4px;padding:1px 4px;font-weight:600;">Chiều</span> 13:00 – 20:00</span>
-                    <span style="font-size:.78rem;"><span style="display:inline-block;width:40px;text-align:center;background:#fdf4ff;color:#7e22ce;border-radius:4px;padding:1px 4px;font-weight:600;">Full</span> &nbsp;&nbsp;6:00 – 20:00</span>
+                    {{-- Chú thích 3 ca lấy từ config/shifts.php --}}
+                    @foreach(collect($shiftCfg)->except('off') as $key => $cfg)
+                    <span style="font-size:.78rem;"><span style="display:inline-block;min-width:40px;text-align:center;background:{{ $cfg['bg'] }};color:{{ $cfg['color'] }};border-radius:4px;padding:1px 4px;font-weight:600;">{{ $cfg['short'] }}</span> {{ $cfg['time'] }}</span>
+                    @endforeach
                     <span style="font-size:.78rem;"><span style="display:inline-block;width:40px;text-align:center;background:#f1f5f9;color:#94a3b8;border-radius:4px;padding:1px 4px;font-weight:600;">Nghỉ</span> Không làm</span>
                 </div>
                 <div style="margin-top:10px;font-size:.75rem;color:#94a3b8;">
@@ -259,7 +264,8 @@
 
 <script>
 const shiftCycle = ['morning', 'afternoon', 'full', 'off'];
-const shiftLabel = { morning:'Sáng', afternoon:'Chiều', full:'Full', off:'Nghỉ' };
+// Nhãn ngắn của từng ca lấy từ config/shifts.php (gồm cả 'off')
+const shiftLabel = @json(collect($shiftCfg)->map(fn($c) => $c['short']));
 
 function cycleShift(btn) {
     const cur   = btn.dataset.current;

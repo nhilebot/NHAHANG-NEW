@@ -180,7 +180,7 @@ div#bs-example-navbar-collapse-1 {
 }
 
 nav {
-    background: #1E1E1E !important;
+    background: var(--ft-bg, #111010) !important; /* cùng nền footer (biến khai báo trong custom.css) */
     font-size: 18px;
     color: white !important;
 }
@@ -406,7 +406,7 @@ SECOND FOOTER CONTENT
 =========================*/
 
 footer.sub_footer {
-    background-color: #1C1C1C;
+    background-color: #1a1104f0;
     padding: 20px;
 }
 
@@ -866,26 +866,27 @@ body {
 }
 /* ===== FIX NAVBAR GIỐNG MENU ===== */
 
-/* Navbar nền đen */
+/* Navbar nền đen - CÙNG MÀU FOOTER.
+   (Trước đây là #1a1104f0: hơi nâu + trong suốt nên nhìn khác footer) */
 .navbar.navbar-default {
-    background: #222 !important;
+    background: var(--ft-bg, #111010) !important;
     border: none !important;
 }
 
-/* Link trắng */
+/* Link màu kem */
 .navbar-default .navbar-nav > li > a {
-    color: #fff !important;
+    color: var(--ft-heading, #f4efe6) !important;
     transition: 0.3s;
 }
 
-/* Hover đỏ giống menu */
+/* Hover vàng đồng giống footer */
 .navbar-default .navbar-nav > li > a:hover {
-    color: #7e7b7b !important;
+    color: var(--ft-gold, #c9a45c) !important;
 }
 
-/* Active đỏ */
+/* Đang chọn */
 .navactive {
-    color: #7e7b7b !important;
+    color: var(--ft-gold, #c9a45c) !important;
     border-bottom: none !important;
 }
 
@@ -902,8 +903,8 @@ body {
 .dropdown-custom .dropdown-menu {
     display: none;
     position: absolute;
-    background: #222;
-    border-top: 3px solid #e74c3c;
+    background: var(--ft-bg-soft, #1a1817);
+    border-top: 3px solid var(--ft-gold, #c9a45c);
     padding: 0;
 }
 

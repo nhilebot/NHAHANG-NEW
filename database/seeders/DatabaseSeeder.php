@@ -11,6 +11,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RoleSeeder::class,   // phải chạy trước UserSeeder (khoá ngoại role_id)
             UserSeeder::class,
+            ShiftSeeder::class,  // lịch ca nhân viên (sau UserSeeder)
             CategorySeeder::class,
             MenuSeeder::class,
             TableSeeder::class,

@@ -65,11 +65,8 @@ class AdminController extends Controller
         $staffListToday = [];
         $chefListToday  = [];
 
-        $shiftNames = [
-            'morning'   => 'Ca Sáng (06:00 – 13:00)',
-            'afternoon' => 'Ca Chiều (13:00 – 20:00)',
-            'full'      => 'Cả Ngày (06:00 – 20:00)',
-        ];
+        // Tên ca kèm giờ (hiển thị trong modal danh sách nhân viên trực hôm nay), lấy từ config/shifts.php
+        $shiftNames = \App\Support\ShiftSchedule::names();
 
         // 🟢 3. Lọc người có lịch trực hôm nay (loại bỏ 'off')
         foreach ($employees as $emp) {

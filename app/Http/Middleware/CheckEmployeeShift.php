@@ -46,11 +46,9 @@ class CheckEmployeeShift
             $errorMessage = "Hôm nay ({$todayKey}) bạn không có ca trực. Bạn được chuyển đến trang xem lịch!";
         } else {
             // 5. Kiểm tra khung giờ ca
-            $shiftHours = [
-                'morning'   => ['start' => '05:30', 'end' => '13:30', 'label' => 'Ca Sáng (06:00 - 13:00)'],
-                'afternoon' => ['start' => '12:30', 'end' => '20:30', 'label' => 'Ca Chiều (13:00 - 20:00)'],
-                'full'      => ['start' => '05:30', 'end' => '20:30', 'label' => 'Cả Ngày (06:00 - 20:00)'],
-            ];
+            // Khung giờ từng ca lấy từ config/shifts.php (đã cộng thời gian cho phép sớm/trễ).
+            // Muốn đổi giờ làm: sửa config/shifts.php, không sửa ở đây.
+            $shiftHours = \App\Support\ShiftSchedule::windows();
 
             $currentTime = Carbon::now()->format('H:i');
             if (isset($shiftHours[$todayShift])) {

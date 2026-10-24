@@ -18,6 +18,8 @@ use Illuminate\Validation\Rule;
 
 class ReservationController extends Controller
 {
+    private const RESERVATION_EMAILS_ENABLED = false; // true để bật gửi email xác nhận đặt bàn cho khách, false để tắt
+
     public function __construct()
     {
         $this->middleware('auth');
@@ -178,14 +180,16 @@ $depositAmount = Reservation::calcDeposit($totalAmount);
     // ở trang giỏ hàng (CartController::checkout).
 
     // At this point the booking is only a request awaiting payment and staff verification.
-    try {
-        $reservation->refresh()->load('table');
-        Mail::to($reservation->email)->send(new BookingPendingDeposit($reservation));
-    } catch (\Throwable $e) {
-        \Log::error('Booking pending-deposit email failed.', [
-            'reservation_id' => $reservation->id,
-            'exception' => $e,
-        ]);
+    if (self::RESERVATION_EMAILS_ENABLED) {
+        try {
+            $reservation->refresh()->load('table');
+            Mail::to($reservation->email)->send(new BookingPendingDeposit($reservation));
+        } catch (\Throwable $e) {
+            \Log::error('Booking pending-deposit email failed.', [
+                'reservation_id' => $reservation->id,
+                'exception' => $e,
+            ]);
+        }
     }
 
     return redirect()->route('cart.index')->with('success', 'Ghi nhận yêu cầu đặt bàn! Vui lòng hoàn tất cọc để giữ bàn.');
@@ -270,6 +274,145 @@ $depositAmount = Reservation::calcDeposit($totalAmount);
 
         abort(403);
     }
+
+/**
+ * Khách gửi yêu cầu hủy đặt bàn đã xác nhận cọc.
+ */
+public function requestCancellation(Request $request, $id)
+{
+    $data = $request->validate([
+        'cancellation_reason' => ['nullable', 'string', 'max:1000'],
+    ]);
+
+    try {
+        \Illuminate\Support\Facades\DB::transaction(function () use ($id, $data) {
+            $reservation = \App\Models\Reservation::where('user_id', auth()->id())
+                ->lockForUpdate()
+                ->findOrFail($id);
+
+            if (
+                !in_array($reservation->status, ['pending', 'confirmed'], true)
+                || $reservation->payment_status !== 'deposit_paid'
+                || !$reservation->deposit_paid_at
+            ) {
+                throw new \DomainException(
+                    'Chỉ được yêu cầu hủy khi đặt bàn đã được nhân viên xác nhận cọc.'
+                );
+            }
+
+            $reservationDateTime = \Carbon\Carbon::parse(
+                $reservation->reservation_date->format('Y-m-d') . ' ' .
+                $reservation->reservation_time
+            );
+
+            if (now()->greaterThanOrEqualTo($reservationDateTime->copy()->subHours(2))) {
+                throw new \DomainException(
+                    'Bạn chỉ được yêu cầu hủy khi còn ít nhất 2 tiếng trước giờ đặt bàn.'
+                );
+            }
+
+            if ($reservation->cancellation_status === 'pending') {
+                throw new \DomainException(
+                    'Yêu cầu hủy của bạn đang chờ nhân viên xử lý.'
+                );
+            }
+
+            $reservation->cancellation_status = 'pending';
+            $reservation->cancellation_reason = $data['cancellation_reason'] ?? null;
+            $reservation->cancellation_requested_at = now();
+            $reservation->cancellation_reviewed_at = null;
+            $reservation->cancellation_reviewed_by = null;
+            $reservation->save();
+        });
+    } catch (\DomainException $e) {
+        return back()->with('error', $e->getMessage());
+    }
+
+    return back()->with(
+        'success',
+        'Đã gửi yêu cầu hủy đặt bàn. Vui lòng chờ nhân viên xử lý. Tiền cọc không tự động hoàn lại.'
+    );
+}
+
+/**
+ * Nhân viên hoặc quản trị viên duyệt/từ chối yêu cầu hủy.
+ */
+public function reviewCancellation(Request $request, $id)
+{
+    $data = $request->validate([
+        'decision' => ['required', \Illuminate\Validation\Rule::in(['approve', 'reject'])],
+    ]);
+
+    try {
+        \Illuminate\Support\Facades\DB::transaction(function () use ($id, $data) {
+            $reservation = \App\Models\Reservation::lockForUpdate()->findOrFail($id);
+
+            if ($reservation->cancellation_status !== 'pending') {
+                throw new \DomainException(
+                    'Yêu cầu hủy này không tồn tại hoặc đã được xử lý.'
+                );
+            }
+
+            if ($data['decision'] === 'reject') {
+                $reservation->cancellation_status = 'rejected';
+                $reservation->cancellation_reviewed_at = now();
+                $reservation->cancellation_reviewed_by = auth()->id();
+                $reservation->save();
+
+                return;
+            }
+
+            if (
+                !in_array($reservation->status, ['pending', 'confirmed'], true)
+                || $reservation->payment_status !== 'deposit_paid'
+                || !$reservation->deposit_paid_at
+            ) {
+                throw new \DomainException(
+                    'Đặt bàn không còn đủ điều kiện để hủy theo quy tắc hiện tại.'
+                );
+            }
+
+            $reservationDateTime = \Carbon\Carbon::parse(
+                $reservation->reservation_date->format('Y-m-d') . ' ' .
+                $reservation->reservation_time
+            );
+
+            if (now()->greaterThanOrEqualTo($reservationDateTime->copy()->subHours(2))) {
+                throw new \DomainException(
+                    'Đã không còn đủ 2 tiếng trước giờ đặt bàn. Không thể duyệt hủy.'
+                );
+            }
+
+            $reservation->cancellation_status = 'approved';
+            $reservation->cancellation_reviewed_at = now();
+            $reservation->cancellation_reviewed_by = auth()->id();
+            $reservation->status = 'cancelled';
+            $reservation->save();
+
+            // Chỉ hủy đơn món ăn liên kết chính xác với lượt đặt bàn này.
+            $order = \App\Models\Order::where('reservation_id', $reservation->id)
+                ->lockForUpdate()
+                ->first();
+
+            if ($order && !in_array($order->status, ['paid', 'completed'], true)) {
+                $order->status = 'cancelled';
+                $order->save();
+            }
+
+            // Chỉ giải phóng bàn nếu không còn lượt đặt bàn nào khác giữ bàn.
+            $this->releaseTableIfFree($reservation);
+        });
+    } catch (\DomainException $e) {
+        return back()->with('error', $e->getMessage());
+    }
+
+    return back()->with(
+        'success',
+        $data['decision'] === 'approve'
+            ? 'Đã duyệt hủy đặt bàn. Tiền cọc không tự động hoàn lại.'
+            : 'Đã từ chối yêu cầu hủy đặt bàn.'
+    );
+}
 
     /**
      * Cập nhật trạng thái đặt bàn (Admin & Staff) — CHỈ theo máy trạng thái Reservation::TRANSITIONS.
@@ -357,7 +500,7 @@ $depositAmount = Reservation::calcDeposit($totalAmount);
         }
 
         // Gửi mail SAU khi đã lưu thành công (không để lỗi SMTP làm hỏng giao dịch)
-        if ($sendDepositMail && $reservation->email) {
+        if (self::RESERVATION_EMAILS_ENABLED && $sendDepositMail && $reservation->email) {
             try {
                 Mail::to($reservation->email)->send(new BookingConfirmation($reservation->load('table')));
             } catch (\Throwable $e) {
@@ -366,7 +509,7 @@ $depositAmount = Reservation::calcDeposit($totalAmount);
                     'exception' => $e,
                 ]);
             }
-        } elseif ($sendDepositMail) {
+        } elseif (self::RESERVATION_EMAILS_ENABLED && $sendDepositMail) {
             \Log::warning('Booking confirmation email skipped because the reservation has no email address.', [
                 'reservation_id' => $reservation->id,
             ]);

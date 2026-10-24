@@ -6,7 +6,7 @@
    ===================================================================== */
 
 :root {
-    --lx-gold: #D4AF37;
+    --lx-gold: var(--ft-gold, #c9a45c);   /* dùng chung vàng đồng của footer */
     --lx-gold-dark: #B5952F;
     --lx-ink: #1A2228;
     --lx-muted: #718096;
@@ -107,8 +107,8 @@
     }
     .navbar-default .navbar-toggle:hover,
     .navbar-default .navbar-toggle:focus,
-    .navbar-default .navbar-toggle:active { background: rgba(212,175,55,.18); border-color: var(--lx-gold); outline: 0; }
-    .navbar-default .navbar-toggle .icon-bar { background: #fff; width: 22px; }
+    .navbar-default .navbar-toggle:active { background: rgba(201,164,92,.18); border-color: var(--lx-gold); outline: 0; }
+    .navbar-default .navbar-toggle .icon-bar { background: var(--lx-gold); width: 22px; }
 
     /* Menu sổ xuống: bảng gọn nằm bên TRÁI, ngay dưới thanh điều hướng (không trải hết bề ngang) */
     .navbar-collapse.nav-flex {
@@ -116,9 +116,9 @@
         flex: none !important;
         width: 270px !important; max-width: 86vw; height: auto !important; max-height: 75vh;
         overflow-y: auto !important;
-        background: #161616;
+        background: var(--ft-bg, #111010);
         flex-direction: column !important;
-        border-top: 1px solid rgba(212,175,55,.35);
+        border-top: 1px solid rgba(201,164,92,.35);
         border-radius: 0 0 16px 0;
         box-shadow: 0 16px 32px rgba(0,0,0,.35);
     }
@@ -133,12 +133,12 @@
     }
     .navbar-collapse.nav-flex .dropdown-menu {
         position: static; float: none; width: 100%; margin: 0;
-        background: #222; border: 0; box-shadow: none; border-radius: 0;
+        background: var(--ft-bg-soft, #1a1817); border: 0; box-shadow: none; border-radius: 0;
     }
     .navbar-collapse.nav-flex .dropdown-menu > li > a { color: #fff !important; padding: 14px 36px !important; display: flex !important; align-items: center; justify-content: flex-start; gap: 10px; }
     .navbar-default .navbar-nav > .open > a,
     .navbar-default .navbar-nav > .open > a:hover,
-    .navbar-default .navbar-nav > .open > a:focus { background: #222 !important; color: #fff !important; }
+    .navbar-default .navbar-nav > .open > a:focus { background: var(--ft-bg-soft, #1a1817) !important; color: var(--ft-gold, #c9a45c) !important; }
     /* FIX: menu con (tài khoản) chỉ mở khi chạm vào; chữ trắng trên nền tối (trước đó bị #1A2228 → không đọc được) */
     .navbar-collapse.nav-flex .nav > li.dropdown > .dropdown-menu { display: none !important; }
     .navbar-collapse.nav-flex .nav > li.dropdown.open > .dropdown-menu { display: block !important; }

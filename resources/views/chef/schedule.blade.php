@@ -207,27 +207,24 @@
     <div class="legend-card">
         <div class="legend-title">ℹ️ Khung giờ hoạt động khu vực Bếp</div>
         <div class="legend-grid">
+            {{-- Các ca lấy từ config/shifts.php, đổi giờ ở đó là bảng này tự cập nhật --}}
+            @php
+                // Mô tả công việc của bếp theo từng ca (chỉ là chữ hiển thị, không ảnh hưởng logic)
+                $chefNotes = [
+                    'morning'   => 'Sơ chế & Phục vụ trưa',
+                    'afternoon' => 'Phục vụ tối & Vệ sinh bếp',
+                    'full'      => 'Toàn bộ hoạt động bếp',
+                ];
+            @endphp
+            @foreach(collect($shiftConfigs)->except('off') as $key => $cfg)
             <div class="legend-item">
-                <span style="font-size:1.4rem;">🌅</span>
+                <span style="font-size:1.4rem;">{{ $cfg['badge'] }}</span>
                 <div>
-                    <div style="font-weight:700;font-size:0.85rem;color:#1d4ed8;">Ca Sáng</div>
-                    <div style="font-size:0.75rem;color:#64748b;">06:00 – 13:00 (Sơ chế & Phục vụ trưa)</div>
+                    <div style="font-weight:700;font-size:0.85rem;color:{{ $cfg['color'] }};">{{ $cfg['label'] }}{{ $key === 'full' ? ' (Full)' : '' }}</div>
+                    <div style="font-size:0.75rem;color:#64748b;">{{ $cfg['time'] }}@if(isset($chefNotes[$key])) ({{ $chefNotes[$key] }})@endif</div>
                 </div>
             </div>
-            <div class="legend-item">
-                <span style="font-size:1.4rem;">🌇</span>
-                <div>
-                    <div style="font-weight:700;font-size:0.85rem;color:#854d0e;">Ca Chiều</div>
-                    <div style="font-size:0.75rem;color:#64748b;">13:00 – 20:00 (Phục vụ tối & Vệ sinh bếp)</div>
-                </div>
-            </div>
-            <div class="legend-item">
-                <span style="font-size:1.4rem;">⭐</span>
-                <div>
-                    <div style="font-weight:700;font-size:0.85rem;color:#7e22ce;">Cả Ngày (Full)</div>
-                    <div style="font-size:0.75rem;color:#64748b;">06:00 – 20:00 (Toàn bộ hoạt động bếp)</div>
-                </div>
-            </div>
+            @endforeach
             <div class="legend-item">
                 <span style="font-size:1.4rem;">☕</span>
                 <div>

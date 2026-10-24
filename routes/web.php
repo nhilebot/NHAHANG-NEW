@@ -6,7 +6,7 @@ use App\Http\Controllers\{
     OrderController, TableController, AdminController, AuthController,
     CartController, OtpPasswordController, ProfileController, CommentController,
     AdminCategoryController, AdminMenuController, AdminTableController,
-    AdminUserController, BookingController, StaffOrderController, ChatbotController, AdminBillController
+    AdminUserController, BookingController, StaffOrderController, ChatbotController, AdminBillController, NewsController
 };
 
 // =========================================================
@@ -84,6 +84,13 @@ Route::get('/order-history', [App\Http\Controllers\OrderController::class, 'hist
     });
 
     Route::post('/order/store', [OrderController::class, 'store'])->name('order.store');
+    Route::post('/order/{id}/cancel', [OrderController::class, 'cancel'])
+    ->name('order.cancel');
+    // Khách gửi yêu cầu hủy đặt bàn
+Route::post('/reservations/{id}/request-cancellation', [
+    ReservationController::class,
+    'requestCancellation',
+])->name('reservations.requestCancellation');
     Route::put('/comment/{id}', [CommentController::class, 'update'])
     ->name('comment.update');
     Route::post('/menu/{menuId}/comment', [CommentController::class, 'store'])->name('comment.store');
@@ -129,6 +136,10 @@ Route::post('/reservations/store', [ReservationController::class, 'staffStore'])
 // Quản lý đơn hàng (Admin)
         // QUẢN LÝ KHO NGUYÊN LIỆU (chỉ Admin)
         Route::prefix('inventory')->name('inventory.')->group(function () {
+            Route::post(
+    '/reservations/{id}/review-cancellation',
+    [ReservationController::class, 'reviewCancellation']
+)->name('reservations.reviewCancellation');
             Route::resource('issues', \App\Http\Controllers\Admin\Inventory\StockIssueController::class)
     ->only(['index', 'create', 'store', 'show']);
             Route::get('/', fn () => redirect()->route('admin.inventory.ingredients.index'))->name('index');
@@ -151,6 +162,10 @@ Route::delete('/orders/{id}', [OrderController::class, 'destroy'])->name('orders
         // Quản lý đặt bàn & đơn hàng
         Route::get('/reservations', [ReservationController::class, 'adminIndex'])->name('reservations.index');
         Route::post('/reservations/{id}/update-status', [ReservationController::class, 'updateStatus'])->name('reservations.updateStatus');
+        Route::post('/reservations/{id}/review-cancellation', [
+    ReservationController::class,
+    'reviewCancellation',
+])->name('reservations.reviewCancellation');
         Route::post('/reservations/{id}/pay', [ReservationController::class, 'pay'])->name('reservations.pay');
         Route::get('/orders/{id}', [OrderController::class, 'show'])->name('orders.show');
     });
@@ -160,7 +175,10 @@ Route::delete('/orders/{id}', [OrderController::class, 'destroy'])->name('orders
     //    Admin cũng được vào nhờ logic trong CheckRole
     // =========================================================
    Route::middleware('role:staff')->prefix('staff')->name('staff.')->group(function () {
-
+Route::post(
+    '/reservations/{id}/review-cancellation',
+    [ReservationController::class, 'reviewCancellation']
+)->name('reservations.reviewCancellation');
     // 🟢 Tuyến đường xem lịch (Không bị chặn)
     Route::get('/schedule', [\App\Http\Controllers\StaffDashboardController::class, 'schedule'])->name('schedule');
 
@@ -234,3 +252,5 @@ Route::middleware('role:chef')->prefix('chef')->name('chef.')->group(function ()
 Route::post('/chatbot/ask', [ChatbotController::class, 'ask'])
     ->middleware('throttle:15,1')
     ->name('chatbot.ask');
+     Route::get('/news', [NewsController::class, 'index'])->name('news.index');
+   Route::get('/news/{slug}', [NewsController::class, 'show'])->name('news.show');

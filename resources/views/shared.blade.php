@@ -12,6 +12,8 @@
     <link rel="stylesheet" href="{{ asset('css/picto-foundry-food.css') }}">
     <link rel="stylesheet" href="{{ asset('css/jquery-ui.css') }}">
     <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
+             <link rel="stylesheet" href="{{ asset('css/footer.css') }}">
+
     <link href="{{ asset('css/font-awesome.min.css') }}" rel="stylesheet">
     <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Playball' rel='stylesheet' type='text/css'>
@@ -45,6 +47,7 @@
 
     <ul class="nav navbar-nav navbar-center-custom" style="flex: 2; display: flex; justify-content: center; align-items: flex-start; float: none; margin: 0; padding: 0; gap: 20px;">
         <li style="margin: 0; padding: 0;"><a class="color_animation" href="{{ url('/') }}" style="padding: 10px;">TRANG CHỦ</a></li>
+        <!-- <li style="margin: 0; padding: 0;"><a class="color_animation" href="{{ url('/news') }}" style="padding: 10px;">TIN TỨC</a></li> -->
         <li style="margin: 0; padding: 0;"><a class="color_animation" href="{{ url('/reservation') }}" style="padding: 10px;">ĐẶT BÀN</a></li>
         <li style="margin: 0; padding: 0;"><a class="color_animation" href="{{ url('/menu') }}" style="padding: 10px;">THỰC ĐƠN</a></li>
         
@@ -125,42 +128,101 @@
             @yield('content')
         </main>
         
-    </div> <footer class="sub_footer" style="flex-shrink: 0;">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-4 footer-section">
-<img class="nav-logo" src="{{ asset('images/logo.png') }}" alt="Món Việt Logo" style="height: 60px; width: auto; filter: drop-shadow(0px 0px 2px rgba(0,0,0,0.5)); margin-right: -10px; margin-left: 100px;">
-                    <p class="footer-desc">
-                        Khởi nguồn từ niềm đam mê ẩm thực, chúng tôi mang đến những trải nghiệm chuẩn vị và đậm đà nhất, vươn mình trở thành chuỗi nhà hàng hàng đầu.
-                    </p>
-                </div>
-                <div class="col-md-4 footer-section text-center">
-                    <h3 class="footer-title">MENU</h3>
-                    <ul class="footer-links">
-                        <li><a href="#">Chi nhánh</a></li>
-                        <li><a class="color_animation" href="{{ url('/menu') }}">Thực đơn</a></li>
-                        <li><a href="#">Khuyến mãi</a></li>
-                        <li><a href="#">Thành viên</a></li>
-                        <li><a href="#">Tin tức</a></li>
-                    </ul>
-                </div>
-                <div class="col-md-4 footer-section text-right">
-                    <h3 class="footer-title">LIÊN HỆ</h3>
-                    <p>Hotline: 0899911390</p>
-                    <p>Email: contact@AuroraGarden.com</p>
-                    <div class="footer-social">
-                        <p>Theo dõi chúng tôi trên</p>
-                        <a href="#"><i class="fa fa-instagram"></i></a>
-                        <a href="#"><i class="fa fa-facebook"></i></a>
-                        <a href="#"><i class="fa fa-tiktok"></i></a>
-                        <a href="#"><i class="fa fa-youtube-play"></i></a>
+    </div> 
+
+    <footer class="site-footer">
+
+        {{-- Dải kêu gọi đặt bàn --}}
+        <div class="ft-cta">
+            <div class="container">
+                
+            </div>
+        </div>
+
+        {{-- Nội dung chính: 4 cột --}}
+        <div class="ft-main">
+            <div class="container">
+                <div class="ft-grid">
+
+                    {{-- Cột 1: Thương hiệu --}}
+                    <div class="ft-brand">
+                        <img class="ft-logo" src="{{ asset('images/logo.png') }}" alt="Aurora Garden - Fine Dining">
+                        <p class="ft-desc">
+                            Khởi nguồn từ niềm đam mê ẩm thực, chúng tôi mang đến những trải nghiệm chuẩn vị và đậm đà nhất, vươn mình trở thành chuỗi nhà hàng hàng đầu.
+                        </p>
+                        <div class="ft-social">
+                            <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                            <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                            <a href="#" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+                            <a href="#" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+                        </div>
                     </div>
+
+                    {{-- Cột 2: Khám phá --}}
+                    <div>
+                        <h4 class="ft-title">Khám phá</h4>
+                        <ul class="ft-links">
+                            <li><a href="{{ url('/menu') }}">Thực đơn</a></li>
+                            <li><a href="{{ url('/reservation') }}">Đặt bàn</a></li>
+                            <li><a href="#">Chi nhánh</a></li>
+                            <li><a href="#">Khuyến mãi</a></li>
+                            <li><a href="#">Thành viên</a></li>
+                            <li><a href="{{ url('/news') }}">Tin tức</a></li>
+                        </ul>
+                    </div>
+
+                    {{-- Cột 3: Giờ mở cửa --}}
+                    <div>
+                        <h4 class="ft-title">Giờ mở cửa</h4>
+                        <ul class="ft-info">
+                            <li>
+                                <span class="ft-ico"><i class="fa-regular fa-clock"></i></span>
+                                <span>
+                                    <small>Thứ Hai – Chủ Nhật</small>
+                                    <strong>06:00 – 22:00</strong>
+                                </span>
+                            </li>
+                            <li>
+                                <span class="ft-ico"><i class="fa-solid fa-utensils"></i></span>
+                                <span>
+                                    <small>Phục vụ</small>
+                                    <strong>Tại chỗ &amp; đặt trước</strong>
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    {{-- Cột 4: Liên hệ --}}
+                    <div>
+                        <h4 class="ft-title">Liên hệ</h4>
+                        <ul class="ft-info">
+                            <li>
+                                <span class="ft-ico"><i class="fa-solid fa-phone"></i></span>
+                                <span>
+                                    <small>Hotline</small>
+                                    <a href="tel:0899911390">0899 911 390</a>
+                                </span>
+                            </li>
+                            <li>
+                                <span class="ft-ico"><i class="fa-regular fa-envelope"></i></span>
+                                <span>
+                                    <small>Email</small>
+                                    <a href="mailto:contact@AuroraGarden.com">contact@AuroraGarden.com</a>
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
+
                 </div>
             </div>
-            <div class="row footer-bottom">
-                <div class="col-xs-12 text-center">
-                    <hr>
-                    <p>&copy; 2026 Restaurant. All Rights Reserved. Powered by YourGroup</p>
+        </div>
+
+        {{-- Thanh bản quyền --}}
+        <div class="ft-bottom">
+            <div class="container">
+                <div class="ft-bottom-inner">
+                    <span>&copy; {{ date('Y') }} Restaurant. All Rights Reserved.</span>
+                    <span>Powered by YourGroup</span>
                 </div>
             </div>
         </div>
