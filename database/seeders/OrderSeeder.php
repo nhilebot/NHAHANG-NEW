@@ -14,11 +14,23 @@ class OrderSeeder extends Seeder
             'reservation_code' => 'DEMO-RES-CASH-001',
             'table_name' => 'Bàn 01',
             'reservation_time' => '18:00:00',
-            'payment_method' => 'cash',
-            'status' => 'paid_cash',
+            'payment_method' => 'transfer',
+            'order_status' => 'paid',
+            'reservation_status' => 'serving',
+            
             'items' => [
-                ['name' => 'Cua Hấp', 'quantity' => 1, 'price' => 250000, 'image' => 'images/hs1.jpg'],
-                ['name' => 'Tôm Càng Hấp', 'quantity' => 1, 'price' => 220000, 'image' => 'images/hs2.jpg'],
+                [
+                    'name' => 'Cua Hấp',
+                    'quantity' => 1,
+                    'price' => 250000,
+                    'image' => 'images/hs1.jpg',
+                ],
+                [
+                    'name' => 'Tôm Càng Hấp',
+                    'quantity' => 1,
+                    'price' => 220000,
+                    'image' => 'images/hs2.jpg',
+                ],
             ],
         ],
         [
@@ -26,11 +38,20 @@ class OrderSeeder extends Seeder
             'reservation_code' => 'DEMO-RES-TRANSFER-002',
             'table_name' => 'Bàn 02',
             'reservation_time' => '19:00:00',
-            'payment_method' => 'transfer',
-            'status' => 'paid_transfer',
+            'payment_method' => 'cash',
+            'order_status' => 'completed',
+            'reservation_status' => 'completed',
             'items' => [
-                ['name' => 'Mực hấp', 'quantity' => 1, 'price' => 150000,],
-                ['name' => 'Salad trái cây', 'quantity' => 1, 'price' => 80000,],
+                [
+                    'name' => 'Mực hấp',
+                    'quantity' => 1,
+                    'price' => 150000,
+                ],
+                [
+                    'name' => 'Salad trái cây',
+                    'quantity' => 1,
+                    'price' => 80000,
+                ],
             ],
         ],
     ];
@@ -40,12 +61,15 @@ class OrderSeeder extends Seeder
         $customer = DB::table('users')
             ->where('email', 'leyennhi22122006@gmail.com')
             ->first();
+
         $staff = DB::table('users')
             ->where('email', 'staff@gmail.com')
             ->first();
 
         if (!$customer || !$staff) {
-            throw new RuntimeException('Run UserSeeder before OrderSeeder to create the demo customer and staff.');
+            throw new RuntimeException(
+                'Run UserSeeder before OrderSeeder to create the demo customer and staff.'
+            );
         }
 
         DB::transaction(function () use ($customer, $staff): void {
@@ -57,15 +81,23 @@ class OrderSeeder extends Seeder
                     ->first();
 
                 if (!$table) {
-                    throw new RuntimeException('Run TableSeeder before OrderSeeder to create the demo tables.');
+                    throw new RuntimeException(
+                        'Run TableSeeder before OrderSeeder to create the demo tables.'
+                    );
                 }
 
                 $total = array_sum(array_map(
-                    fn (array $item): int => $item['quantity'] * $item['price'],
+                    fn (array $item): int =>
+                        $item['quantity'] * $item['price'],
                     $sample['items']
                 ));
+
                 $deposit = (int) round($total * 0.2);
-                $cartData = json_encode($sample['items'], JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR);
+
+                $cartData = json_encode(
+                    $sample['items'],
+                    JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR
+                );
 
                 DB::table('reservations')->updateOrInsert(
                     ['code' => $sample['reservation_code']],
@@ -85,10 +117,12 @@ class OrderSeeder extends Seeder
                         'paid_at' => $now,
                         'paid_by' => $staff->id,
                         'deposit_paid_at' => $now->copy()->subHour(),
-                        'reservation_status' => 'completed',
+                        'reservation_status' => $sample['reservation_status'],
                         'payment_status' => 'paid',
                         'payment_method' => $sample['payment_method'],
-                        'status' => $sample['status'],
+                        'status' => $sample['reservation_status'] === 'completed'
+                            ? 'completed'
+                            : 'paid_transfer',
                         'created_at' => $now,
                         'updated_at' => $now,
                     ]
@@ -99,7 +133,9 @@ class OrderSeeder extends Seeder
                     ->value('id');
 
                 if (!$reservationId) {
-                    throw new RuntimeException("Could not find reservation for demo order {$sample['code']}.");
+                    throw new RuntimeException(
+                        "Could not find reservation for demo order {$sample['code']}."
+                    );
                 }
 
                 DB::table('orders')->updateOrInsert(
@@ -109,7 +145,7 @@ class OrderSeeder extends Seeder
                         'reservation_id' => $reservationId,
                         'table_number' => (string) $table->id,
                         'total_price' => $total,
-                        'status' => 'paid',
+                        'status' => $sample['order_status'],
                         'payment_method' => $sample['payment_method'],
                         'name' => $customer->name,
                         'phone' => $customer->phone,

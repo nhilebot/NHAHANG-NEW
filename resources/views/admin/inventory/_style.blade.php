@@ -44,4 +44,46 @@
 .inv-pager{margin-top:16px;display:flex;justify-content:center}
 .inv-empty{text-align:center;padding:32px 10px;color:#718096}
 @media(max-width:768px){.inv-stats{grid-template-columns:1fr}.inv-form .row2{grid-template-columns:1fr}.inv-dl{grid-template-columns:1fr}.inv-filter input[type=text]{min-width:0;width:100%}}
+/* ===== Phân trang ===== */
+.inv-pager{margin-top:20px;display:flex;justify-content:center}
+.inv-pager nav{display:flex;flex-direction:column;align-items:center;gap:10px}
+.inv-pager nav>div:first-child{display:none} /* ẩn bản mobile nếu có */
+.inv-pager ul,
+.inv-pager .pagination{
+  list-style:none;margin:0;padding:0;
+  display:flex;align-items:center;justify-content:center;
+  gap:6px;flex-wrap:wrap
+}
+.inv-pager li{list-style:none;margin:0;padding:0}
+.inv-pager li::marker{content:''}
+
+.inv-pager li a,
+.inv-pager li span{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-width:38px;height:38px;padding:0 12px;box-sizing:border-box;
+  border:1px solid #E2E8F0;border-radius:8px;background:#fff;
+  color:#4A5568;font-size:14px;font-weight:600;text-decoration:none;
+  transition:all .15s ease
+}
+.inv-pager li a:hover{
+  border-color:#D4AF37;color:#1A2228;background:#FCFBF8
+}
+.inv-pager li.active span,
+.inv-pager li.active a,
+.inv-pager li[aria-current="page"] span{
+  background:#D4AF37;border-color:#D4AF37;color:#1A2228;
+  box-shadow:0 4px 10px rgba(212,175,55,.3)
+}
+.inv-pager li.disabled span,
+.inv-pager li[aria-disabled="true"] span{
+  background:#F8FAFC;color:#CBD5E1;cursor:not-allowed
+}
+.inv-pager li:first-child a,
+.inv-pager li:last-child a,
+.inv-pager li:first-child span,
+.inv-pager li:last-child span{font-size:16px}
+
+@media(max-width:480px){
+  .inv-pager li a,.inv-pager li span{min-width:34px;height:34px;padding:0 8px;font-size:13px}
+}
 </style>

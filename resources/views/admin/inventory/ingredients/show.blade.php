@@ -35,5 +35,32 @@
         <dd>{{ $ingredient->reference_price !== null ? number_format($ingredient->reference_price, 0, ',', '.') . 'đ / ' . $ingredient->unit : '—' }}</dd>
         <dt>Ghi chú</dt><dd>{{ $ingredient->note ?: '—' }}</dd>
     </dl>
+    <h3 class="inv-title" style="font-size:16px;margin-top:22px">Lịch sử tồn kho gần đây</h3>
+<div class="inv-wrap">
+    <table class="inv-table">
+        <thead><tr><th>Thời gian</th><th>Loại</th><th class="r">Thay đổi</th><th class="r">Tồn sau</th><th>Chứng từ</th></tr></thead>
+        <tbody>
+        @forelse($movements as $m)
+            @php $pos = $m->quantity > 0; @endphp
+            <tr>
+                <td class="inv-muted">{{ $m->created_at->format('d/m/Y H:i') }}</td>
+                <td>{{ $m->type_label }}</td>
+                <td class="r"><strong style="color:{{ $pos ? '#16A34A' : '#DC2626' }}">{{ $pos ? '+' : '' }}{{ \App\Models\Ingredient::fmt($m->quantity) }}</strong> {{ $ingredient->unit }}</td>
+                <td class="r">{{ \App\Models\Ingredient::fmt($m->balance_after) }} {{ $ingredient->unit }}</td>
+                <td>
+                    @if($m->reference instanceof \App\Models\StockReceipt)
+                        <a href="{{ route('admin.inventory.receipts.show', $m->reference) }}">{{ $m->reference->code }}</a>
+                    @elseif($m->reference instanceof \App\Models\StockIssue)
+                        <a href="{{ route('admin.inventory.issues.show', $m->reference) }}">{{ $m->reference->code }}</a>
+                    @else<span class="inv-muted">{{ $m->note ?: '—' }}</span>@endif
+                </td>
+            </tr>
+        @empty
+            <tr><td colspan="5" class="inv-empty">Chưa có biến động nào.</td></tr>
+        @endforelse
+        </tbody>
+    </table>
+</div>
+<a href="{{ route('admin.inventory.movements.index', ['ingredient_id' => $ingredient->id]) }}" class="btn btn-sm btn-ghost" style="margin-top:8px">Xem toàn bộ sổ kho</a>
 </div>
 @endsection

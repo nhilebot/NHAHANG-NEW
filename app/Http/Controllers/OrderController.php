@@ -7,6 +7,8 @@ use App\Models\Menu;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Reservation;
+use App\Models\ReservationItem;
+use App\Services\ReservationItemService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
@@ -142,110 +144,143 @@ class OrderController extends Controller
     /**
      * Dashboard bếp — Bếp thấy đơn khi status = 'serving' hoặc 'arrived'
      */
-    public function chefIndex()
+    public function chefIndex(ReservationItemService $items)
     {
-        // Đơn đang cần nấu (Staff đã gửi bếp)
-        $pendingOrders = Reservation::with('table')
-            ->whereIn('status', ['arrived', 'serving'])
+        // Đơn cũ (đang ở bếp) chưa có dòng trong reservation_items: đưa sang trước khi hiển thị.
+        Reservation::whereIn('status', ['arrived', 'serving'])->doesntHave('reservationItems')->get()
+            ->each(fn ($r) => $items->ensureImported($r));
+
+        $unfinished = fn ($q) => $q->active()->whereIn('status', ['pending', 'cooking']);
+
+        // Đơn cần nấu: đang ở bếp (arrived/serving) HOẶC đã ready/served nhưng có món gọi thêm chưa nấu xong
+        $pendingOrders = Reservation::with(['table', 'reservationItems' => fn ($q) => $q->active()])
+            ->whereIn('status', ['arrived', 'serving', 'ready', 'served'])
+            ->where(function ($q) use ($unfinished) {
+                $q->whereIn('status', ['arrived', 'serving'])
+                  ->orWhereHas('reservationItems', $unfinished);
+            })
             ->oldest('updated_at')
             ->get();
 
-        // Đơn đã nấu xong (chờ Staff bưng ra)
+        // Đơn đã nấu xong (chờ Staff bưng ra): không còn món chờ/đang nấu
         $readyOrders = Reservation::where('status', 'ready')
+            ->whereDoesntHave('reservationItems', $unfinished)
             ->latest('updated_at')
             ->get();
 
         $pendingItems = 0;
         $cookingItems = 0;
-
         foreach ($pendingOrders as $res) {
-            $statuses = $res->chef_statuses ?? [];
-            foreach (($res->cart_data ?? []) as $item) {
-                $st  = $statuses[$item['id']] ?? 'pending';
-                $qty = $item['quantity'] ?? 1;
-                if ($st === 'pending') $pendingItems += $qty;
-                if ($st === 'cooking') $cookingItems += $qty;
+            foreach ($res->reservationItems as $line) {
+                if ($line->status === ReservationItem::STATUS_PENDING) $pendingItems += $line->active_quantity;
+                if ($line->status === ReservationItem::STATUS_COOKING) $cookingItems += $line->active_quantity;
             }
         }
 
         return view('chef.dashboard', compact('pendingOrders', 'readyOrders', 'pendingItems', 'cookingItems'));
     }
 
+    /** Trạng thái đơn mà bếp còn thao tác được (có thể có món gọi thêm sau khi đã ready/served). */
+    private const CHEF_OPEN = ['arrived', 'serving', 'ready', 'served'];
+
     /**
-     * Cập nhật trạng thái từng món (pending → cooking → done)
+     * Route CŨ theo menu_id (giữ để tương thích): áp dụng cho các dòng còn hiệu lực của món đó.
+     * Chỉ tiến lên, không đụng dòng đã bưng.
      */
-    public function updateItemStatus(Request $request, $reservationId, $menuId)
+    public function updateItemStatus(Request $request, $reservationId, $menuId, ReservationItemService $items)
     {
         $data = $request->validate([
             'chef_status' => ['required', Rule::in(['pending', 'cooking', 'done'])],
         ]);
 
         $reservation = Reservation::findOrFail($reservationId);
-        abort_unless(in_array($reservation->status, ['arrived', 'serving'], true), 422, 'Đơn này không còn ở bếp.');
+        abort_unless(in_array($reservation->status, self::CHEF_OPEN, true), 422, 'Đơn này không còn ở bếp.');
 
-        $itemIds = collect($reservation->cart_data ?? [])->pluck('id')->map(fn ($i) => (string) $i);
-        abort_unless($itemIds->contains((string) $menuId), 404);
-
-        $statuses            = $reservation->chef_statuses ?? [];
-        $statuses[$menuId]   = $data['chef_status'];
-        $reservation->chef_statuses = $statuses;
+        try {
+            $items->setMenuStatus($reservation, (int) $menuId, $data['chef_status']);
+        } catch (\DomainException $e) {
+            return back()->with('error', $e->getMessage());
+        }
 
         // Món đầu tiên được nấu → đơn chuyển sang 'serving'
         if ($data['chef_status'] === 'cooking' && $reservation->status === 'arrived') {
-            $reservation->status = 'serving';
+            $reservation->update(['status' => 'serving']);
         }
 
-        $reservation->save();
         return back()->with('success', 'Đã cập nhật trạng thái món!');
     }
 
     /**
-     * Bếp bấm "Bắt đầu nấu" toàn bộ đơn
+     * Đổi trạng thái đúng MỘT lần gọi món (một dòng). Hai lần gọi cùng món không còn dùng chung trạng thái.
      */
-    public function startOrder($id)
+    public function updateLineStatus(Request $request, ReservationItem $item, ReservationItemService $items)
     {
-        $reservation = Reservation::findOrFail($id);
+        $data = $request->validate([
+            'chef_status' => ['required', Rule::in(['pending', 'cooking', 'done'])],
+        ]);
 
-        if (!in_array($reservation->status, ['arrived', 'serving'], true)) {
-            return back()->with('error', 'Đơn này không ở trạng thái chờ nấu.');
+        $reservation = Reservation::findOrFail($item->reservation_id);
+        abort_unless(in_array($reservation->status, self::CHEF_OPEN, true), 422, 'Đơn này không còn ở bếp.');
+
+        try {
+            $items->setLineStatus($item, $data['chef_status']);
+        } catch (\DomainException $e) {
+            return back()->with('error', $e->getMessage());
         }
 
-        $statuses = $reservation->chef_statuses ?? [];
-        foreach (($reservation->cart_data ?? []) as $item) {
-            if (($statuses[$item['id']] ?? 'pending') === 'pending') {
-                $statuses[$item['id']] = 'cooking';   // không ghi đè món đã 'done'
-            }
+        if ($data['chef_status'] === 'cooking' && $reservation->status === 'arrived') {
+            $reservation->update(['status' => 'serving']);
         }
 
-        $reservation->chef_statuses = $statuses;
-        $reservation->status        = 'serving';
-        $reservation->save();
-
-        return back()->with('success', 'Đã bắt đầu chế biến toàn bộ món!');
+        return back()->with('success', 'Đã cập nhật trạng thái món!');
     }
 
     /**
-     * Bếp bấm "Nấu xong" → Staff biết để bưng lên
+     * Bếp bấm "Bắt đầu nấu" toàn bộ đơn: chỉ các dòng đang chờ chuyển sang đang nấu.
      */
-    public function finishOrder($id)
+    public function startOrder($id, ReservationItemService $items)
     {
         $reservation = Reservation::findOrFail($id);
 
-        if (!Reservation::canTransition($reservation->status, 'ready')) {
+        if (!in_array($reservation->status, self::CHEF_OPEN, true)) {
+            return back()->with('error', 'Đơn này không ở trạng thái chờ nấu.');
+        }
+
+        $changed = $items->startAll($reservation);
+
+        if ($reservation->status === 'arrived') {
+            $reservation->update(['status' => 'serving']);
+        }
+
+        return back()->with(
+            $changed > 0 ? 'success' : 'error',
+            $changed > 0 ? 'Đã bắt đầu chế biến các món đang chờ!' : 'Không có món nào đang chờ nấu.'
+        );
+    }
+
+    /**
+     * Bếp bấm "Nấu xong": các dòng chờ/đang nấu => xong.
+     * Đơn đang 'serving' => 'ready' (như trước). Đơn đã ready/served (chỉ nấu món gọi thêm) giữ nguyên trạng thái.
+     */
+    public function finishOrder($id, ReservationItemService $items)
+    {
+        $reservation = Reservation::findOrFail($id);
+
+        if ($reservation->status === 'serving') {
+            if (!Reservation::canTransition($reservation->status, 'ready')) {
+                return back()->with('error', 'Đơn chưa ở trạng thái đang nấu nên không thể báo xong.');
+            }
+        } elseif (!in_array($reservation->status, ['ready', 'served'], true)) {
             return back()->with('error', 'Đơn chưa ở trạng thái đang nấu nên không thể báo xong.');
         }
 
-        $statuses = [];
-        foreach (($reservation->cart_data ?? []) as $item) {
-            $statuses[$item['id']] = 'done';
-        }
+        $items->finishAll($reservation);
 
-        $reservation->chef_statuses = $statuses;
-        $reservation->status        = 'ready';
-        $reservation->save();
-
-        if ($order = $reservation->linkedOrder()) {
-            $order->update(['status' => 'ready']);
+        if ($reservation->status === 'serving') {
+            $reservation->update(['status' => 'ready']);
+            if ($order = $reservation->linkedOrder()) {
+                $order->update(['status' => 'ready']);
+            }
         }
 
         return back()->with('success', 'Bếp đã nấu xong! Staff hãy bưng món ra.');

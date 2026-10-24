@@ -129,12 +129,19 @@ Route::post('/reservations/store', [ReservationController::class, 'staffStore'])
 // Quản lý đơn hàng (Admin)
         // QUẢN LÝ KHO NGUYÊN LIỆU (chỉ Admin)
         Route::prefix('inventory')->name('inventory.')->group(function () {
+            Route::resource('issues', \App\Http\Controllers\Admin\Inventory\StockIssueController::class)
+    ->only(['index', 'create', 'store', 'show']);
             Route::get('/', fn () => redirect()->route('admin.inventory.ingredients.index'))->name('index');
 
             Route::resource('categories', \App\Http\Controllers\Admin\Inventory\IngredientCategoryController::class)
                 ->except('show');
             Route::resource('suppliers', \App\Http\Controllers\Admin\Inventory\SupplierController::class);
             Route::resource('ingredients', \App\Http\Controllers\Admin\Inventory\IngredientController::class);
+            Route::resource('recipes', \App\Http\Controllers\Admin\Inventory\RecipeController::class);
+            Route::resource('receipts', \App\Http\Controllers\Admin\Inventory\StockReceiptController::class)
+    ->only(['index', 'create', 'store', 'show']);
+Route::get('movements', [\App\Http\Controllers\Admin\Inventory\StockMovementController::class, 'index'])
+    ->name('movements.index');
         });
 Route::get('/orders', [OrderController::class, 'adminIndex'])->name('orders.index');
 Route::get('/orders/{id}', [OrderController::class, 'show'])->name('orders.show');      // đã có
@@ -211,6 +218,11 @@ Route::middleware('role:chef')->prefix('chef')->name('chef.')->group(function ()
         Route::post('/order/{id}/finish', [OrderController::class, 'finishOrder'])->name('order.finish');
 
         // Cập nhật trạng thái từng món
+        // Cập nhật trạng thái đúng MỘT lần gọi món (dòng reservation_items).
+        // PHẢI đứng TRƯỚC route theo menu_id bên dưới vì hai đường dẫn cùng dạng ("line" sẽ bị hiểu là reservationId).
+        Route::post('/item/line/{item}/status', [OrderController::class, 'updateLineStatus'])->name('item.line_status');
+
+        // Route cũ theo menu_id (giữ để tương thích)
         Route::post('/item/{reservationId}/{menuId}/status', [OrderController::class, 'updateItemStatus'])->name('item.status');
     });
 

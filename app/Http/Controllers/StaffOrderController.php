@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Menu;
 use App\Models\OrderItem;
 use App\Models\Reservation;
+use App\Services\ReservationItemService;
 use Illuminate\Support\Facades\DB;
 class StaffOrderController extends Controller
 {
@@ -19,47 +20,19 @@ class StaffOrderController extends Controller
      */
     public function create($reservationId)
     {
-        $reservation = Reservation::with('table')->findOrFail($reservationId);
-        $menus       = Menu::all();
-        $categories  = Menu::distinct()->pluck('category')->filter();
-
-        return view('staff.order-create', compact('reservation', 'menus', 'categories'));
+        // Luồng cũ đã ngừng: món được quản lý qua màn hình "Sửa món" (edit_items).
+        return redirect()->route('staff.reservations.edit_items', $reservationId)
+            ->with('error', 'Chức năng này đã ngừng. Vui lòng dùng màn hình sửa món của đơn.');
     }
 
     /**
-     * Lưu order mới (chưa gửi bếp)
+     * (Đã ngừng) Trước đây ghi đè toàn bộ cart_data không kiểm tra trạng thái, làm lệch dữ liệu món.
+     * Chặn lại; mọi thay đổi món đi qua update() -> ReservationItemService.
      */
     public function store(Request $request, $reservationId)
     {
-        $reservation = Reservation::findOrFail($reservationId);
-
-        $cartData   = [];
-        $totalPrice = 0;
-
-        foreach ($request->items ?? [] as $item) {
-            $menu = Menu::find($item['id']);    
-            if (!$menu) continue;
-
-            $qty         = (int) $item['quantity'];
-            $totalPrice += $menu->price * $qty;
-
-            $cartData[] = [
-                'id'       => $menu->id,
-                'name'     => $menu->name,
-                'price'    => $menu->price,
-                'quantity' => $qty,
-                'image'    => $menu->image,
-            ];
-        }
-
-        $reservation->update([
-            'cart_data'   => $cartData,
-            'total_price' => $totalPrice,
-            'notes'       => $request->notes ?? $reservation->notes,
-        ]);
-
-        return redirect()->route('staff.reservations.index')
-                         ->with('success', 'Đã lưu đơn thành công!');
+        return redirect()->route('staff.reservations.edit_items', $reservationId)
+            ->with('error', 'Chức năng này đã ngừng. Vui lòng dùng màn hình sửa món của đơn.');
     }
 
     /**
@@ -80,6 +53,9 @@ class StaffOrderController extends Controller
         }
 
         $reservation->update(['status' => 'serving']);
+
+        // Đánh dấu các món chưa gửi bếp là đã gửi (theo từng dòng)
+        app(ReservationItemService::class)->markSentToKitchen($reservation);
 
         return redirect()->route('staff.reservations.index')
                          ->with('success', 'Đã gửi bếp! Bếp sẽ bắt đầu chế biến.');
@@ -105,16 +81,17 @@ class StaffOrderController extends Controller
    /**
      * Cập nhật đơn món ăn (Staff gọi thêm món cho khách tại bàn)
      */
-    public function update(Request $request, $reservationId)
+    public function update(Request $request, $reservationId, ReservationItemService $items)
     {
         $request->validate([
             'items'            => 'required|array',
             'items.*.id'       => 'required|integer|exists:menus,id',
             'items.*.quantity' => 'required|integer|min:0|max:99',
+            'cancel_reason'    => 'nullable|string|max:255',
         ]);
 
         try {
-            DB::transaction(function () use ($request, $reservationId) {
+            DB::transaction(function () use ($request, $reservationId, $items) {
                 $reservation = Reservation::lockForUpdate()->findOrFail($reservationId);
 
                 // Không cho sửa món sau khi đã thanh toán / huỷ
@@ -122,98 +99,42 @@ class StaffOrderController extends Controller
                     throw new \DomainException('Đơn này không còn ở trạng thái có thể gọi thêm món.');
                 }
 
-                // Số lượng cũ lấy từ SERVER (không tin old_quantity do client gửi)
-                $oldCart = collect($reservation->cart_data ?? [])->keyBy(fn ($i) => (string) $i['id']);
-
+                // Số phần MONG MUỐN theo form (gộp nếu một món xuất hiện nhiều dòng)
                 $wanted = [];
                 foreach ($request->input('items') as $item) {
-                    $key = (string) $item['id'];
+                    $key = (int) $item['id'];
                     $wanted[$key] = ($wanted[$key] ?? 0) + (int) $item['quantity'];
                 }
-                // Món có trong đơn cũ mà không còn trong form => số lượng mới = 0
-                foreach ($oldCart->keys() as $key) {
-                    $wanted[$key] = $wanted[$key] ?? 0;
+
+                // Món đang có trong đơn mà không còn trong form => số phần mong muốn = 0.
+                // Lấy từ cả cart_data (đơn cũ chưa chuyển) lẫn reservation_items.
+                $oldIds = collect($reservation->cart_data ?? [])->pluck('id')->filter()
+                    ->merge(array_keys($items->activeQuantities($reservation)))
+                    ->map(fn ($id) => (int) $id)->unique();
+                foreach ($oldIds as $id) {
+                    $wanted[$id] = $wanted[$id] ?? 0;
                 }
 
-                $chefStatuses = is_array($reservation->chef_statuses) ? $reservation->chef_statuses : [];
-                $newCartData  = [];
-                $newTotal     = 0;
-                $extras       = [];   // [menu, số lượng gọi thêm]
-                $reductions   = [];   // [menu_id, số lượng giảm]
+                // Chỉ admin mới được hủy phần đã gửi bếp/đã nấu (và phải có lý do).
+                $canCancelCooked = (bool) auth()->user()?->isAdmin();
 
-                foreach ($wanted as $menuId => $newQty) {
-                    $menu = Menu::find($menuId);
+                $result = $items->setQuantities(
+                    $reservation, $wanted, auth()->id(), $canCancelCooked, $request->input('cancel_reason')
+                );
+
+                // Trừ số phần có thể bán (menus.stock) cho PHẦN GỌI THÊM, như trước đây.
+                // Không đủ thì ném lỗi => cả giao dịch (kể cả dòng vừa tạo) bị hủy.
+                foreach ($result['extras'] as $menuId => $qty) {
+                    $menu = Menu::whereKey($menuId)->lockForUpdate()->first();
                     if (!$menu) continue;
-
-                    $oldQty = (int) ($oldCart[$menuId]['quantity'] ?? 0);
-                    $diff   = $newQty - $oldQty;
-                    // Giữ nguyên đơn giá đã chốt cho món cũ; món mới lấy giá hiện tại
-                    $price  = isset($oldCart[$menuId]) ? $oldCart[$menuId]['price'] : $menu->price;
-
-                    if ($diff > 0) {
-                        if ($menu->stock < $diff) {
-                            throw new \DomainException("Món '{$menu->name}' hiện không đủ phần đáp ứng (Chỉ còn {$menu->stock} phần).");
-                        }
-                        $menu->decrement('stock', $diff);
-                        $chefStatuses[$menuId] = 'pending';   // bếp nhận diện món gọi thêm
-                        $extras[] = [$menu, $diff];
-                    } elseif ($diff < 0) {
-                        $reductions[] = [$menuId, -$diff];
+                    if ($menu->stock < $qty) {
+                        throw new \DomainException("Món '{$menu->name}' hiện không đủ phần đáp ứng (Chỉ còn {$menu->stock} phần).");
                     }
-
-                    if ($newQty > 0) {
-                        $newCartData[] = [
-                            'id'       => $menu->id,
-                            'name'     => $menu->name,
-                            'price'    => $price,
-                            'quantity' => $newQty,
-                            'image'    => $menu->image,
-                        ];
-                        $newTotal += $newQty * $price;
-                    } else {
-                        unset($chefStatuses[$menuId]);
-                    }
+                    $menu->decrement('stock', $qty);
                 }
 
-                $update = [
-                    'cart_data'     => $newCartData,
-                    'total_price'   => $newTotal,
-                    'chef_statuses' => $chefStatuses,
-                ];
-                // Có món gọi thêm => đưa đơn lại hàng đợi bếp (KDS)
-                if (!empty($extras)) {
-                    $update['status'] = 'arrived';
-                }
-                $reservation->update($update);
-
-                // Đồng bộ hoá đơn của khách (hiện ở /order-history)
-                if ($order = $reservation->linkedOrder()) {
-                    foreach ($extras as [$menu, $qty]) {
-                        OrderItem::create([
-                            'order_id'     => $order->id,
-                            'menu_id'      => $menu->id,
-                            'product_name' => $menu->name,
-                            'quantity'     => $qty,
-                            'price'        => $menu->price,
-                            'is_extra'     => true,           // đánh dấu "Gọi thêm tại bàn"
-                        ]);
-                    }
-
-                    foreach ($reductions as [$menuId, $qty]) {
-                        // giảm dần từ dòng gọi thêm mới nhất, rồi mới đến dòng đặt trước
-                        $rows = OrderItem::where('order_id', $order->id)->where('menu_id', $menuId)
-                            ->orderByDesc('is_extra')->orderByDesc('id')->get();
-                        foreach ($rows as $row) {
-                            if ($qty <= 0) break;
-                            $take = min($row->quantity, $qty);
-                            $row->quantity -= $take;
-                            $qty -= $take;
-                            $row->quantity > 0 ? $row->save() : $row->delete();
-                        }
-                    }
-
-                    $order->update(['total_price' => $newTotal]);
-                }
+                // Không đổi trạng thái đơn khi gọi thêm: bếp tự thấy các dòng món "chờ nấu"
+                // (kể cả khi đơn đã ready/served), nên không còn ép đơn về 'arrived'.
             });
         } catch (\DomainException $e) {
             return redirect()->back()->with('error', $e->getMessage());

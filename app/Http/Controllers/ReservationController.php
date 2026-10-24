@@ -103,16 +103,11 @@ $depositAmount = Reservation::calcDeposit($totalAmount);
             $reservation->cart_data          = $cartData;
             $reservation->save();
 
-            foreach ($cartData as $item) {
-                \App\Models\OrderItem::create([
-                    'reservation_id' => $reservation->id,
-                    'order_id'       => null,
-                    'menu_id'        => $item['id'],
-                    'product_name'   => $item['name'],
-                    'quantity'       => $item['quantity'],
-                    'price'          => $item['price'],
-                ]);
-            }
+            // Mỗi món là một dòng reservation_items (lần gọi đầu tiên của khách).
+            // cart_data / order_items được service sinh lại từ các dòng này.
+            app(\App\Services\ReservationItemService::class)->addLines(
+                $reservation, $cartData, \App\Models\ReservationItem::SOURCE_CUSTOMER_PREORDER, auth()->id()
+            );
 
             return $reservation;
         });
@@ -246,17 +241,13 @@ $depositAmount = Reservation::calcDeposit($totalAmount);
                     throw new \DomainException('Khách chưa xác nhận đã chuyển khoản tiền cọc.');
                 }
 
-                $chefStatuses = is_array($reservation->chef_statuses) ? $reservation->chef_statuses : [];
+                $itemService = app(\App\Services\ReservationItemService::class);
 
-                foreach (($reservation->cart_data ?? []) as $item) {
-                    $itemId = $item['id'] ?? null;
-                    if (!$itemId) continue;
-
-                    if ($newStatus === 'serving' && ($chefStatuses[$itemId] ?? 'pending') === 'pending') {
-                        $chefStatuses[$itemId] = 'pending';          // chờ bếp nhận (bếp bấm "đang nấu")
-                    } elseif (in_array($newStatus, ['ready', 'served'], true)) {
-                        $chefStatuses[$itemId] = 'done';
-                    }
+                // Báo "đã lên món" khi bếp CHƯA nấu xong các món => chặn (admin được phép xử lý thủ công)
+                if ($newStatus === 'served'
+                    && !auth()->user()?->isAdmin()
+                    && $itemService->hasUnfinished($reservation)) {
+                    throw new \DomainException('Còn món chưa nấu xong, chưa thể báo đã lên món. Vui lòng chờ bếp hoàn tất.');
                 }
 
                 // Admin/staff duyệt cọc hoặc xác nhận đơn => chắc chắn bàn phải được giữ
@@ -270,9 +261,19 @@ $depositAmount = Reservation::calcDeposit($totalAmount);
                     $sendDepositMail = true;
                 }
 
-                $reservation->status        = $newStatus;
-                $reservation->chef_statuses = $chefStatuses;
+                $reservation->status = $newStatus;
                 $reservation->save();
+
+                // Trạng thái bếp theo TỪNG DÒNG món (không còn gán chung theo menu_id).
+                // Service tự sinh lại cart_data/chef_statuses cho các màn hình cũ.
+                if ($newStatus === 'serving') {
+                    $itemService->markSentToKitchen($reservation);
+                } elseif ($newStatus === 'ready') {
+                    $itemService->finishAll($reservation);
+                } elseif ($newStatus === 'served') {
+                    $itemService->finishAll($reservation);
+                    $itemService->serveAll($reservation);
+                }
 
                 // Đồng bộ hoá đơn liên kết (nếu có)
                 if ($order = $reservation->linkedOrder()) {
@@ -328,6 +329,11 @@ $depositAmount = Reservation::calcDeposit($totalAmount);
             ->with('error', 'Chỉ thanh toán được khi bàn đã lên món xong.');
     }
 
+    if (app(\App\Services\ReservationItemService::class)->hasUnfinished($reservation)) {
+        return redirect()->route('staff.reservations.index')
+            ->with('error', 'Còn món gọi thêm chưa nấu xong, chưa thể thanh toán.');
+    }
+
     $total = (int) $reservation->total_price;
     $due   = max(0, $total - min((int) ($reservation->deposit_amount ?? 0), $total));
 
@@ -355,6 +361,11 @@ $depositAmount = Reservation::calcDeposit($totalAmount);
 
                 if ($reservation->status !== 'served') {
                     throw new \DomainException('Chỉ thanh toán được khi bàn đã lên món xong (trạng thái "Đã lên món").');
+                }
+
+                // Có món gọi thêm sau khi đã lên món mà bếp chưa nấu xong => chưa thanh toán
+                if (app(\App\Services\ReservationItemService::class)->hasUnfinished($reservation)) {
+                    throw new \DomainException('Còn món gọi thêm chưa nấu xong, chưa thể thanh toán.');
                 }
 
                 $total   = (int) $reservation->total_price;
@@ -474,6 +485,12 @@ return redirect()->route($billRoute, $id)
                 $tableStatus = $isWalkIn ? 'occupied' : 'reserved';
                 Table::whereKey($request->table_id)->update(['status' => $tableStatus]);
 
+                // Món do nhân viên nhập: mỗi món một dòng reservation_items (bỏ món số lượng 0)
+                $staffLines = array_values(array_filter($cartData, fn ($c) => (int) $c['quantity'] > 0));
+                app(\App\Services\ReservationItemService::class)->addLines(
+                    $reservation, $staffLines, \App\Models\ReservationItem::SOURCE_STAFF_WALKIN, auth()->id()
+                );
+
                 if ($isWalkIn && count($cartData) > 0) {
                     $order = \App\Models\Order::create([
                         'user_id'        => auth()->id(),
@@ -483,15 +500,8 @@ return redirect()->route($billRoute, $id)
                         'status'         => 'pending',
                     ]);
 
-                    foreach ($cartData as $item) {
-                        \App\Models\OrderItem::create([
-                            'order_id'     => $order->id,
-                            'menu_id'      => $item['id'],
-                            'product_name' => $item['name'],
-                            'quantity'     => $item['quantity'],
-                            'price'        => $item['price'],
-                        ]);
-                    }
+                    // order_items của hóa đơn được sinh từ reservation_items
+                    app(\App\Services\ReservationItemService::class)->syncCaches($reservation);
                 }
             });
         } catch (\DomainException $e) {

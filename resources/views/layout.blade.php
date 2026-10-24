@@ -12,7 +12,7 @@
                 <div class="fill" style="background-image:url('{{ asset('images/steak.jpg') }}');"></div>
             </div>
             <div class="item">
-                <div class="fill" style="background-image:url('{{ asset('images/bannersl.jpg') }}');"></div>
+                <div class="fill" style="background-image:url('{{ asset('images/salad.jpg') }}');"></div>
             </div>
             <div class="item">
                 <div class="fill" style="background-image:url('{{ asset('images/breakfast.jpg') }}');"></div>

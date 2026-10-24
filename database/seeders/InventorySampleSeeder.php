@@ -82,6 +82,15 @@ class InventorySampleSeeder extends Seeder
             ['Rau củ tươi',            'Rau củ & trái cây', 'kg', 10, 4,   40000],
             ['Trái cây theo mùa',      'Rau củ & trái cây', 'kg', 10, 4,   60000],
             ['Dâu Hokkaido',           'Rau củ & trái cây', 'kg', 3,  1,   350000],
+            ['Cà chua', 'Rau củ & trái cây', 'kg', 5, 2, 35000],
+            ['Dưa leo', 'Rau củ & trái cây', 'kg', 5, 2, 30000],
+            ['Giá đỗ', 'Rau củ & trái cây', 'kg', 3, 1, 20000],
+            ['Rau sống', 'Rau củ & trái cây', 'kg', 5, 2, 40000],
+            ['Rau thơm', 'Rau củ & trái cây', 'kg', 2, 0.5, 50000],
+            ['Thịt heo tươi', 'Thịt & gia cầm', 'kg', 8, 3, 150000],
+            ['Thịt bò tươi', 'Thịt & gia cầm', 'kg', 5, 2, 280000],
+            ['Đậu phộng', 'Gia vị & phụ liệu', 'kg', 2, 0.5, 60000],
+            ['Nấm mèo', 'Rau củ & trái cây', 'kg', 2, 0.5, 120000],
 
             // Tinh bột
             ['Bánh phở',                 'Tinh bột', 'kg',  8,  3,   35000],
@@ -100,6 +109,13 @@ class InventorySampleSeeder extends Seeder
             ['Nước mắm',           'Gia vị & phụ liệu', 'lít', 10, 3,   60000],
             ['Dầu ăn',             'Gia vị & phụ liệu', 'lít', 20, 6,   45000],
             ['Đường',              'Gia vị & phụ liệu', 'kg',  10, 3,   22000],
+            ['Sả', 'Gia vị & phụ liệu', 'kg', 5, 1, 30000],
+            ['Gừng', 'Gia vị & phụ liệu', 'kg', 3, 1, 50000],
+            ['Muối', 'Gia vị & phụ liệu', 'kg', 5, 1, 15000],
+            ['Hành tím', 'Gia vị & phụ liệu', 'kg', 3, 1, 40000],
+            ['Lá chanh', 'Gia vị & phụ liệu', 'kg', 1, 0.2, 80000],
+            ['Tiêu', 'Gia vị & phụ liệu', 'kg', 1, 0.2, 180000],
+            ['Lá é', 'Rau củ & trái cây', 'kg', 1, 0.2, 60000],
 
             // Nguyên liệu tráng miệng
             ['Trứng gà',            'Nguyên liệu tráng miệng', 'quả', 150, 50,  3500],
@@ -109,12 +125,32 @@ class InventorySampleSeeder extends Seeder
             ['Mascarpone',          'Nguyên liệu tráng miệng', 'kg',  3,   1,   300000],
             ['Bột matcha',          'Nguyên liệu tráng miệng', 'kg',  0.3, 0.3, 900000], // sắp hết (chạm mức tối thiểu)
             ['Cà phê',              'Nguyên liệu tráng miệng', 'kg',  3,   1,   250000],
+            ['Miến khô', 'Tinh bột', 'kg', 3, 1, 80000],
+            ['Bột năng', 'Tinh bột', 'kg', 3, 1, 30000],
+            ['Bột chiên', 'Tinh bột', 'kg', 3, 1, 45000],
+            ['Gelatin', 'Nguyên liệu tráng miệng', 'kg', 1, 0.2, 350000],
+            ['Vani', 'Nguyên liệu tráng miệng', 'chai', 5, 2, 25000],
+            ['Bột cacao', 'Nguyên liệu tráng miệng', 'kg', 1, 0.3, 180000],
+            ['Hạnh nhân', 'Nguyên liệu tráng miệng', 'kg', 2, 0.5, 250000],
+            ['Bánh bông lan', 'Nguyên liệu tráng miệng', 'cái', 10, 3, 50000],
+            ['Bánh ladyfinger', 'Nguyên liệu tráng miệng', 'gói', 10, 3, 60000],
+            ['Caramel', 'Nguyên liệu tráng miệng', 'kg', 2, 0.5, 60000],
 
             // Đồ uống
             ['Whisky', 'Đồ uống', 'chai', 6,  2,   650000],
             ['Gin',    'Đồ uống', 'chai', 5,  2,   550000],
             ['Soda',   'Đồ uống', 'lon',  48, 12,  9000],
             ['Chanh',  'Đồ uống', 'kg',   4,  1.5, 40000],
+             ['Sốt salad', 'Gia vị & phụ liệu', 'chai', 10, 3, 50000],
+            ['Nước chấm', 'Gia vị & phụ liệu', 'chai', 10, 3, 30000],
+            ['Nước sốt trái cây', 'Nguyên liệu tráng miệng', 'chai', 10, 3, 45000],
+            ['Nước ép dứa', 'Đồ uống', 'lít', 5, 2, 40000],
+            ['Nước ép cam', 'Đồ uống', 'lít', 5, 2, 50000],
+            ['Nước ép táo', 'Đồ uống', 'lít', 5, 2, 60000],
+            ['Siro lựu', 'Đồ uống', 'chai', 5, 2, 80000],
+            ['Siro đường', 'Đồ uống', 'chai', 5, 2, 30000],
+            ['Trà đen', 'Đồ uống', 'kg', 2, 0.5, 180000],
+            ['Nước cốt chanh', 'Đồ uống', 'lít', 3, 1, 50000],
         ];
 
         foreach ($rows as [$name, $category, $unit, $stock, $min, $price]) {

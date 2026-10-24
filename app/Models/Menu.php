@@ -17,6 +17,12 @@ class Menu extends Model
     {
         return $this->hasMany(OrderItem::class);
     }
+
+    /** Công thức định lượng của món (nếu đã có). */
+    public function recipe()
+    {
+        return $this->hasOne(Recipe::class);
+    }
     public function comments()
 {
     return $this->hasMany(Comment::class)->where('status', 1)->orderBy('created_at', 'desc');

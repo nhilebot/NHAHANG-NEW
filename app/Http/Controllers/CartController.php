@@ -359,26 +359,25 @@ $tableId = $latestReservation->table_id;
         // Staff/bếp đọc món từ reservations.cart_data, còn hóa đơn đọc order_items.
         // Cập nhật cả hai từ cùng snapshot để không lệch với giỏ khách vừa chốt.
         if ($latestReservation) {
-            $reservationUpdate = [
-                'cart_data' => $cartData,
-                'total_price' => $totalAmount,
-            ];
-            $reservationUpdate['deposit_amount'] = Reservation::calcDeposit($totalAmount);
-            $latestReservation->update($reservationUpdate);
-            $latestReservation->chef_statuses = array_fill_keys(array_column($cartData, 'id'), 'pending');
-            $latestReservation->save();
+            $itemService = app(\App\Services\ReservationItemService::class);
 
-            \App\Models\OrderItem::where('reservation_id', $latestReservation->id)->delete();
-            foreach ($cartData as $item) {
-                \App\Models\OrderItem::create([
-                    'reservation_id' => $latestReservation->id,
-                    'order_id'       => null,
-                    'menu_id'        => $item['id'],
-                    'quantity'       => $item['quantity'],
-                    'price'          => $item['price'],
-                    'product_name'   => $item['name'],
-                ]);
+            $wanted = [];
+            foreach ($cartData as $c) {
+                $wanted[(int) $c['id']] = ($wanted[(int) $c['id']] ?? 0) + (int) $c['quantity'];
             }
+
+            // Đồng bộ các dòng món theo giỏ vừa chốt: chỉ ghi phần chênh, không xóa dòng nào.
+            // cart_data / total_price / chef_statuses / order_items được service sinh lại từ các dòng này.
+            try {
+                $itemService->syncCustomerCart($latestReservation, $wanted, $userId);
+            } catch (\DomainException $e) {
+                return redirect()->back()->with('error', $e->getMessage());
+            }
+
+            $latestReservation->refresh();
+            $latestReservation->update([
+                'deposit_amount' => Reservation::calcDeposit($itemService->total($latestReservation)),
+            ]);
         }
 
 // 6-8. Chỉ tạo Order khi khách có đặt món trước.
@@ -400,17 +399,12 @@ if ($cartItems->isNotEmpty()) {
     ]);
 
     foreach ($cartItems as $item) {
-        \App\Models\OrderItem::create([
-            'order_id'     => $order->id,
-            'menu_id'      => $item->menu_id,
-            'quantity'     => $item->quantity,
-            'price'        => $item->menu->price,
-            'product_name' => $item->menu->name,
-        ]);
-
         // Trừ tồn kho món đã đặt
         $item->menu->decrement('stock', $item->quantity);
     }
+
+    // order_items của hóa đơn được sinh từ reservation_items (không tự tạo/xóa tay nữa)
+    app(\App\Services\ReservationItemService::class)->syncCaches($latestReservation);
 }
 
 // 9. Thông báo cho khách (mail xác nhận chỉ gửi sau khi staff duyệt cọc)
@@ -529,55 +523,26 @@ public function history()
     ->first();
         
         if ($reservation) {
-            // Cập nhật lại mảng JSON và tổng tiền
-            $payload = [
-    'cart_data'   => $cartData,
-    'total_price' => $totalPrice,
-];
-// Đơn chưa cọc: tiền cọc luôn = 20% tổng mới
-if ($reservation->status === 'pending_deposit') {
-    $payload['deposit_amount'] = Reservation::calcDeposit($totalPrice);
-}
-$reservation->update($payload);
+            $itemService = app(\App\Services\ReservationItemService::class);
 
-            // =======================================================
-            // 🔥 ĐOẠN FIX QUAN TRỌNG: ĐỒNG BỘ VÀO BẢNG ORDER_ITEMS 
-            // =======================================================
-            // Bước A: Xóa sạch toàn bộ chi tiết món cũ của cái hóa đơn này đi
-            \App\Models\OrderItem::where('reservation_id', $reservation->id)->delete();
-
-            // Bước B: Dựa vào giỏ hàng mới nhất, tạo lại các món ăn (nếu giỏ hàng đã bị xóa trống thì vòng lặp này bỏ qua)
+            $wanted = [];
             foreach ($cartData as $cd) {
-                \App\Models\OrderItem::create([
-                    'reservation_id' => $reservation->id,
-                    'order_id'       => null,
-                    'menu_id'        => $cd['id'],
-                    'quantity'       => $cd['quantity'],
-                    'price'          => $cd['price'],
-                    'product_name'   => $cd['name']
-                ]);
+                $wanted[(int) $cd['id']] = ($wanted[(int) $cd['id']] ?? 0) + (int) $cd['quantity'];
             }
-            // =======================================================
 
-            // 3. Cập nhật Hóa đơn (Orders) — chỉ khi đơn còn ở bước đầu và chưa có món gọi thêm tại bàn
-            $order = $reservation->linkedOrder();
-
-            if ($order
-                && in_array($order->status, ['pending_payment', 'pending'], true)
-                && !$order->items()->where('is_extra', true)->exists()) {
-                $order->update(['total_price' => $totalPrice]);
-                \App\Models\OrderItem::where('order_id', $order->id)->delete();
-                foreach ($cartData as $cd) {
-                    \App\Models\OrderItem::create([
-                        'order_id'       => $order->id,
-                        'reservation_id' => null,
-                        'menu_id'        => $cd['id'],
-                        'quantity'       => $cd['quantity'],
-                        'price'          => $cd['price'],
-                        'product_name'   => $cd['name']
-                    ]);
-                }
+            // Chỉ ghi nhận phần chênh của giỏ (không còn "xóa sạch rồi tạo lại" order_items).
+            try {
+                $itemService->syncCustomerCart($reservation, $wanted, $userId);
+            } catch (\DomainException $e) {
+                report($e);
+                return;
             }
+
+            // Đơn chưa cọc: tiền cọc luôn tính lại theo tổng mới
+            $reservation->refresh();
+            $reservation->update([
+                'deposit_amount' => Reservation::calcDeposit($itemService->total($reservation)),
+            ]);
         }
     }
 }

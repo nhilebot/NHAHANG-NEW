@@ -69,10 +69,12 @@
 
     @forelse($pendingOrders as $reservation)
     @php
-        $statuses  = $reservation->chef_statuses ?? [];
-        $cartItems = $reservation->cart_data ?? [];
-        $isCooking = $reservation->status === 'serving';
-        $tableName = $reservation->table->name ?? ('Bàn ' . $reservation->table_id);
+        // Mỗi LẦN GỌI MÓN là một dòng riêng (reservation_items), không gộp theo tên món
+        $lines      = $reservation->reservationItems->where('status', '!=', 'served');
+        $hasPending = $lines->where('status', 'pending')->isNotEmpty();
+        $isCooking  = $reservation->status === 'serving';
+        $isExtraOnly = in_array($reservation->status, ['ready', 'served'], true);
+        $tableName  = $reservation->table->name ?? ('Bàn ' . $reservation->table_id);
     @endphp
 
     <div class="kds-card">
@@ -85,7 +87,7 @@
                     {{ $reservation->full_name }}
                 </span>
                 <span style="font-size:.8rem; background:rgba(0,0,0,.2); padding:2px 8px; border-radius:10px;">
-                    {{ $isCooking ? '🔥 Đang nấu' : '🆕 Đơn mới' }}
+                    {{ $isExtraOnly ? '➕ Gọi thêm' : ($isCooking ? '🔥 Đang nấu' : '🆕 Đơn mới') }}
                 </span>
             </div>
              @if(!empty($reservation->notes))
@@ -98,16 +100,16 @@
 
         {{-- DANH SÁCH MÓN --}}
         <div class="kds-body">
-            @forelse($cartItems as $item)
-            @php
-                $menuId    = $item['id'];
-                $itemSt    = $statuses[$menuId] ?? 'pending';
-            @endphp
+            @forelse($lines as $line)
+            @php $itemSt = $line->status; @endphp
             <div class="kds-item">
                 <div class="item-info">
-                    <span class="item-qty">{{ $item['quantity'] }}</span>
+                    <span class="item-qty">{{ $line->active_quantity }}</span>
                     <span class="item-name {{ $itemSt === 'done' ? 'item-done' : '' }}">
-                        {{ $item['name'] }}
+                        {{ $line->menu_name }}
+                        @if($line->source === 'staff_extra')
+                            <span class="badge-item" style="background:#e0e7ff; color:#3730a3;">➕ Gọi thêm (lần {{ $line->batch }})</span>
+                        @endif
                     </span>
                 </div>
                 <div class="d-flex align-items-center gap-1">
@@ -116,9 +118,9 @@
     {{ \App\Helpers\StatusHelper::getTextWithEmoji($itemSt) }}
 </span>
 
-                    {{-- Nút đổi trạng thái từng món --}}
+                    {{-- Nút đổi trạng thái đúng lần gọi món này --}}
                     @if($itemSt !== 'done')
-                    <form action="{{ route('chef.item.status', [$reservation->id, $menuId]) }}" method="POST">
+                    <form action="{{ route('chef.item.line_status', $line->id) }}" method="POST">
                         @csrf
                         @if($itemSt === 'pending')
                             <button name="chef_status" value="cooking"
@@ -138,7 +140,7 @@
 
         {{-- FOOTER NÚT BẤM --}}
         <div class="kds-footer">
-            @if($reservation->status === 'arrived')
+            @if($hasPending)
             <form action="{{ route('chef.order.start', $reservation->id) }}" method="POST" class="w-100">
                 @csrf
                 <button class="btn-kds w-100" style="background:#fbbf24; color:#fff;">▶ Bắt đầu nấu tất cả</button>

@@ -551,8 +551,12 @@
           </a>
           <div class="sub-menu" id="inventory-sub" style="display:{{ Request::routeIs('admin.inventory.*') ? 'flex':'none' }}">
             <a class="sub-item {{ Request::routeIs('admin.inventory.ingredients.*') ? 'active':'' }}" href="{{ route('admin.inventory.ingredients.index') }}">Nguyên liệu</a>
+            <a class="sub-item {{ Request::routeIs('admin.inventory.recipes.*') ? 'active':'' }}" href="{{ route('admin.inventory.recipes.index') }}">Công thức món</a>
             <a class="sub-item {{ Request::routeIs('admin.inventory.categories.*') ? 'active':'' }}" href="{{ route('admin.inventory.categories.index') }}">Nhóm nguyên liệu</a>
             <a class="sub-item {{ Request::routeIs('admin.inventory.suppliers.*') ? 'active':'' }}" href="{{ route('admin.inventory.suppliers.index') }}">Nhà cung cấp</a>
+             <a class="sub-item {{ Request::routeIs('admin.inventory.receipts.*') ? 'active':'' }}" href="{{ route('admin.inventory.receipts.index') }}">Phiếu nhập kho</a>
+  <a class="sub-item {{ Request::routeIs('admin.inventory.issues.*') ? 'active':'' }}" href="{{ route('admin.inventory.issues.index') }}">Phiếu xuất kho</a>
+  <a class="sub-item {{ Request::routeIs('admin.inventory.movements.*') ? 'active':'' }}" href="{{ route('admin.inventory.movements.index') }}">Sổ kho</a>
           </div>
         </div>
         <div class="sidebar-section-label">Thanh toán</div>

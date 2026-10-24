@@ -86,4 +86,8 @@ class Ingredient extends Model
 
         return rtrim(rtrim($s, '0'), ',');
     }
+    public function movements()
+{
+    return $this->hasMany(\App\Models\StockMovement::class)->latest('id');
+}
 }

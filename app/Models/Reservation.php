@@ -128,6 +128,11 @@ public static function calcDeposit(int $total): int
     // Nó sẽ chỉ lấy những món ăn có gắn ID của đúng hóa đơn này
     return $this->hasMany(\App\Models\OrderItem::class, 'reservation_id', 'id');
 }
+/** Các lần gọi món (nguồn dữ liệu chính). Khác với orderItems() là bảng hóa đơn cũ. */
+public function reservationItems()
+{
+    return $this->hasMany(\App\Models\ReservationItem::class)->orderBy('batch')->orderBy('id');
+}
 public function order()
 {
     // Reservation nối với Order qua user_id và table_id (hoặc reservation_id nếu có)
@@ -144,4 +149,4 @@ public function user()
         // 'table_id' là tên cột khóa ngoại trong bảng reservations nối với bảng tables
         return $this->belongsTo(\App\Models\Table::class, 'table_id');
     }
-}   
+}

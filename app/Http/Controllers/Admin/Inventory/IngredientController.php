@@ -62,11 +62,11 @@ class IngredientController extends Controller
     }
 
     public function show(Ingredient $ingredient)
-    {
-        $ingredient->load('category');
-
-        return view('admin.inventory.ingredients.show', compact('ingredient'));
-    }
+{
+    $ingredient->load('category');
+    $movements = $ingredient->movements()->with(['user', 'reference'])->limit(15)->get();
+    return view('admin.inventory.ingredients.show', compact('ingredient', 'movements'));
+}
 
     public function edit(Ingredient $ingredient)
     {
@@ -81,6 +81,15 @@ class IngredientController extends Controller
     {
         $data = $this->validated($request, $ingredient);
         $data['code'] = $data['code'] ?: $ingredient->code;
+
+        // Đổi đơn vị kho không được làm công thức đang dùng nguyên liệu này bị sai đơn vị
+        if (\App\Services\UnitConverter::normalize($data['unit']) !== \App\Services\UnitConverter::normalize($ingredient->unit)) {
+            $bad = \App\Models\RecipeItem::where('ingredient_id', $ingredient->id)->pluck('unit')
+                ->filter(fn ($u) => !\App\Services\UnitConverter::compatible($u, $data['unit']))->isNotEmpty();
+            if ($bad) {
+                return back()->withInput()->withErrors(['unit' => 'Có công thức món đang dùng nguyên liệu này theo đơn vị không tương thích với "' . $data['unit'] . '". Hãy sửa công thức trước.']);
+            }
+        }
 
         $ingredient->update($data);
 
