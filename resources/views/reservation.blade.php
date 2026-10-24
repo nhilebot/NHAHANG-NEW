@@ -421,6 +421,33 @@
 @endsection
 
 @section('scripts')
+@if ($errors->any())
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        Swal.fire({
+            icon: 'error',
+            title: 'Không thể đặt bàn',
+            text: @json($errors->first()),
+            confirmButtonText: 'Tôi đã hiểu',
+            confirmButtonColor: '#1A2228'
+        });
+    });
+</script>
+@endif
+
+@if (session('error'))
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        Swal.fire({
+            icon: 'error',
+            title: 'Không thể đặt bàn',
+            text: @json(session('error')),
+            confirmButtonText: 'Tôi đã hiểu',
+            confirmButtonColor: '#1A2228'
+        });
+    });
+</script>
+@endif
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         const menuItems = @json($menus ?? []);
@@ -732,16 +759,16 @@
                 console.log('Hidden inputs:', $('#hidden-inputs-container').html());
 
                 Swal.fire({
-                    icon: 'success',
-                    title: 'Đặt Bàn Thành Công!',
-                    text: 'Yêu cầu của quý khách đã được ghi nhận. Nhà hàng đang chuẩn bị chu đáo nhất...',
-                    showConfirmButton: false,
-                    timer: 2000,
-                    timerProgressBar: true,
-                    iconColor: '#D4AF37'
-                }).then(() => {
-                    form.submit();
-                });
+    icon: 'success',
+    title: 'Đặt Bàn Thành Công!',
+    text: 'Yêu cầu của quý khách đã được ghi nhận. Nhà hàng đang chuẩn bị chu đáo nhất...',
+    showConfirmButton: false,
+    timer: 2000,
+    timerProgressBar: true,
+    iconColor: '#D4AF37'
+}).then(() => {
+    form.submit();
+});
             });
         });
     </script>

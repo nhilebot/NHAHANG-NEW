@@ -58,6 +58,65 @@ public function store(Request $request)
         'reservation_time' => 'required',
         'table_id'         => 'required|integer|exists:tables,id',
     ]);
+    
+    
+$time = $request->input('reservation_time');
+
+// Bước 1: Kiểm tra định dạng giờ và khung giờ nhà hàng.
+if (
+    !is_string($time) ||
+    !preg_match('/^(?:[01]\d|2[0-3]):[0-5]\d$/', $time) ||
+    $time < '06:00' ||
+    $time > '22:00'
+) {
+    return back()
+        ->withInput()
+        ->withErrors([
+            'reservation_time' => 'Nhà hàng chỉ nhận đặt bàn từ 06:00 đến 22:00.',
+        ]);
+}
+
+// Bước 2: Kiểm tra ngày giờ đặt bàn theo giờ Việt Nam.
+try {
+    $reservationDateTime = \Carbon\Carbon::createFromFormat(
+        '!Y-m-d H:i',
+        $request->input('reservation_date') . ' ' . $time,
+        'Asia/Ho_Chi_Minh'
+    );
+} catch (\Throwable $e) {
+    return back()
+        ->withInput()
+        ->withErrors([
+            'reservation_time' => 'Ngày hoặc giờ đặt bàn không hợp lệ.',
+        ]);
+}
+
+// Bước 3: Không cho đặt vào thời điểm đã qua hoặc đúng thời điểm hiện tại.
+if (
+    !$reservationDateTime ||
+    $reservationDateTime->lessThanOrEqualTo(now('Asia/Ho_Chi_Minh'))
+) {
+    return back()
+        ->withInput()
+        ->withErrors([
+            'reservation_time' => 'Giờ đặt bàn đã qua. Vui lòng chọn thời điểm trong tương lai.',
+        ]);
+}
+
+
+    if (
+        !is_string($time) ||
+        !preg_match('/^(?:[01]\d|2[0-3]):[0-5]\d$/', $time) ||
+        $time < '06:00' ||
+        $time > '22:00'
+    ) {
+        return back()
+            ->withInput()
+            ->withErrors([
+                'reservation_time' => 'Nhà hàng chỉ nhận đặt bàn từ 06:00 đến 22:00.',
+            ]);
+    }
+
 
     $dbCart     = Cart::with('menu')->where('user_id', auth()->id())->get();
     $cartData   = [];
@@ -437,6 +496,24 @@ return redirect()->route($billRoute, $id)
         }
 
         $request->validate($rules);
+        $selectedDate = $request->input('reservation_date');
+$selectedTime = $request->input('reservation_time');
+
+$now = now('Asia/Ho_Chi_Minh');
+$today = $now->toDateString();
+$currentTime = $now->format('H:i');
+
+if ($selectedDate < $today) {
+    return back()->withInput()->withErrors([
+        'reservation_date' => 'Ngày đặt bàn đã qua. Vui lòng chọn ngày khác.',
+    ]);
+}
+
+if ($selectedDate === $today && $selectedTime <= $currentTime) {
+    return back()->withInput()->withErrors([
+        'reservation_time' => 'Giờ đặt bàn đã qua. Vui lòng chọn giờ khác.',
+    ]);
+}
 
         // 3. Xử lý mảng món ăn nhân viên gọi trực tiếp từ form
         $cartData = [];
