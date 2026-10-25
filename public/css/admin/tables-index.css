@@ -1,0 +1,67 @@
+/* ==========================================================================
+   css/admin/tables-index.css
+   Tách nguyên văn từ views/admin/tables/index.blade.php
+   (chỉ chuyển vị trí, không đổi nội dung quy tắc)
+   ========================================================================== */
+
+/* Container bao quanh phân trang */
+.pagination-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+    padding: 20px 0;
+}
+
+.pagination-wrapper nav {
+    display: flex;
+    gap: 5px;
+}
+
+.pagination-wrapper .pagination {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    gap: 8px;
+}
+
+/* Style cho các nút số */
+.pagination-wrapper .page-item .page-link {
+    color: #1A2228;
+    background-color: #fff;
+    border: 1px solid #E5E7EB;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    font-size: 14px;
+}
+
+/* Khi di chuột qua nút (Hover) */
+.pagination-wrapper .page-item .page-link:hover {
+    background-color: #1A2228;
+    color: #D4AF37;
+    border-color: #1A2228;
+    transform: translateY(-2px);
+}
+
+/* Nút đang được chọn (Active) */
+.pagination-wrapper .page-item.active .page-link {
+    background-color: #D4AF37;
+    color: #fff;
+    border-color: #D4AF37;
+    box-shadow: 0 4px 10px rgba(212, 175, 55, 0.3);
+}
+
+/* Nút bị vô hiệu hóa (Disabled) */
+.pagination-wrapper .page-item.disabled .page-link {
+    color: #9CA3AF;
+    background-color: #F3F4F6;
+    border-color: #E5E7EB;
+    cursor: not-allowed;
+}
+
+/* Ẩn bớt các text thừa của Laravel */
+.pagination-wrapper nav div:first-child {
+    display: none !important;
+}

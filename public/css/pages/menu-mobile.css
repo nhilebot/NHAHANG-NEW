@@ -1,0 +1,249 @@
+/* ==========================================================================
+   css/pages/menu-mobile.css
+   Thiết kế lại trang THỰC ĐƠN cho ĐIỆN THOẠI (<= 767px)
+   Dùng chung cho: menu, seafood, special, salad, vietnamese, desserts, drinks.
+   Chỉ nằm trong @media max-width -> Desktop / iPad (>= 768px) giữ nguyên.
+   Nạp SAU css riêng của từng trang để ghi đè (cùng độ ưu tiên, nạp sau thắng).
+   ========================================================================== */
+
+@media (max-width: 767px) {
+
+    /* ---------- 1. BANNER ĐẦU TRANG ----------
+       Banner đã được đẩy xuống dưới navbar (responsive.css: margin-top 64px).
+       Phải có "body" phía trước để thắng rule `body .menu-banner` của responsive.css. */
+    body .menu-banner { height: 230px; aspect-ratio: auto; }
+    body .menu-banner .banner-img { height: 100%; }
+    body .banner-overlay {
+        box-sizing: border-box;
+        padding: 0 24px;
+        background: linear-gradient(180deg, rgba(0,0,0,.28) 0%, rgba(0,0,0,.55) 100%);
+        text-align: center;
+    }
+    body .banner-overlay .section-title {
+        font-size: 30px !important;
+        line-height: 1.2;
+        margin: 0;
+    }
+    body .banner-overlay .section-subtitle {
+        font-size: 13px;
+        line-height: 1.5;
+        margin: 8px auto 0;
+        padding: 0;
+        max-width: 92%;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    /* Hai lớp .container lồng nhau làm lề bị cộng đôi (20px + 20px) -> bỏ lớp trong */
+    .menu-banner + .container { padding-left: 0; padding-right: 0; }
+
+    /* ---------- 2. Ô TÌM KIẾM (trang /menu) ----------
+       Dùng ".input-group.search-box" để thắng rule cùng tên trong responsive.css
+       (rule cũ xếp ô nhập và nút thành 2 hàng). */
+    .input-group.search-box {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        align-items: stretch;
+        gap: 0;
+        position: relative;
+        z-index: 3;
+        margin: -26px 0 14px;
+        padding: 0;
+        border-radius: 999px;
+        border: 1px solid #ece7da;
+        box-shadow: 0 8px 22px rgba(26, 34, 40, .14);
+        overflow: hidden;
+    }
+    .input-group.search-box .form-control {
+        flex: 1 1 auto;
+        float: none;
+        width: 1%;
+        min-width: 0;
+        height: 52px;
+        min-height: 52px;
+        padding-left: 20px;
+        font-size: 15px !important;
+        border-radius: 999px 0 0 999px;
+    }
+    .input-group.search-box .input-group-btn {
+        display: flex;
+        flex: 0 0 auto;
+        width: auto;
+    }
+    .input-group.search-box .btn-search {
+        flex: 0 0 58px;
+        width: 58px;
+        height: 52px;
+        min-height: 52px;
+        padding: 0;
+        font-size: 0;                 /* ẩn chữ "Tìm ngay", chỉ giữ icon kính lúp */
+        border-radius: 0 999px 999px 0;
+        background-color: #1A2228;
+    }
+    .input-group.search-box .btn-search i { font-size: 18px; }
+
+    /* ---------- 3. DANH MỤC: THANH CHIP CUỘN NGANG ---------- */
+    .category-nav {
+        display: flex;
+        flex-wrap: nowrap;
+        gap: 8px;
+        margin: 14px -20px 6px;
+        padding: 6px 20px 10px;
+        text-align: left;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scroll-snap-type: x proximity;
+        scrollbar-width: none;
+        -webkit-mask-image: linear-gradient(to right, #000 92%, transparent 100%);
+                mask-image: linear-gradient(to right, #000 92%, transparent 100%);
+    }
+    .category-nav::-webkit-scrollbar { display: none; }
+    .btn-category {
+        flex: 0 0 auto;
+        display: inline-flex;
+        align-items: center;
+        margin: 0;
+        padding: 0 16px;
+        min-height: 38px;
+        border-radius: 999px;
+        border: 1px solid #e3ded0;
+        background: #fff;
+        color: #333;
+        font-size: 12px;
+        letter-spacing: .3px;
+        white-space: nowrap;
+        scroll-snap-align: start;
+        box-shadow: 0 1px 2px rgba(0,0,0,.04);
+    }
+    .btn-category:hover { background: #fff; color: #333 !important; }
+    .btn-category.active,
+    .btn-category.active:hover {
+        order: -1;                    /* mục đang chọn luôn hiện đầu thanh */
+        background: #1A2228;
+        border-color: #1A2228;
+        color: #fff !important;
+    }
+
+    /* ---------- 4. TIÊU ĐỀ NHÓM MÓN (trang /menu) ---------- */
+    .category-section-title {
+        font-size: 15px;
+        letter-spacing: 1.2px;
+        margin: 26px 0 10px;
+        padding-left: 10px;
+        border-left: 3px solid #B5952F;
+    }
+
+    /* ---------- 5. LƯỚI MÓN: 2 CỘT ---------- */
+    .menu-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+        padding: 6px 0 28px;
+    }
+
+    /* ---------- 6. THẺ MÓN ĂN ---------- */
+    .menu-card {
+        padding: 8px;
+        text-align: left;
+        border-radius: 16px;
+        box-shadow: 0 1px 2px rgba(0,0,0,.04), 0 6px 16px rgba(26, 34, 40, .07);
+    }
+    .menu-card:hover { transform: none; }
+    .menu-card:active { transform: scale(.985); }
+    .menu-card:hover .product-img { transform: none; }
+
+    .img-container {
+        padding-bottom: 80%;          /* ảnh 5:4 gọn hơn ảnh vuông 1:1 */
+        margin-bottom: 10px;
+        border-radius: 12px;
+    }
+
+    .product-name {
+        font-family: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        font-size: 14px;
+        font-weight: 600;
+        line-height: 1.35;
+        color: #1A2228;
+        height: auto;
+        min-height: 2.7em;            /* luôn đủ chỗ 2 dòng -> các thẻ cao bằng nhau */
+        margin: 0 2px 4px;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-align: left;
+    }
+    .price-text {
+        font-size: 15px;
+        font-weight: 700;
+        color: #8a6d3b;
+        margin: 0 2px 10px;
+        text-align: left;
+    }
+
+    .card-buttons { gap: 6px; }
+    .btn-action {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        min-height: 38px;
+        padding: 0 4px;
+        border-radius: 10px;
+        font-size: 11px;
+        letter-spacing: .2px;
+        white-space: nowrap;
+    }
+    /* "Chi tiết": nút phụ, nền nhạt */
+    .btn-detail-red,
+    .btn-detail-red:hover {
+        background-color: #f3f1ec;
+        color: #333 !important;
+    }
+    /* "Thêm": nút chính, nền vàng đồng */
+    .btn-add-green,
+    .btn-add-green:hover {
+        background-color: #B5952F;
+        border: 1px solid #B5952F;
+        color: #fff !important;
+        transform: none;
+        box-shadow: none;
+    }
+    .btn-add-green:disabled { opacity: .7; }
+
+    /* Nhãn "TẠM HẾT MÓN" (style inline trong view) cho gọn lại */
+    .menu-card > [style*="absolute"] {
+        top: 32% !important;          /* đặt lên vùng ảnh, không đè tên món */
+        width: 76% !important;
+        padding: 4px 8px !important;
+        font-size: 11px;
+        text-align: center;
+        border-radius: 8px !important;
+    }
+
+    /* ---------- 7. THÔNG BÁO (toast): nổi ở đáy màn hình ---------- */
+    .toast-notification {
+        top: auto;
+        bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+        left: 16px;
+        right: 16px;
+        padding: 14px 16px;
+        border-radius: 14px;
+        font-size: 14px;
+        text-align: center;
+        transform: translateY(24px);
+        box-shadow: 0 10px 28px rgba(0,0,0,.25);
+    }
+    .toast-notification.show { transform: translateY(0); }
+}
+
+/* Điện thoại rất nhỏ (<= 359px): thu gọn thêm để 2 cột không bị chật */
+@media (max-width: 359px) {
+    .menu-grid { gap: 8px; }
+    .menu-card { padding: 6px; }
+    .product-name { font-size: 13px; }
+    .price-text { font-size: 14px; }
+    .btn-action { font-size: 10px; }
+}

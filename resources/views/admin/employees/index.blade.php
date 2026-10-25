@@ -6,76 +6,9 @@
     // Cấu hình ca lấy từ config/shifts.php (nhãn ngắn, giờ, màu). Đổi giờ ở đó là trang này tự cập nhật.
     $shiftCfg = \App\Support\ShiftSchedule::viewConfigs();
 @endphp
-<style>
-    /* ─── TABS ─── */
-    .emp-tabs { display:flex; gap:8px; margin-bottom:24px; }
-    .emp-tab  { padding:8px 22px; border-radius:9px; font-size:.875rem; font-weight:600;
-                cursor:pointer; border:1.5px solid #e2e8f0; text-decoration:none;
-                color:#64748b; background:#fff; transition:all .18s; }
-    .emp-tab.active  { background:#5b3cff; color:#fff; border-color:#5b3cff; }
-    .emp-tab:hover:not(.active) { background:#f1f5f9; }
-
-    /* ─── LAYOUT ─── */
-    .emp-layout { display:grid; grid-template-columns:1fr 340px; gap:20px; align-items:start; }
-
-    /* ─── BẢNG NHÂN VIÊN ─── */
-    .emp-card  { background:#fff; border-radius:16px; box-shadow:0 4px 20px rgba(15,23,42,.07); overflow:hidden; }
-    .emp-card-header { padding:18px 22px; border-bottom:1px solid #f1f5f9;
-                       display:flex; justify-content:space-between; align-items:center; }
-    .emp-card-title  { font-size:1rem; font-weight:700; color:#0f172a; }
-
-    .emp-table { width:100%; border-collapse:collapse; }
-    .emp-table th { padding:11px 16px; font-size:.74rem; font-weight:700; text-transform:uppercase;
-                    color:#64748b; background:#f8fafc; border-bottom:2px solid #f1f5f9; text-align:left; }
-    .emp-table td { padding:13px 16px; border-bottom:1px solid #f8fafc;
-                    font-size:.88rem; vertical-align:middle; }
-    .emp-table tr:last-child td { border-bottom:none; }
-    .emp-table tr:hover td { background:#fafbff; }
-
-    .avatar-circle { width:36px; height:36px; border-radius:50%;
-                     background:linear-gradient(135deg,#5b3cff,#a78bff);
-                     display:grid; place-items:center; font-weight:700;
-                     font-size:.82rem; color:#fff; flex-shrink:0; }
-
-    /* ─── LỊCH CA ─── */
-    .shift-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:4px; margin-top:6px; }
-    .shift-cell { text-align:center; }
-    .shift-day  { font-size:.68rem; color:#94a3b8; margin-bottom:3px; font-weight:600; }
-    .shift-pill { font-size:.65rem; font-weight:700; padding:4px 0; border-radius:6px;
-                  cursor:pointer; border:none; width:100%; transition:all .15s; }
-    .shift-morning   { background:#eff6ff; color:#1d4ed8; }
-    .shift-afternoon { background:#fefce8; color:#854d0e; }
-    .shift-full      { background:#fdf4ff; color:#7e22ce; }
-    .shift-off       { background:#f1f5f9; color:#94a3b8; }
-    .shift-pill:hover { opacity:.75; }
-
-    /* ─── FORM THÊM ─── */
-    .add-card { background:#fff; border-radius:16px; box-shadow:0 4px 20px rgba(15,23,42,.07);
-                padding:22px; position:sticky; top:20px; }
-    .add-title { font-size:.95rem; font-weight:700; color:#0f172a; margin-bottom:18px;
-                 display:flex; align-items:center; gap:8px; }
-    .form-group { margin-bottom:14px; }
-    .form-label { font-size:.8rem; font-weight:600; color:#374151; display:block; margin-bottom:5px; }
-    .form-control { width:100%; padding:9px 13px; border:1.5px solid #e2e8f0; border-radius:9px;
-                    font-size:.875rem; outline:none; transition:border .2s; font-family:inherit; box-sizing:border-box; }
-    .form-control:focus { border-color:#5b3cff; }
-    .form-select { appearance:none;
-                   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
-                   background-repeat:no-repeat; background-position:right 12px center; padding-right:36px; }
-    .btn-add { width:100%; padding:10px; background:#5b3cff; color:#fff; border:none;
-               border-radius:9px; font-size:.875rem; font-weight:700; cursor:pointer; transition:background .18s; }
-    .btn-add:hover { background:#4a30e0; }
-
-    /* ─── DELETE ─── */
-    .btn-del { background:none; border:none; cursor:pointer; color:#ef4444; font-size:1.1rem;
-               padding:4px 8px; border-radius:7px; transition:background .15s; }
-    .btn-del:hover { background:#fef2f2; }
-
-    /* ─── BADGE ROLE ─── */
-    .rbadge { display:inline-block; padding:3px 10px; border-radius:20px; font-size:.72rem; }
-    .rbadge-staff { background:#eff6ff; color:#1d4ed8; }
-    .rbadge-chef  { background:#fff7ed; color:#c2410c; }
-</style>
+@push('styles')
+<link rel="stylesheet" href="{{ asset('css/admin/employees-index.css') }}?v=1">
+@endpush
 
 <div class="container-fluid" style="max-width:1200px;margin:0 auto;">
 

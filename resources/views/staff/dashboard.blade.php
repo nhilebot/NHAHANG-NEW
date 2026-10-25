@@ -145,66 +145,9 @@
     </div>
 </div>
 
-<style>
-.sd-wrap{max-width:1250px;margin:auto}
-.sd-alert{padding:12px 16px;border-radius:12px;margin-bottom:16px;font-weight:600}
-.sd-alert.ok{background:#ecfdf5;color:#065f46}.sd-alert.err{background:#fef2f2;color:#991b1b}
-
-.sd-hello{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;
-    background:linear-gradient(135deg,#0f172a,#1e293b);color:#fff;border-radius:22px;padding:28px 32px;margin-bottom:22px}
-.sd-hello h2{margin:0;font-size:26px}
-.sd-hello p{margin:6px 0 0;opacity:.8}
-.sd-hello b{color:#d4af37}
-.sd-hello-btns{display:flex;gap:10px;flex-wrap:wrap}
-.sd-btn{padding:11px 18px;border-radius:12px;font-weight:700;text-decoration:none;font-size:14px}
-.sd-btn.gold{background:#d4af37;color:#fff}.sd-btn.gold:hover{background:#b89020}
-.sd-btn.light{background:rgba(255,255,255,.12);color:#fff}.sd-btn.light:hover{background:rgba(255,255,255,.22)}
-
-.sd-stats{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin-bottom:22px}
-.sd-stat{background:#fff;border-radius:18px;padding:18px 20px;box-shadow:0 10px 30px rgba(0,0,0,.05);position:relative}
-.sd-stat p{margin:0;color:#64748b;font-size:13px}
-.sd-stat h3{margin:6px 0 0;font-size:30px;color:#1e293b}
-.sd-stat small{color:#94a3b8}
-.sd-stat .dot{position:absolute;top:18px;right:18px;width:10px;height:10px;border-radius:50%}
-.sd-stat.money{background:#fffbeb;border:1px solid #fde68a}
-.sd-stat.money h3{font-size:22px;color:#b45309}
-
-.sd-main{display:grid;grid-template-columns:1.2fr 1fr;gap:22px;align-items:start}
-.sd-side{display:flex;flex-direction:column;gap:22px}
-.sd-card{background:#fff;border-radius:20px;padding:24px;box-shadow:0 10px 30px rgba(0,0,0,.05)}
-.sd-card h3{margin:0 0 16px;font-size:18px;color:#1e293b}
-
-.sd-group{margin-bottom:18px}
-.sd-group-title{display:flex;justify-content:space-between;align-items:center;border-left:4px solid;padding:4px 10px;
-    margin-bottom:8px;font-weight:700;color:#334155;font-size:14px}
-.sd-group-title b{color:#fff;border-radius:999px;padding:1px 10px;font-size:12px}
-.sd-task{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;background:#f8fafc;margin-bottom:6px}
-.sd-task-info strong{display:block;color:#1e293b}
-.sd-task-info span{color:#64748b;font-size:13px}
-.sd-act{border:none;color:#fff;font-weight:700;font-size:13px;padding:8px 14px;border-radius:10px;cursor:pointer;text-decoration:none;white-space:nowrap}
-.sd-act:hover{filter:brightness(.92);color:#fff}
-.sd-empty{text-align:center;padding:40px 10px;color:#94a3b8}
-
-.sd-legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:#64748b;margin-bottom:12px}
-.sd-legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px}
-.sd-tables{display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:10px}
-.sd-table{border-radius:14px;padding:12px 6px;text-align:center;border:2px solid transparent}
-.sd-table b{display:block;font-size:14px}.sd-table small{font-size:11px;opacity:.8}
-.tb-empty{background:#ecfdf5;color:#065f46;border-color:#a7f3d0}
-.tb-occupied{background:#fef2f2;color:#991b1b;border-color:#fecaca}
-.tb-reserved{background:#fffbeb;color:#92400e;border-color:#fde68a}
-.tb-cleaning{background:#f1f5f9;color:#475569;border-color:#cbd5e1}
-.sd-legend .tb-empty{background:#10b981}.sd-legend .tb-occupied{background:#ef4444}
-.sd-legend .tb-reserved{background:#f59e0b}.sd-legend .tb-cleaning{background:#94a3b8}
-
-.sd-bill{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid #f1f5f9;text-decoration:none;color:#1e293b}
-.sd-bill small{display:block;color:#94a3b8}
-.sd-bill:hover{background:#f8fafc}
-.sd-more{display:block;text-align:center;margin-top:12px;color:#b45309;font-weight:700;text-decoration:none;font-size:14px}
-.sd-muted{color:#94a3b8;text-align:center;margin:10px 0}
-
-@media(max-width:1100px){.sd-stats{grid-template-columns:repeat(2,1fr)}.sd-main{grid-template-columns:1fr}}
-</style>
+@push('styles')
+<link rel="stylesheet" href="{{ asset('css/staff/dashboard.css') }}?v=1">
+@endpush
 
 <script>
     setTimeout(() => location.reload(), 30000);

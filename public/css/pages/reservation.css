@@ -1,0 +1,240 @@
+/* ==========================================================================
+   css/pages/reservation.css
+   Tách nguyên văn từ views/reservation.blade.php
+   (chỉ chuyển vị trí, không đổi nội dung quy tắc)
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap');
+
+body { 
+    padding-top: 70px; 
+    background-color: #F9F8F6;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+} 
+
+#reservation .featured.background_content {
+    margin-top: -70px; 
+    padding: 120px 0 80px 0;
+    background-image: linear-gradient(rgba(26, 34, 40, 0.7), rgba(26, 34, 40, 0.7)), url('https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?q=80&w=2070&auto=format&fit=crop');
+    background-size: cover; 
+    background-position: center;
+    background-attachment: fixed;
+}
+#reservation .featured h1 {
+    font-family: 'Playfair Display', serif;
+    color: #fffefa;
+    font-size: 48px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    text-shadow: 2px 4px 10px rgba(0,0,0,0.3);
+}
+
+.reservation-section { background-color: transparent; padding-bottom: 80px; margin-top: -50px; }
+
+.form-container-custom { 
+    max-width: 900px; 
+    margin: 0 auto; 
+    padding: 45px 50px; 
+    background: #ffffff; 
+    border-radius: 12px; 
+    box-shadow: 0 15px 40px rgba(0,0,0,0.08); 
+    position: relative;
+    border-top: 5px solid #D4AF37;
+}
+
+.form-title { 
+    font-family: 'Playfair Display', serif; 
+    color: #1A2228; 
+    font-size: 32px; 
+    text-align: center; 
+    margin-bottom: 40px; 
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-top: 100px;
+}
+
+.form-title::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 3px;
+    background: #D4AF37;
+    margin: 15px auto 0;
+}
+
+.label-custom { 
+    font-weight: 600; 
+    color: #4A5568; 
+    margin-top: 20px; 
+    display: block; 
+    margin-bottom: 8px; 
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.input-custom { 
+    height: 50px !important; 
+    border: 1px solid #E2E8F0 !important; 
+    border-radius: 8px !important; 
+    background-color: #FDFDFD;
+    font-size: 15px;
+    transition: all 0.3s ease;
+}
+.input-custom:focus {
+    border-color: #D4AF37 !important;
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15) !important;
+    background-color: #FFF;
+}
+
+/* ===== TABLE SELECTION GRID - ĐÃ SỬA ===== */
+.table-selection-grid { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); 
+    gap: 12px; 
+    margin-bottom: 10px; 
+}
+.table-item input[type="radio"] { display: none; }
+.table-item label { 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    height: 70px;
+    border: 1px solid #E2E8F0; 
+    border-radius: 8px; 
+    cursor: pointer; 
+    transition: all 0.3s ease; 
+    background: #FFF;
+    padding: 0 8px;
+    overflow: hidden;
+}
+.table-item label .table-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: #1A2228;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    text-align: center;
+}
+.table-item label small { 
+    font-size: 11px;
+    font-weight: 500;
+    white-space: nowrap;
+    margin-top: 0;
+}
+
+.table-item label:hover { 
+    border-color: #D4AF37; 
+    transform: translateY(-3px); 
+    box-shadow: 0 8px 15px rgba(212, 175, 55, 0.1); 
+}
+.table-item input[type="radio"]:checked + label { 
+    border-color: #1A2228; 
+    background-color: #1A2228; 
+    color: #D4AF37; 
+}
+.table-item input[type="radio"]:checked + label .table-name { color: #D4AF37; }
+.table-item input[type="radio"]:checked + label small { color: #FFF !important; }
+
+input[disabled] + label {
+    background-color: #F7FAFC !important;
+    color: #A0AEC0 !important;
+    cursor: not-allowed !important;
+    border: 1px dashed #CBD5E0 !important;
+    transform: none !important;
+    box-shadow: none !important;
+}
+input[disabled] + label .table-name { color: #A0AEC0 !important; }
+input[disabled] + label small { color: #A0AEC0 !important; }
+
+.btn-food-select { 
+    background: #FFF; 
+    color: #1A2228; 
+    border: 2px solid #1A2228; 
+    width: 100%; 
+    padding: 15px; 
+    margin: 10px 0 20px 0; 
+    font-weight: 600; 
+    border-radius: 8px; 
+    transition: all 0.3s ease;
+    letter-spacing: 1px;
+}
+.btn-food-select:hover {
+    background: #1A2228;
+    color: #D4AF37;
+}
+
+.btn-reserve { 
+    background-color: #D4AF37; 
+    color: #FFF; 
+    padding: 16px; 
+    border: none; 
+    border-radius: 8px; 
+    width: 100%; 
+    font-size: 16px; 
+    font-weight: 700; 
+    letter-spacing: 2px;
+    text-transform: uppercase; 
+    margin-top: 30px; 
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+}
+.btn-reserve:hover {
+    background-color: #B5952F;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4);
+}
+
+.cart-wrapper { 
+    background: #FAFAFA; 
+    padding: 25px; 
+    border-radius: 8px; 
+    border: 1px solid #EAEAEA; 
+    margin-bottom: 25px; 
+}
+
+.search-input { 
+    width: 100%; 
+    padding: 12px 25px; 
+    border: 1px solid #E2E8F0; 
+    border-radius: 30px; 
+    outline: none; 
+    background: #F7FAFC;
+    transition: all 0.3s;
+}
+.search-input:focus { border-color: #D4AF37; background: #FFF; }
+
+.modal-content { border-radius: 12px; border: none; overflow: hidden; }
+.modal-header { background: #1A2228; color: #fffffd; border-bottom: none; padding: 20px 25px; }
+.modal-title { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 600; }
+.modal-header .close { color: #FFF; opacity: 0.8; text-shadow: none; }
+.modal-header .close:hover { color: #D4AF37; opacity: 1; }
+.btn-finish-modal { background: #D4AF37; border: none; color: #FFF; font-weight: 600; padding: 10px 25px; border-radius: 6px; }
+.btn-finish-modal:hover { background: #1A2228; color: #D4AF37; }
+
+.category-divider { 
+    background: transparent; 
+    padding: 10px 0; 
+    margin: 30px 0 15px 0; 
+    border-bottom: 2px solid #E2E8F0; 
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    color: #1A2228; 
+}
+
+/* ==========================================================================
+   RESPONSIVE - Máy tính bảng (<=991px) và Điện thoại (<=767px)
+   Chỉ nằm trong @media max-width nên giao diện Desktop (>=992px) giữ nguyên.
+   ========================================================================== */
+
+@media (max-width: 991px) {
+    .table-selection-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
+}
+@media (max-width: 767px) {
+    .reservation-section { padding-bottom: 50px; }
+    .table-selection-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .modal-dialog { margin: 10px; }
+}

@@ -1,0 +1,18 @@
+/* ==========================================================================
+   css/admin/categories-edit.css
+   Tách nguyên văn từ views/admin/categories/edit.blade.php
+   (chỉ chuyển vị trí, không đổi nội dung quy tắc)
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap');
+
+.edit-category-box {
+    background: #fff; 
+    padding: 40px; 
+    border-radius: 12px; 
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05); 
+    max-width: 600px; 
+    margin: 40px auto; 
+    border-top: 5px solid #D4AF37;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}

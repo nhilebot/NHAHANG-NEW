@@ -2,14 +2,9 @@
 @section('topbar_title', 'Sửa đơn — ' . ($reservation->table->name ?? 'Bàn '.$reservation->table_id))
 
 @section('admin_content')
-<style>
-    .menu-row { display:flex; justify-content:space-between; align-items:center;
-                padding:10px; border-bottom:1px solid #f1f5f9; }
-    .qty-box  { display:flex; align-items:center; gap:6px; }
-    .qty-btn  { width:28px; height:28px; border-radius:50%; border:1.5px solid #e2e8f0;
-                background:#f8fafc; cursor:pointer; font-weight:700; }
-    .qty-inp  { width:40px; text-align:center; border:1.5px solid #e2e8f0; border-radius:8px; padding:3px; }
-</style>
+@push('styles')
+<link rel="stylesheet" href="{{ asset('css/staff/order-edit.css') }}?v=1">
+@endpush
 
 <div class="row g-4">
     <div class="col-lg-8">

@@ -1,14 +1,9 @@
 @extends('layouts.admin')
 
 @section('admin_content')
-<style>
-    .form-edit-luxury { max-width: 900px; margin: 30px auto; background: #fff; padding: 40px; border-radius: 15px; box-shadow: 0 15px 35px rgba(0,0,0,0.08); border-top: 5px solid #D4AF37; }
-    .label-custom { font-weight: 700; color: #4A5568; font-size: 12px; text-transform: uppercase; margin-bottom: 8px; display: block; }
-    .input-custom { width: 100%; padding: 12px; border: 1px solid #E2E8F0; border-radius: 10px; background: #F8FAFC; margin-bottom: 20px; }
-    .input-custom:focus { border-color: #D4AF37; outline: none; background: #fff; }
-    .btn-update { background: #D4AF37; color: #fff; width: 100%; padding: 15px; border: none; border-radius: 10px; font-weight: 800; text-transform: uppercase; cursor: pointer; transition: 0.3s; }
-    .btn-update:hover { background: #1A2228; color: #D4AF37; }
-</style>
+@push('styles')
+<link rel="stylesheet" href="{{ asset('css/admin/menus-edit.css') }}?v=1">
+@endpush
 
 <div class="form-edit-luxury">
     <h3 class="text-center" style="font-family: 'Playfair Display', serif; font-weight: 700; margin-bottom: 30px;">CHỈNH SỬA MÓN ĂN</h3>

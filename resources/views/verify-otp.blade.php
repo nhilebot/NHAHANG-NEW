@@ -5,17 +5,7 @@
 @section('body-class', 'd-flex align-items-center min-vh-100')
 
 @section('head')
-<style>
-    body { background-color: #f9f9f9; font-family: "Times New Roman", serif; }
-    .auth-card { background: white; max-width: 520px; margin: 80px auto; padding: 2.5rem; border-radius: 18px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); border-top: 5px solid #041526e0; }
-    .auth-title { font-family: 'Pacifico', cursive; color: #041526e0; font-size: 36px; margin-bottom: 18px; }
-    .form-control { border-radius: 30px; border: 1px solid #ddd; padding: 12px 18px; height: auto; }
-    .form-control:focus { border-color: #041526e0; box-shadow: 0 0 0 3px rgba(231,76,60,0.18); }
-    .btn-primary-custom { background-color: #041526e0; color: white; border-radius: 30px; border: none; padding: 12px 20px; width: 100%; font-weight: 700; }
-    .btn-primary-custom:hover { background-color: #041526e0; }
-    .text-link { color: #777; text-decoration: none; }
-    .text-link:hover { color: #e74c3c; text-decoration: underline; }
-</style>
+<link rel="stylesheet" href="{{ asset('css/pages/verify-otp.css') }}?v=1">
 @endsection
 
 @section('content')

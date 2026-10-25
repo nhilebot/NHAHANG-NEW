@@ -1,0 +1,162 @@
+/* ==========================================================================
+   css/staff/reservations.css
+   Tách nguyên văn từ views/staff/reservations.blade.php
+   (chỉ chuyển vị trí, không đổi nội dung quy tắc)
+   ========================================================================== */
+
+.badge-status {
+    padding: 6px 14px; font-weight: 600; font-size: 0.85rem;
+    border-radius: 50px; display: inline-flex; align-items: center; gap: 6px;
+}
+.st-pending { background-color: #fff4e5; color: #664d03; }
+.st-confirmed { background-color: #e7f6f8; color: #087990; }
+.st-arrived { background-color: #e7f0ff; color: #0d6efd; }
+.st-serving { background-color: #fff9db; color: #856404; }
+.st-served { background-color: #e0f7fa; color: #006064; }
+.st-success { background-color: #e9f7ef; color: #198754; }
+
+/* Cải thiện hiển thị cột khách hàng */
+.customer-cell {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+.customer-info {
+    flex: 1;
+}
+.customer-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-left: 10px;
+}
+.btn-action-mini {
+    padding: 2px 8px;
+    font-size: 11px;
+    border-radius: 4px;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+/* ===== Cột thao tác phục vụ ===== */
+.svc-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+    min-width: 170px;
+    max-width: 200px;
+    margin: 0 auto;
+}
+
+.svc-actions .btn,
+.svc-review-actions .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    width: 100%;
+    min-height: 36px;
+    margin: 0;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 12.5px;
+    font-weight: 600;
+    line-height: 1.3;
+    white-space: normal;       /* cho nút dài như "Xác nhận cọc 500.000đ" tự xuống dòng */
+    text-align: center;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, .06);
+    transition: transform .12s ease, box-shadow .12s ease, filter .12s ease;
+}
+
+.svc-actions .btn:hover,
+.svc-review-actions .btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, .12);
+    filter: brightness(1.04);
+}
+
+.svc-actions .btn i { font-size: 12px; flex-shrink: 0; }
+
+/* Nút phụ: Hủy đơn */
+.svc-actions .btn-cancel-soft {
+    min-height: 32px;
+    background: #fff;
+    color: #dc3545;
+    border: 1px solid #fecaca;
+    font-size: 12px;
+    box-shadow: none;
+}
+
+.svc-actions .btn-cancel-soft:hover {
+    background: #fef2f2;
+    border-color: #f87171;
+    color: #b91c1c;
+    box-shadow: none;
+}
+
+/* Dòng chữ chú thích (ví dụ: chờ khách chuyển khoản) */
+.svc-note {
+    padding: 8px 10px;
+    text-align: center;
+    font-size: 12px;
+    color: #718096;
+    background: #f8fafc;
+    border-radius: 8px;
+}
+
+/* Thẻ yêu cầu hủy do khách gửi */
+.svc-review {
+    width: 100%;
+    max-width: 200px;
+    margin: 10px auto 0;
+    padding: 10px;
+    text-align: left;
+    background: #fff7ed;
+    border: 1px solid #fed7aa;
+    border-left: 3px solid #f97316;
+    border-radius: 8px;
+    box-sizing: border-box;
+}
+
+.svc-review-title {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 4px;
+    color: #c2410c;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.svc-review-reason {
+    margin-bottom: 8px;
+    color: #64748b;
+    font-size: 11.5px;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;     /* lý do dài chỉ hiện 2 dòng */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.svc-review-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+}
+
+.svc-review-actions .btn {
+    min-height: 30px;
+    padding: 4px 6px;
+    font-size: 12px;
+}
+
+/* ==========================================================================
+   RESPONSIVE - Máy tính bảng (<=991px) và Điện thoại (<=767px)
+   Chỉ nằm trong @media max-width nên giao diện Desktop (>=992px) giữ nguyên.
+   ========================================================================== */
+
+@media (max-width: 767px) {
+    .svc-actions { min-width: 0; max-width: none; }
+}

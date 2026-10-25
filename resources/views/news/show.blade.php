@@ -1,4 +1,4 @@
-@extends('shared') {{-- đổi 'layouts.app' thành tên file layout của bạn --}}
+@extends('shared')
 
 @section('head')
     <link rel="stylesheet" href="{{ asset('css/news.css') }}?v=1">

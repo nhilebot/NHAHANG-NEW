@@ -1,0 +1,38 @@
+/* ==========================================================================
+   css/admin/bills-index.css
+   Tách nguyên văn từ views/admin/bills/index.blade.php
+   (chỉ chuyển vị trí, không đổi nội dung quy tắc)
+   ========================================================================== */
+
+.card{
+    background:#fff;
+    padding:24px;
+    border-radius:14px;
+}
+
+.table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+.table th,
+.table td{
+    padding:12px;
+    border-bottom:1px solid #eee;
+}
+
+.stat-box{
+    background:#f8f8f8;
+    padding:20px;
+    border-radius:12px;
+    min-width:250px;
+}
+
+/* ==========================================================================
+   RESPONSIVE - Máy tính bảng (<=991px) và Điện thoại (<=767px)
+   Chỉ nằm trong @media max-width nên giao diện Desktop (>=992px) giữ nguyên.
+   ========================================================================== */
+
+@media (max-width: 767px) {
+    .stat-box { min-width: 0; width: 100%; }
+}

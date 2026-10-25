@@ -3,35 +3,7 @@
 @section('title', 'Lịch sử đơn hàng')
 
 @section('head')
-<style>
-    body { background-color: #f4f6f9; font-family: 'Times New Roman', serif; } /* Đổi sang font dễ đọc theo style bạn thích ở trang đăng nhập */
-    .history-container { max-width: 1100px; margin: 30px auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-    .title-page { text-align: center; font-weight: bold; margin-bottom: 25px; font-size: 24px; color: #d9534f; }
-    .order-tabs { display: flex; justify-content: space-around; border-bottom: 2px solid #eee; margin-bottom: 20px; background: #fff; position: sticky; top: 0; z-index: 10; }
-    .tab-item { padding: 15px 10px; cursor: pointer; font-weight: 600; color: #666; transition: 0.3s; border-bottom: 3px solid transparent; flex: 1; text-align: center; }
-    .tab-item:hover { color: #d9534f; }
-    .tab-item.active { color: #d9534f; border-bottom-color: #d9534f; }
-
-    .order-block { border: 1px solid #ebebeb; margin-bottom: 25px; border-radius: 4px; overflow: hidden; }
-    .order-info-header { background: #fafafa; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; }
-    
-    .badge-status { padding: 6px 15px; border-radius: 20px; font-size: 12px; font-weight: 700; display: inline-block; }
-
-    .product-row { display: flex; padding: 15px 20px; align-items: center; border-bottom: 1px solid #f1f1f1; background: #fff; }
-    .product-img { width: 80px; height: 80px; object-fit: cover; border: 1px solid #eee; border-radius: 4px; background: #f9f9f9; }
-    .product-detail { flex: 1; padding-left: 15px; }
-    .product-name { font-weight: bold; font-size: 16px; color: #333; }
-    .product-qty { color: #888; font-size: 14px; }
-
-    .order-footer { padding: 15px 20px; background: #fff; display: flex; justify-content: flex-end; align-items: center; gap: 15px; border-top: 1px solid #f1f1f1; }
-    .total-price-all { font-size: 20px; font-weight: bold; color: #d9534f; }
-    
-    .btn-action { padding: 8px 20px; border-radius: 4px; font-size: 14px; font-weight: 600; text-decoration: none; border: none; transition: 0.3s; }
-    .btn-view { background-color: #d9534f; color: white; }
-    .btn-view:hover { background-color: #c9302c; color: #fff; }
-
-    .empty-state { text-align: center; padding: 50px; display: none; }
-</style>
+<link rel="stylesheet" href="{{ asset('css/pages/cart-history.css') }}?v=1">
 @endsection
 
 @section('content')

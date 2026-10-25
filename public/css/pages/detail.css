@@ -1,0 +1,301 @@
+/* ==========================================================================
+   css/pages/detail.css
+   Tách nguyên văn từ views/detail.blade.php
+   (chỉ chuyển vị trí, không đổi nội dung quy tắc)
+   ========================================================================== */
+
+body { background-color: #f9f9f9; padding-top: 100px; }
+
+/* Navbar đồng bộ */
+.navbar-default {
+    background-color: #fff;
+    border: none !important;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05) !important;
+}
+
+/* Container chính */
+.product-detail-container {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    margin-bottom: 50px;
+}
+
+/* Khung ảnh vuông 1:1 */
+.detail-image-wrapper {
+    position: relative;
+    width: 100%;
+    padding-bottom: 100%;
+    overflow: hidden;
+    border-radius: 20px;
+    background-color: #fcfcfc;
+    border: 1px solid #f0f0f0;
+}
+
+.detail-image-wrapper img {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+}
+
+.detail-image-wrapper:hover img { transform: scale(1.05); }
+
+/* Phần thông tin món ăn */
+.info-section h1 {
+    font-family: 'Playball', cursive;
+    color: #041526e0;
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 38px;
+}
+
+.price-tag {
+    font-size: 27px;
+    color: #8a6d3b;
+    font-weight: 700;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.rating-stars {
+    font-size: 16px;
+    background: #fff4f1;
+    padding: 5px 15px;
+    border-radius: 30px;
+    color: #e74c3c;
+}
+
+.description-text {
+    font-size: 17px;
+    color: #666;
+    line-height: 1.8;
+    margin-bottom: 30px;
+    border-left: 4px solid #e74c3c;
+    padding-left: 20px;
+}
+
+/* Form đặt hàng chính */
+.order-controls {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 25px 0;
+    border-top: 1px dashed #eee;
+}
+
+.qty-input-group {
+    display: flex;
+    align-items: center;
+    border: 2px solid #eee;
+    border-radius: 30px;
+    overflow: hidden;
+}
+
+.qty-input-group input {
+    width: 60px;
+    height: 45px;
+    border: none;
+    text-align: center;
+    font-weight: bold;
+    outline: none;
+}
+
+.btn-add-cart {
+    background-color: #D4AF37;
+    color: white;
+    border: none;
+    padding: 12px 35px;
+    border-radius: 30px;
+    font-weight: bold;
+    transition: 0.3s;
+    box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+    cursor: pointer;
+}
+
+.btn-add-cart:hover:not(:disabled) {
+   background-color: #B5952F;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4);
+}
+
+/* ─── PHẦN SẢN PHẨM LIÊN QUAN ─── */
+.related-container {
+    margin-top: 40px;
+    margin-bottom: 50px;
+}
+
+.related-title {
+    font-family: 'Playball', cursive;
+    color: #041526e0;
+    font-size: 32px;
+    margin-bottom: 25px;
+    border-bottom: 2px dashed #eee;
+    padding-bottom: 10px;
+}
+
+.related-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 25px;
+}
+
+.related-card-wrapper {
+    background: #fff;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+    border: 1px solid #f0f0f0;
+}
+
+.related-card-wrapper:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+}
+
+.related-card { text-decoration: none !important; display: block; }
+
+.related-img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+}
+
+.related-card:hover .related-img { transform: scale(1.08); }
+
+.related-info { padding: 15px; text-align: center; }
+
+.related-name {
+    font-weight: 700;
+    color: #333;
+    font-size: 16px;
+    margin-bottom: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.related-price {
+    color: #8a6d3b;
+    font-weight: 700;
+    font-size: 15px;
+    margin-bottom: 10px;
+}
+
+.btn-related-add {
+    width: 100%;
+   background-color: #D4AF37;
+    color: #fff;
+    border: none;
+    padding: 10px;
+    border-radius: 30px;
+    font-weight: bold;
+    font-size: 13px;
+    transition: 0.3s;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(231, 76, 60, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn-related-add:hover:not(:disabled) {
+    background-color: #B5952F;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4);
+}
+
+/* Phần bình luận */
+.comments-container {
+    background: #fff;
+    border-radius: 20px;
+    padding: 30px;
+    margin-top: 30px;
+}
+
+.avatar-circle {
+    width: 50px; height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.comment-item {
+    padding: 20px 0;
+    border-bottom: 1px solid #f5f5f5;
+    display: flex;
+    gap: 15px;
+}
+
+/* ── CSS CHỌN SAO KIỂU SHOPEE ── */
+.shopee-rating {
+    display: inline-flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 10px;
+}
+.shopee-rating input[type="radio"] { display: none; }
+.shopee-rating label {
+    font-size: 26px;
+    color: #e4e4e4;
+    cursor: pointer;
+    transition: color 0.1s ease;
+    margin: 0;
+}
+.shopee-rating label:hover,
+.shopee-rating label:hover ~ label { color: #ff9727; }
+.shopee-rating input[type="radio"]:checked ~ label { color: #ee4d2d; }
+
+.rating-text {
+    margin-left: 15px;
+    font-weight: 600;
+    font-size: 14px;
+    color: #ee4d2d;
+}
+
+/* Nút hành động sửa/xóa bình luận */
+.comment-actions {
+    display: flex;
+    gap: 10px;
+}
+.btn-action-edit { background: none; border: none; color: #4aa0e6; cursor: pointer; font-size: 14px; padding: 0; }
+.btn-action-delete { background: none; border: none; color: #e74c3c; cursor: pointer; font-size: 14px; padding: 0; }
+.btn-action-edit:hover { text-decoration: underline; }
+.btn-action-delete:hover { text-decoration: underline; }
+
+/* ==========================================================================
+   RESPONSIVE - Máy tính bảng (<=991px) và Điện thoại (<=767px)
+   Chỉ nằm trong @media max-width nên giao diện Desktop (>=992px) giữ nguyên.
+   ========================================================================== */
+
+@media (max-width: 991px) {
+    .product-detail-container { padding: 28px; border-radius: 16px; }
+    .info-section h1 { width: auto; max-width: 100%; font-size: 32px; }
+    .related-grid { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 18px; }
+}
+@media (max-width: 767px) {
+    .product-detail-container { padding: 18px; margin-bottom: 30px; }
+    .info-section { margin-top: 20px; }
+    .info-section h1 { font-size: 26px; margin-bottom: 14px; }
+    .price-tag { font-size: 22px; flex-wrap: wrap; gap: 10px; }
+    .description-text { font-size: 15px; padding-left: 14px; margin-bottom: 20px; }
+    .order-controls { flex-wrap: wrap; gap: 12px; padding: 18px 0; }
+    .btn-add-cart { flex: 1 1 160px; padding: 12px 20px; }
+    .related-container { margin-top: 28px; }
+    .related-title { font-size: 26px; }
+    .related-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .related-img { height: 130px; }
+    .related-info { padding: 10px; }
+    .related-name { font-size: 14px; }
+    .comments-container { padding: 16px; border-radius: 16px; }
+    .comment-item { gap: 10px; }
+    .avatar-circle { width: 40px; height: 40px; }
+}

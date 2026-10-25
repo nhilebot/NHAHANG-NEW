@@ -1,20 +1,9 @@
 @extends('layouts.admin')
 
 @section('admin_content')
-<style>
-    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap');
-
-    .edit-table-box {
-        background: #fff;
-        padding: 40px;
-        border-radius: 12px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-        max-width: 600px;
-        margin: 40px auto;
-        border-top: 5px solid #D4AF37;
-        font-family: 'Plus Jakarta Sans', sans-serif;
-    }
-</style>
+@push('styles')
+<link rel="stylesheet" href="{{ asset('css/admin/tables-edit.css') }}?v=1">
+@endpush
 
 <div class="container">
     <div class="edit-table-box">

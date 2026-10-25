@@ -1,0 +1,331 @@
+/* ==========================================================================
+   css/admin/reservations-index.css
+   Tách nguyên văn từ views/admin/reservations/index.blade.php
+   (chỉ chuyển vị trí, không đổi nội dung quy tắc)
+   ========================================================================== */
+
+.reservation-page {
+    font-family: 'Be Vietnam Pro', sans-serif;
+    color: #1a2228;
+}
+
+.reservation-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 22px;
+}
+
+.reservation-header h4 {
+    font-weight: 700;
+    margin: 0;
+    color: #1a2228;
+}
+
+.reservation-subtitle {
+    color: #718096;
+    font-size: 13px;
+    margin-top: 5px;
+}
+
+.reservation-card {
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, .04);
+    overflow: hidden;
+}
+
+.reservation-card-header {
+    padding: 18px 22px;
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.reservation-card-header h5 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.reservation-table {
+    width: 100%;
+    min-width: 1050px;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 0;
+}
+
+.reservation-table thead th {
+    background: #f8fafc;
+    color: #64748b;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 15px 16px;
+    border-bottom: 1px solid #e2e8f0;
+    white-space: nowrap;
+}
+
+.reservation-table tbody td {
+    padding: 18px 16px;
+    vertical-align: middle;
+    border-bottom: 1px solid #edf2f7;
+    font-size: 13px;
+}
+
+.reservation-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.reservation-table tbody tr:hover {
+    background: #fafcff;
+}
+
+.customer-name {
+    font-weight: 700;
+    font-size: 14px;
+    color: #1a2228;
+    margin-bottom: 5px;
+}
+
+.reservation-muted {
+    color: #718096;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+.table-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #eff6ff;
+    color: #1d4ed8;
+    padding: 7px 10px;
+    border-radius: 8px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.badge-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 7px 11px;
+    border-radius: 50px;
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.st-pending   { background: #fff4e5; color: #92400e; }
+.st-confirmed { background: #e7f6f8; color: #087990; }
+.st-arrived   { background: #e7f0ff; color: #1d4ed8; }
+.st-serving   { background: #fff9db; color: #856404; }
+.st-served    { background: #e0f7fa; color: #006064; }
+.st-success   { background: #e9f7ef; color: #198754; }
+.st-danger    { background: #fdf2f2; color: #dc3545; }
+.st-neutral   { background: #edf2f7; color: #475569; }
+
+/* ===== Nhóm nút thao tác ===== */
+.reservation-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+    min-width: 180px;
+    max-width: 200px;
+    margin: 0 auto;
+}
+
+.reservation-actions .btn,
+.cancellation-review-actions .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    width: 100%;
+    height: 36px;
+    margin: 0;
+    padding: 0 12px;
+    border-radius: 8px;
+    font-size: 12.5px;
+    font-weight: 600;
+    line-height: 1;
+    white-space: nowrap;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, .06);
+    transition: transform .12s ease, box-shadow .12s ease, filter .12s ease;
+}
+
+.reservation-actions .btn:hover,
+.cancellation-review-actions .btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, .12);
+    filter: brightness(1.04);
+}
+
+.reservation-actions .btn i {
+    font-size: 12px;
+    flex-shrink: 0;
+}
+
+/* 2 nút thanh toán cạnh nhau */
+.reservation-pay-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.reservation-pay-group .btn {
+    padding: 0 6px;
+    font-size: 12px;
+}
+
+/* Nút phụ: Hủy đặt bàn */
+.reservation-actions .btn-cancel-soft {
+    height: 32px;
+    background: #fff;
+    color: #dc3545;
+    border: 1px solid #fecaca;
+    font-size: 12px;
+    font-weight: 600;
+    box-shadow: none;
+}
+
+.reservation-actions .btn-cancel-soft:hover {
+    background: #fef2f2;
+    border-color: #f87171;
+    color: #b91c1c;
+    box-shadow: none;
+}
+
+.reservation-actions .reservation-muted {
+    margin: 0;
+    padding: 8px 10px;
+    text-align: center;
+    background: #f8fafc;
+    border-radius: 8px;
+}
+
+/* Chỉnh sửa đơn */
+.btn-reservation-edit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    margin-top: 9px;
+    padding: 6px 9px;
+    font-size: 11px;
+    border: 1px solid #cbd5e1;
+    color: #2563eb;
+    border-radius: 7px;
+    text-decoration: none;
+    background: #fff;
+}
+
+.btn-reservation-edit:hover {
+    background: #eff6ff;
+    color: #1d4ed8;
+}
+
+/* ===== Thẻ yêu cầu hủy của khách ===== */
+.cancellation-review-box {
+    width: 100%;
+    max-width: 200px;
+    margin: 10px auto 0;
+    padding: 10px;
+    background: #fff7ed;
+    border: 1px solid #fed7aa;
+    border-left: 3px solid #f97316;
+    border-radius: 8px;
+    box-sizing: border-box;
+}
+
+.cancellation-review-title {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #c2410c;
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.cancellation-review-reason {
+    font-size: 11.5px;
+    color: #64748b;
+    margin-bottom: 8px;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.cancellation-review-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+}
+
+.cancellation-review-actions .btn {
+    height: 30px;
+    padding: 0 6px;
+    font-size: 12px;
+}
+
+.cancellation-result {
+    max-width: 200px;
+    margin: 10px auto 0;
+    padding: 7px 10px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    text-align: center;
+}
+
+.cancellation-result.approved {
+    color: #166534;
+    background: #f0fdf4;
+}
+
+.cancellation-result.rejected {
+    color: #475569;
+    background: #f1f5f9;
+}
+
+.empty-reservations {
+    text-align: center;
+    padding: 45px 20px !important;
+    color: #718096;
+}
+
+.empty-reservations .empty-icon {
+    display: block;
+    font-size: 34px;
+    margin-bottom: 10px;
+}
+
+@media (max-width: 768px) {
+    .reservation-header {
+        align-items: flex-start;
+    }
+
+    .reservation-header .btn {
+        width: 100%;
+    }
+
+    .reservation-card-header {
+        padding: 15px;
+    }
+
+    .reservation-table {
+        min-width: 1050px;
+    }
+}

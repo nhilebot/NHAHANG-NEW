@@ -109,30 +109,8 @@
     </div>
 </div>
 
-<style>
-.card{
-    background:#fff;
-    padding:24px;
-    border-radius:14px;
-}
-
-.table{
-    width:100%;
-    border-collapse:collapse;
-}
-
-.table th,
-.table td{
-    padding:12px;
-    border-bottom:1px solid #eee;
-}
-
-.stat-box{
-    background:#f8f8f8;
-    padding:20px;
-    border-radius:12px;
-    min-width:250px;
-}
-</style>
+@push('styles')
+<link rel="stylesheet" href="{{ asset('css/admin/bills-index.css') }}?v=1">
+@endpush
 
 @endsection
