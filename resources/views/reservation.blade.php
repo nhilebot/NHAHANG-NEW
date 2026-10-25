@@ -528,8 +528,6 @@
                     return;
                 }
 
-                const form = this;
-
                 console.log('=== Form Submission Debug ===');
                 console.log('Form name:', $('input[name="full_name"]').val());
                 console.log('Form table_id:', $('input[name="table_id"]:checked').val());
@@ -537,17 +535,7 @@
                 console.log('Form time:', $('input[name="reservation_time"]').val());
                 console.log('Hidden inputs:', $('#hidden-inputs-container').html());
 
-                Swal.fire({
-    icon: 'success',
-    title: 'Đặt Bàn Thành Công!',
-    text: 'Yêu cầu của quý khách đã được ghi nhận. Nhà hàng đang chuẩn bị chu đáo nhất...',
-    showConfirmButton: false,
-    timer: 2000,
-    timerProgressBar: true,
-    iconColor: '#D4AF37'
-}).then(() => {
-    form.submit();
-});
+                this.submit();
             });
         });
     </script>

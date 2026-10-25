@@ -192,7 +192,7 @@ $depositAmount = Reservation::calcDeposit($totalAmount);
         }
     }
 
-    return redirect()->route('cart.index')->with('success', 'Ghi nhận yêu cầu đặt bàn! Vui lòng hoàn tất cọc để giữ bàn.');
+    return redirect()->route('cart.index')->with('success', 'Yêu cầu đặt bàn đã được ghi nhận. Vui lòng hoàn tất cọc để giữ bàn.');
 }
 
     /**
@@ -646,16 +646,19 @@ $now = now('Asia/Ho_Chi_Minh');
 $today = $now->toDateString();
 $currentTime = $now->format('H:i');
 
-if ($selectedDate < $today) {
-    return back()->withInput()->withErrors([
-        'reservation_date' => 'Ngày đặt bàn đã qua. Vui lòng chọn ngày khác.',
-    ]);
-}
 
-if ($selectedDate === $today && $selectedTime <= $currentTime) {
-    return back()->withInput()->withErrors([
-        'reservation_time' => 'Giờ đặt bàn đã qua. Vui lòng chọn giờ khác.',
-    ]);
+if (!$isWalkIn) {
+    if ($selectedDate < $today) {
+        return back()->withInput()->withErrors([
+            'reservation_date' => 'Ngày đặt bàn đã qua. Vui lòng chọn ngày khác.',
+        ]);
+    }
+
+    if ($selectedDate === $today && $selectedTime <= $currentTime) {
+        return back()->withInput()->withErrors([
+            'reservation_time' => 'Giờ đặt bàn đã qua. Vui lòng chọn giờ khác.',
+        ]);
+    }
 }
 
         // 3. Xử lý mảng món ăn nhân viên gọi trực tiếp từ form

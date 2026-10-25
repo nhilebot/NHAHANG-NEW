@@ -9,6 +9,16 @@
     <div class="form-container-custom">
         <h2 class="form-title">Phục Vụ Tại Quầy (Walk-in)</h2>
 
+        @if($errors->any())
+            <div role="alert" style="margin-bottom: 20px; padding: 12px 16px; color: #b91c1c; background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px;">
+                <ul style="margin: 0; padding-left: 20px;">
+                    @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
         
 <form action="{{ auth()->user()->isAdmin()
     ? route('admin.reservations.store')

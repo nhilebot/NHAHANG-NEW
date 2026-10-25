@@ -45,9 +45,9 @@ $depositAmount = \App\Models\Reservation::calcDeposit((int) $total);
         <h3 class="page-title">Hóa đơn của quý khách</h3>
 
         @if (session('success'))
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <div id="reservation-success-fallback" class="alert alert-success alert-dismissible fade show" role="status">
                 {{ session('success') }}
-                <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Đóng"><span aria-hidden="true">&times;</span></button>
             </div>
         @endif
 
@@ -513,4 +513,30 @@ const depositAmount = total > 0 ? Math.round(total * 20 / 100) : TABLE_ONLY_DEPO
         });
     });
 </script>
+@endsection
+
+@section('scripts')
+    @if (session('success'))
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                if (typeof Swal === 'undefined') {
+                    return;
+                }
+
+                const fallback = document.getElementById('reservation-success-fallback');
+                if (fallback) {
+                    fallback.remove();
+                }
+
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Đã ghi nhận đặt bàn!',
+                    text: @json(session('success')),
+                    confirmButtonText: 'Tiếp tục',
+                    confirmButtonColor: '#1A2228'
+                });
+            });
+        </script>
+    @endif
 @endsection
