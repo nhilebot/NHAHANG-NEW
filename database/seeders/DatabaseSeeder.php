@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             CartSeeder::class,
             InventorySampleSeeder::class,
             OpeningBalanceSeeder::class,
+            NewsSeeder::class,
         ]);
     }
 }
