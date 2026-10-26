@@ -9,6 +9,7 @@ class StaffDashboardController extends Controller
 {
     public function index()
     {
+        app(\App\Services\PendingReservationExpiry::class)->expire();
         Table::releaseExpiredCleaning();
 
         // ---- Bàn ----

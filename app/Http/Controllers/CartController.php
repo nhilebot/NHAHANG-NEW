@@ -19,9 +19,10 @@ class CartController extends Controller
 /**
      * 1. HIỂN THỊ TRANG GIỎ HÀNG & BILL THANH TOÁN
      */
-    public function index()
+    public function index(Request $request)
     {
         $userId = auth()->id();
+        app(\App\Services\PendingReservationExpiry::class)->expire();
         
         // ✅ DEBUG
         \Log::info('=== CART INDEX DEBUG ===', [
@@ -44,17 +45,29 @@ class CartController extends Controller
             ];
         })->toArray();
 
-        // 2. LẤY THÔNG TIN ĐẶT BÀN MỚI NHẤT TỪ DATABASE (Tuyệt đối không sợ mất Session)
-        $latestReservation = \App\Models\Reservation::where('user_id', $userId)
-                            ->whereIn('status', Reservation::ACTIVE_STATUSES)
-                            ->orderBy('created_at', 'desc')
-                            ->first();
+        // Khi mở từ lịch sử, chỉ tải đúng đặt bàn thuộc tài khoản hiện tại.
+        $latestReservation = $request->filled('reservation_id')
+            ? Reservation::where('user_id', $userId)->findOrFail($request->integer('reservation_id'))
+            : Reservation::where('user_id', $userId)
+                ->whereIn('status', Reservation::ACTIVE_STATUSES)
+                ->latest('id')
+                ->first();
+        if ($latestReservation && is_array($latestReservation->cart_data)) {
+            $cart = $latestReservation->cart_data;
+        }
         $reservationTable = $latestReservation
             ? \App\Models\Table::find($latestReservation->table_id)
             : null;
         $reservationStatusLabel = $latestReservation
             ? \App\Helpers\StatusHelper::getTextWithEmoji($latestReservation->status)
             : 'Chưa đặt';
+        $latestPendingReservation = Reservation::where('user_id', $userId)
+            ->where('status', 'pending_deposit')
+            ->latest('id')
+            ->first(['id', 'payment_status']);
+        $editableReservationId = $latestPendingReservation?->payment_status === 'unpaid'
+            ? $latestPendingReservation->id
+            : null;
         $hasTableConflict = $latestReservation
             && \App\Models\Reservation::blockingTable()
                 ->where('table_id', $latestReservation->table_id)
@@ -69,7 +82,12 @@ $canCheckout = $latestReservation
     && $latestReservation->payment_status === 'unpaid'
     && $reservationTable
     && $reservationTable->status === 'empty'
-    && !$hasTableConflict;
+    && !$hasTableConflict
+    && (int) $latestReservation->id === (int) $editableReservationId;
+        $canEditReservation = $latestReservation
+            && $latestReservation->status === 'pending_deposit'
+            && $latestReservation->payment_status === 'unpaid'
+            && (int) $latestReservation->id === (int) $editableReservationId;
         $checkoutUnavailableMessage = null;
         if ($latestReservation && !$canCheckout) {
             if ($latestReservation->status !== 'pending_deposit'
@@ -81,6 +99,8 @@ $canCheckout = $latestReservation
             } elseif ($hasTableConflict) {
                 $tableName = $reservationTable->name;
                 $checkoutUnavailableMessage = "Bàn {$tableName} đã được giữ cho khách khác. Vui lòng chọn bàn trống khác hoặc liên hệ nhân viên.";
+            } elseif ((int) $latestReservation->id !== (int) $editableReservationId) {
+                $checkoutUnavailableMessage = 'Bạn có yêu cầu đặt bàn chờ cọc mới hơn. Hãy tiếp tục thanh toán hoặc chỉnh sửa yêu cầu mới nhất trong lịch sử giao dịch.';
             }
         }
 
@@ -96,7 +116,7 @@ $canCheckout = $latestReservation
 
         if ($latestReservation) {
             // Lấy tên bàn từ bảng tables (nếu không thấy thì in ra mã ID chữa cháy)
-            $tableName = \App\Models\Table::find($latestReservation->table_id)->name ?? ('Số ' . $latestReservation->table_id);
+            $tableName = $reservationTable?->name ?? ('Số ' . $latestReservation->table_id);
             
             $reservation = [
     'name'      => $latestReservation->full_name,
@@ -143,9 +163,12 @@ $canCheckout = $latestReservation
             'cart',
             'total',
             'reservation',
+            'latestReservation',
             'canCheckout',
             'checkoutUnavailableMessage',
             'needReservation',
+            'canEditReservation',
+            'editableReservationId',
             'appliedPromotion',
             'promotionDiscount',
             'promotionError',
@@ -170,7 +193,8 @@ public function addToCart(Request $request)
     }
 
     // 2. Validate dữ liệu đầu vào cơ bản
-    $request->validate([
+    $data = $request->validate([
+        'menu_id' => ['required', 'integer', 'exists:menus,id'],
         'quantity' => 'required|integer|min:1|max:10',
     ], [
         'quantity.min' => 'Số lượng ít nhất phải là 1.',
@@ -178,59 +202,31 @@ public function addToCart(Request $request)
     ]);
 
     $userId = auth()->id();
-    $foodId = $request->menu_id;
-    $quantity = (int)$request->input('quantity', 1);
+    try {
+        DB::transaction(function () use ($data, $userId) {
+            \App\Models\User::whereKey($userId)->lockForUpdate()->firstOrFail();
+            $this->assertCartEditable($userId);
+            $menu = Menu::whereKey($data['menu_id'])->lockForUpdate()->firstOrFail();
+            $cartItem = Cart::where('user_id', $userId)
+                ->where('menu_id', $menu->id)
+                ->lockForUpdate()
+                ->first();
+            $newQuantity = (int) ($cartItem->quantity ?? 0) + (int) $data['quantity'];
 
-    // 3. Tìm món ăn trong Database
-    $menu = \App\Models\Menu::find($foodId);
+            if ($newQuantity > $menu->stock) {
+                throw new \DomainException("Món '{$menu->name}' hiện không đủ số lượng trong kho.");
+            }
 
-    if (!$menu) {
-        return response()->json([
-            'success' => false,
-            'message' => 'Món không tồn tại'
-        ]);
-    }
-
-    // 🔥 TRƯỜNG HỢP 1: HẾT HÀNG HOÀN TOÀN
-    if ($menu->stock <= 0) {
-        return response()->json([
-            'success' => false,
-            'message' => 'Rất tiếc, món ăn này hiện đã hết hàng!'
-        ]);
-    }
-
-    // 4. Kiểm tra giỏ hàng hiện tại của User
-    $cartItem = \App\Models\Cart::where('user_id', $userId)
-        ->where('menu_id', $foodId)
-        ->first();
-
-    if ($cartItem) {
-        $newQuantity = $cartItem->quantity + $quantity;
-        
-        // 🔥 TRƯỜNG HỢP 2: TỔNG TRONG GIỎ VƯỢT QUÁ KHO
-        if ($newQuantity > $menu->stock) {
-            return response()->json([
-                'success' => false,
-                'message' => "Rất tiếc, bạn đã có {$cartItem->quantity} phần trong giỏ. Kho chỉ còn tổng cộng {$menu->stock} phần."
-            ]);
-        }
-
-        $cartItem->quantity = $newQuantity;
-        $cartItem->save();
-    } else {
-        // 🔥 TRƯỜNG HỢP 3: THÊM MỚI VƯỢT QUÁ KHO
-        if ($quantity > $menu->stock) {
-            return response()->json([
-                'success' => false,
-                'message' => "Món này hiện chỉ còn {$menu->stock} phần."
-            ]);
-        }
-
-        \App\Models\Cart::create([
-            'user_id' => $userId,
-            'menu_id' => $foodId,
-            'quantity' => $quantity
-        ]);
+            if ($cartItem) {
+                $cartItem->quantity = $newQuantity;
+                $cartItem->save();
+            } else {
+                Cart::create(['user_id' => $userId, 'menu_id' => $menu->id, 'quantity' => $newQuantity]);
+            }
+            $this->syncCustomerCartToStaff($userId);
+        });
+    } catch (\DomainException $e) {
+        return response()->json(['success' => false, 'message' => $e->getMessage()], 422);
     }
 
     // 5. Lấy tổng số lượng món trong giỏ để cập nhật badge trên giao diện
@@ -269,12 +265,16 @@ public function getCart()
      */
     public function clear()
     {
-        if (Auth::check()) {
-            // Xóa dự phòng trong DB nếu có
-            $latestRes = Reservation::where('user_id', Auth::id())->latest()->first();
-            if ($latestRes) {
-                $latestRes->update(['cart_data' => null]);
-            }
+        $userId = Auth::id();
+        try {
+            DB::transaction(function () use ($userId) {
+                \App\Models\User::whereKey($userId)->lockForUpdate()->firstOrFail();
+                $this->assertCartEditable($userId);
+                Cart::where('user_id', $userId)->delete();
+                $this->syncCustomerCartToStaff($userId);
+            });
+        } catch (\DomainException $e) {
+            return redirect()->back()->with('error', $e->getMessage());
         }
         
         session()->forget(['cart']);
@@ -293,146 +293,133 @@ public function getCart()
     public function checkout(Request $request)
     {
         $userId = auth()->id();
+        $data = $request->validate([
+            'reservation_id' => ['nullable', 'integer'],
+            'payment_method' => ['nullable', 'in:BANK'],
+        ]);
 
-        // 1. LẤY GIỎ HÀNG TỪ DATABASE ĐỂ KIỂM TRA ĐẦU VÀO
-        $cartItems = \App\Models\Cart::with('menu')
-            ->where('user_id', $userId)
-            ->get();
+        try {
+            $reservation = DB::transaction(function () use ($data, $userId, $request) {
+                \App\Models\User::whereKey($userId)->lockForUpdate()->firstOrFail();
 
-        // if ($cartItems->isEmpty()) {
-        //     return redirect()->back()->with('error', 'Giỏ hàng của bạn đang trống.');
-        // }
+                $reservationQuery = Reservation::where('user_id', $userId)->lockForUpdate();
+                $reservation = !empty($data['reservation_id'])
+                    ? $reservationQuery->findOrFail($data['reservation_id'])
+                    : $reservationQuery
+                        ->whereIn('status', Reservation::ACTIVE_STATUSES)
+                        ->latest('id')
+                        ->first();
 
-        // 2. KIỂM TRA TỒN KHO (STOCK) TRƯỚC KHI XỬ LÝ
-        foreach ($cartItems as $item) {
-            if (!$item->menu || $item->quantity > $item->menu->stock) {
-                $stockAvailable = $item->menu->stock ?? 0;
-                return redirect()->back()->with('error', "Món '{$item->menu->name}' hiện không đủ số lượng (Chỉ còn {$stockAvailable} phần). Vui lòng điều chỉnh lại giỏ hàng.");
-            }
-        }
+                if (!$reservation || !$reservation->table_id) {
+                    throw new \DomainException('Vui lòng nhập thông tin đặt bàn trước khi thanh toán cọc.');
+                }
+                $latestPending = Reservation::where('user_id', $userId)
+                    ->where('status', 'pending_deposit')
+                    ->latest('id')
+                    ->lockForUpdate()
+                    ->first(['id', 'payment_status']);
+                if (
+                    !$latestPending
+                    || $latestPending->payment_status !== 'unpaid'
+                    || (int) $reservation->id !== (int) $latestPending->id
+                ) {
+                    throw new \DomainException('Chỉ yêu cầu đặt bàn đang chờ cọc mới nhất có thể tiếp tục thanh toán.');
+                }
+                if ($reservation->status !== 'pending_deposit' || $reservation->payment_status !== 'unpaid') {
+                    throw new \DomainException('Yêu cầu này không còn chờ thanh toán cọc hoặc đã được gửi xác nhận.');
+                }
 
-        // 3. Dùng một snapshot món ăn từ giỏ DB cho cả hóa đơn và đơn bếp
-        $totalAmount = 0;
-        $cartData = [];
-        foreach ($cartItems as $item) {
-            $price = $item->menu->price;
-            $totalAmount += $price * $item->quantity;
-            $cartData[] = [
-                'id'       => $item->menu_id,
-                'name'     => $item->menu->name,
-                'price'    => $price,
-                'quantity' => $item->quantity,
-                'image'    => $item->menu->image,
-            ];
-        }
+                $table = \App\Models\Table::whereKey($reservation->table_id)->lockForUpdate()->first();
+                $conflict = !$table || $table->status !== 'empty'
+                    || Reservation::blockingTable()
+                        ->where('table_id', $reservation->table_id)
+                        ->where('id', '!=', $reservation->id)
+                        ->exists();
+                if ($conflict) {
+                    throw new \DomainException('Bàn này không còn trống. Vui lòng chọn bàn khác hoặc liên hệ nhân viên.');
+                }
 
-        // 4. Lấy phương thức thanh toán & Tạo mã đơn hàng ngẫu nhiên
-        $pm = $request->input('payment_method', 'COD');
-        $orderCode = (string)rand(100000, 999999);
-
-        // 5. Lấy TABLE_ID từ RESERVATION gần nhất
-        $latestReservation = \App\Models\Reservation::where('user_id', $userId)
-            ->whereIn('status', Reservation::ACTIVE_STATUSES)
-            ->latest()
-            ->first();
-       // Bắt buộc phải có đặt bàn (kèm bàn) mới được cọc.
-// Chặn ở server để khách không gửi form trực tiếp lách qua giao diện.
-if (!$latestReservation || !$latestReservation->table_id) {
-    return redirect()->route('reservation.index')
-        ->with('error', 'Vui lòng nhập thông tin đặt bàn trước khi thanh toán cọc.');
-}
-$tableId = $latestReservation->table_id;
-
-        // Checkout chỉ được gắn với yêu cầu đặt bàn chưa xác nhận cọc và bàn còn trống.
-        if ($latestReservation) {
-            try {
-                DB::transaction(function () use ($latestReservation) {
-                    $lockedReservation = \App\Models\Reservation::lockForUpdate()->findOrFail($latestReservation->id);
-                    $table = \App\Models\Table::whereKey($lockedReservation->table_id)->lockForUpdate()->first();
-                    $conflict = !$table || $table->status !== 'empty'
-                        || \App\Models\Reservation::blockingTable()
-                            ->where('table_id', $lockedReservation->table_id)
-                            ->where('id', '!=', $lockedReservation->id)
-                            ->exists();
-
-                    if ($lockedReservation->status !== 'pending_deposit'
-                        || $lockedReservation->payment_status !== 'unpaid'
-                        || $conflict) {
-                        throw new \DomainException('Bàn này không còn trống hoặc yêu cầu đặt bàn đã được xử lý. Vui lòng chọn bàn khác hoặc liên hệ nhân viên.');
+                $cartItems = Cart::where('user_id', $userId)->lockForUpdate()->get();
+                $menus = Menu::whereIn('id', $cartItems->pluck('menu_id')->unique())
+                    ->lockForUpdate()
+                    ->get()
+                    ->keyBy('id');
+                $wanted = [];
+                foreach ($cartItems as $item) {
+                    $menu = $menus->get($item->menu_id);
+                    if (!$menu) {
+                        throw new \DomainException('Một món trong giỏ không còn tồn tại. Vui lòng cập nhật giỏ hàng.');
                     }
+                    if ((int) $item->quantity > (int) $menu->stock) {
+                        throw new \DomainException("Món '{$menu->name}' hiện không đủ số lượng trong kho.");
+                    }
+                    if ((int) $item->quantity > 0) {
+                        $wanted[(int) $menu->id] = (int) $item->quantity;
+                    }
+                }
 
-                    $lockedReservation->payment_status = 'deposit_submitted';
-                    $lockedReservation->save();
-                    $table->update(['status' => 'reserved']);
-                });
-            } catch (\DomainException $e) {
-                return redirect()->back()->with('error', $e->getMessage());
-            }
+                $items = app(\App\Services\ReservationItemService::class);
+                $items->syncCustomerCart($reservation, $wanted, $userId);
+                $reservation->refresh();
+                $reservation->deposit_amount = Reservation::calcDeposit($items->total($reservation));
+                $reservation->save();
 
-            $latestReservation->refresh();
+                $order = Order::where('reservation_id', $reservation->id)
+                    ->lockForUpdate()
+                    ->latest('id')
+                    ->first();
+                if ($cartItems->isNotEmpty() && !$order) {
+                    $order = Order::create([
+                        'user_id' => $userId,
+                        'reservation_id' => $reservation->id,
+                        'code' => (string) random_int(100000, 999999),
+                        'total_price' => $reservation->total_price,
+                        'status' => 'pending_payment',
+                        'payment_method' => 'BANK',
+                        'table_number' => $reservation->table_id,
+                        'name' => $reservation->full_name,
+                        'phone' => $reservation->phone,
+                        'notes' => $request->input('order_notes'),
+                    ]);
+
+                    foreach ($cartItems as $item) {
+                        $menu = $menus->get($item->menu_id);
+                        $menu->stock = (int) $menu->stock - (int) $item->quantity;
+                        $menu->save();
+                    }
+                } elseif ($order && !in_array($order->status, ['cancelled', 'paid', 'completed'], true)) {
+                    $order->update([
+                        'total_price' => $reservation->total_price,
+                        'status' => 'pending_payment',
+                        'table_number' => $reservation->table_id,
+                    ]);
+                } elseif ($order && in_array($order->status, ['cancelled', 'paid', 'completed'], true)) {
+                    throw new \DomainException('Đơn hàng liên kết đã được xử lý. Vui lòng liên hệ nhân viên.');
+                }
+
+                $reservation->payment_status = 'deposit_submitted';
+                $reservation->save();
+                $table->update(['status' => 'reserved']);
+
+                if ($order) {
+                    $items->syncCaches($reservation);
+                }
+
+                Cart::where('user_id', $userId)->delete();
+
+                return $reservation;
+            });
+        } catch (\DomainException $e) {
+            return redirect()->back()->with('error', $e->getMessage());
         }
 
-        // Staff/bếp đọc món từ reservations.cart_data, còn hóa đơn đọc order_items.
-        // Cập nhật cả hai từ cùng snapshot để không lệch với giỏ khách vừa chốt.
-        if ($latestReservation) {
-            $itemService = app(\App\Services\ReservationItemService::class);
-
-            $wanted = [];
-            foreach ($cartData as $c) {
-                $wanted[(int) $c['id']] = ($wanted[(int) $c['id']] ?? 0) + (int) $c['quantity'];
-            }
-
-            // Đồng bộ các dòng món theo giỏ vừa chốt: chỉ ghi phần chênh, không xóa dòng nào.
-            // cart_data / total_price / chef_statuses / order_items được service sinh lại từ các dòng này.
-            try {
-                $itemService->syncCustomerCart($latestReservation, $wanted, $userId);
-            } catch (\DomainException $e) {
-                return redirect()->back()->with('error', $e->getMessage());
-            }
-
-            $latestReservation->refresh();
-            $latestReservation->update([
-                'deposit_amount' => Reservation::calcDeposit($itemService->total($latestReservation)),
-            ]);
-        }
-
-// 6-8. Chỉ tạo Order khi khách có đặt món trước.
-// Đặt bàn không món: chỉ cọc giữ bàn, Order sẽ do staff tạo khi khách đến gọi món.
-if ($cartItems->isNotEmpty()) {
-    $orderStatus = ($pm === 'BANK') ? 'pending_payment' : 'pending';
-
-    $order = \App\Models\Order::create([
-        'user_id'        => $userId,
-        'reservation_id' => $latestReservation->id,
-        'code'           => $orderCode,
-        'total_price'    => $totalAmount,
-        'status'         => $orderStatus,
-        'payment_method' => $pm,
-        'table_number'   => $tableId,
-        'name'           => auth()->user()->name,
-        'phone'          => auth()->user()->phone,
-        'notes'          => $request->order_notes ?? null,
-    ]);
-
-    foreach ($cartItems as $item) {
-        // Trừ tồn kho món đã đặt
-        $item->menu->decrement('stock', $item->quantity);
-    }
-
-    // order_items của hóa đơn được sinh từ reservation_items (không tự tạo/xóa tay nữa)
-    app(\App\Services\ReservationItemService::class)->syncCaches($latestReservation);
-}
-
-// 9. Thông báo cho khách (mail xác nhận chỉ gửi sau khi staff duyệt cọc)
-$successMessage = $cartItems->isNotEmpty()
-    ? 'Đặt món thành công! Vui lòng hoàn tất chuyển khoản qua mã QR để đơn hàng được nhà bếp xử lý.'
-    : 'Đã ghi nhận đặt cọc giữ bàn! Nhân viên sẽ xác nhận sau khi nhận được tiền.';
-
-        // 10. Dọn sạch dữ liệu giỏ hàng sau khi đã chuyển thành đơn hàng thành công
-       Cart::where('user_id', $userId)->delete();
         session()->forget('cart');
 
-        return redirect('/')->with('success', $successMessage);
+        $successMessage = $reservation->total_price > 0
+            ? 'Đã ghi nhận thông tin chuyển khoản cọc. Nhân viên sẽ xác nhận sau khi đối soát.'
+            : 'Đã ghi nhận đặt cọc giữ bàn. Nhân viên sẽ xác nhận sau khi nhận được tiền.';
+
+        return redirect()->route('orders.history')->with('success', $successMessage);
     }
 public function removeItem($id)
 {
@@ -462,23 +449,32 @@ public function history()
      */
    public function update(Request $request)
 {
+    $data = $request->validate([
+        'id' => ['required', 'integer', 'exists:menus,id'],
+        'quantity' => ['required', 'integer', 'min:0', 'max:50'],
+    ]);
     $userId = auth()->id();
-    $menuId = $request->id;
-    $quantity = (int) $request->quantity;
+    try {
+        DB::transaction(function () use ($data, $userId) {
+            \App\Models\User::whereKey($userId)->lockForUpdate()->firstOrFail();
+            $this->assertCartEditable($userId);
+            $menu = Menu::whereKey($data['id'])->lockForUpdate()->firstOrFail();
+            $quantity = (int) $data['quantity'];
+            if ($quantity > (int) $menu->stock) {
+                throw new \DomainException("Món '{$menu->name}' hiện chỉ còn {$menu->stock} phần.");
+            }
 
-    // 1. Nếu số lượng > 0 thì cập nhật, ngược lại (bằng 0) thì XÓA món
-    if ($quantity > 0) {
-        \App\Models\Cart::where('user_id', $userId)
-            ->where('menu_id', $menuId)
-            ->update(['quantity' => $quantity]);
-    } else {
-        \App\Models\Cart::where('user_id', $userId)
-            ->where('menu_id', $menuId)
-            ->delete();
+            $item = Cart::where('user_id', $userId)->where('menu_id', $menu->id)->lockForUpdate()->first();
+            if ($quantity === 0) {
+                $item?->delete();
+            } elseif ($item) {
+                $item->update(['quantity' => $quantity]);
+            }
+            $this->syncCustomerCartToStaff($userId);
+        });
+    } catch (\DomainException $e) {
+        return response()->json(['success' => false, 'message' => $e->getMessage()], 422);
     }
-
-    // 2. Gọi hàm đồng bộ để cập nhật bảng order_items (để Admin thấy thay đổi)
-    $this->syncCustomerCartToStaff($userId);
 
     return response()->json(['success' => true]);
 }
@@ -489,21 +485,36 @@ public function history()
     public function remove($id)
     {
         $userId = auth()->id();
-
-        // 1. Xóa món khỏi Database giỏ hàng
-        \App\Models\Cart::where('user_id', $userId)
-                        ->where('menu_id', $id)
-                        ->delete();
+        try {
+            DB::transaction(function () use ($id, $userId) {
+                \App\Models\User::whereKey($userId)->lockForUpdate()->firstOrFail();
+                $this->assertCartEditable($userId);
+                Cart::where('user_id', $userId)->where('menu_id', $id)->delete();
+                $this->syncCustomerCartToStaff($userId);
+            });
+        } catch (\DomainException $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
 
         // Xóa luôn session phụ trợ (nếu có dùng để hiển thị icon giỏ hàng)
         $cart = session()->get('cart', []);
         if(isset($cart[$id])) { unset($cart[$id]); }
         session()->put('cart', $cart);
 
-        // 2. Đồng bộ ngay lập tức cho Nhân viên
-        $this->syncCustomerCartToStaff($userId);
-
         return redirect()->back()->with('success', 'Đã xóa món ăn khỏi giỏ hàng!');
+    }
+
+    private function assertCartEditable(int $userId): void
+    {
+        $reservation = Reservation::where('user_id', $userId)
+            ->where('status', 'pending_deposit')
+            ->latest('id')
+            ->lockForUpdate()
+            ->first();
+
+        if ($reservation && $reservation->payment_status !== 'unpaid') {
+            throw new \DomainException('Bạn đã gửi xác nhận chuyển khoản. Không thể chỉnh sửa món trong yêu cầu này.');
+        }
     }
 
     /**
@@ -514,51 +525,35 @@ public function history()
      */
     private function syncCustomerCartToStaff($userId)
     {
-        // 1. Lấy giỏ hàng mới nhất
-        $cartItems = \App\Models\Cart::with('menu')->where('user_id', $userId)->get();
-        $cartData = [];
-        $totalPrice = 0;
+        $cartItems = Cart::where('user_id', $userId)->lockForUpdate()->get();
+        $menus = Menu::whereIn('id', $cartItems->pluck('menu_id')->unique())
+            ->lockForUpdate()
+            ->get()
+            ->keyBy('id');
+        $reservation = Reservation::where('user_id', $userId)
+            ->where('status', 'pending_deposit')
+            ->latest('id')
+            ->lockForUpdate()
+            ->first();
 
-        foreach ($cartItems as $item) {
-            if (!$item->menu) continue;
-            $cartData[] = [
-                'id'       => $item->menu_id,
-                'name'     => $item->menu->name,
-                'price'    => $item->menu->price,
-                'quantity' => $item->quantity,
-                'image'    => $item->menu->image
-            ];
-            $totalPrice += $item->quantity * $item->menu->price;
-        }
-
-        // 2. Cập nhật Bảng Đặt Bàn (Reservations)
-        $reservation = \App\Models\Reservation::where('user_id', $userId)
-    ->where('status', 'pending_deposit')
-    ->where('payment_status', 'unpaid')
-    ->latest()
-    ->first();
-        
         if ($reservation) {
-            $itemService = app(\App\Services\ReservationItemService::class);
+            if ($reservation->payment_status !== 'unpaid') {
+                throw new \DomainException('Bạn đã gửi xác nhận chuyển khoản. Không thể chỉnh sửa món trong yêu cầu này.');
+            }
 
             $wanted = [];
-            foreach ($cartData as $cd) {
-                $wanted[(int) $cd['id']] = ($wanted[(int) $cd['id']] ?? 0) + (int) $cd['quantity'];
+            foreach ($cartItems as $item) {
+                if (!$menus->has($item->menu_id)) {
+                    throw new \DomainException('Một món trong giỏ không còn tồn tại. Vui lòng cập nhật giỏ hàng.');
+                }
+                $wanted[(int) $item->menu_id] = (int) $item->quantity;
             }
 
-            // Chỉ ghi nhận phần chênh của giỏ (không còn "xóa sạch rồi tạo lại" order_items).
-            try {
-                $itemService->syncCustomerCart($reservation, $wanted, $userId);
-            } catch (\DomainException $e) {
-                report($e);
-                return;
-            }
-
-            // Đơn chưa cọc: tiền cọc luôn tính lại theo tổng mới
+            $itemService = app(\App\Services\ReservationItemService::class);
+            $itemService->syncCustomerCart($reservation, $wanted, $userId);
             $reservation->refresh();
-            $reservation->update([
-                'deposit_amount' => Reservation::calcDeposit($itemService->total($reservation)),
-            ]);
+            $reservation->deposit_amount = Reservation::calcDeposit($itemService->total($reservation));
+            $reservation->save();
         }
     }
 }

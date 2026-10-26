@@ -90,10 +90,9 @@ public static function calcDeposit(int $total): int
     public function linkedOrder(): ?Order
     {
         return Order::where('reservation_id', $this->id)->latest()->first()
-            ?? Order::where('user_id', $this->user_id)
-                ->where('table_number', (string) $this->table_id)
-                ->whereNotIn('status', ['paid', 'completed', 'cancelled'])
-                ->latest()->first();
+            ?? Order::whereHas('orderItems', fn ($query) => $query->where('reservation_id', $this->id))
+                ->latest()
+                ->first();
     }
 
     protected $fillable = [
@@ -138,10 +137,7 @@ public function reservationItems()
 }
 public function order()
 {
-    // Reservation nối với Order qua user_id và table_id (hoặc reservation_id nếu có)
-    return $this->hasOne(\App\Models\Order::class, 'user_id', 'user_id')
-                ->where('table_number', $this->table_id)
-                ->latest();
+    return $this->hasOne(Order::class, 'reservation_id', 'id')->latestOfMany();
 }
 /** Mã khuyến mãi đang gắn với đơn (chưa chắc đã được trừ tiền — xem discount_amount). */
 public function promotion()

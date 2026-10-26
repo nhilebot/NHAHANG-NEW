@@ -16,7 +16,7 @@
         <div class="reservation-section">
             <div class="container">
                 <div class="form-container-custom">
-                    <h2 class="form-title">Yêu cầu đặt bàn</h2>
+                    <h2 class="form-title">{{ $editingReservation ? 'Chỉnh sửa yêu cầu đặt bàn' : 'Yêu cầu đặt bàn' }}</h2>
 
                     @if ($errors->any())
                         <div class="alert alert-danger alert-dismissible fade show" role="alert" style="border-radius: 8px; border-left: 4px solid #e74c3c;">
@@ -43,6 +43,9 @@
                 
                     <form id="reservation-form" method="post" action="{{ route('reservation.store') }}">
                         @csrf
+                        @if($editingReservation)
+                            <input type="hidden" name="reservation_id" value="{{ $editingReservation->id }}">
+                        @endif
                         <div class="row">
                             <div class="col-md-6">
                                 <label class="label-custom">Ngày đặt bàn</label>
@@ -50,24 +53,25 @@
                                     type="date" 
                                     name="reservation_date" 
                                     class="form-control input-custom"
-                                    min="{{ date('Y-m-d') }}"
+                                    min="{{ now('Asia/Ho_Chi_Minh')->toDateString() }}"
+                                    value="{{ old('reservation_date', $editingReservation?->reservation_date?->format('Y-m-d')) }}"
                                     required
                                 >
                             </div>
                             <div class="col-md-6">
                                 <label class="label-custom">Giờ đến</label>
-                                <input type="time" name="reservation_time" class="form-control input-custom" required>
+                                <input type="time" name="reservation_time" class="form-control input-custom" value="{{ old('reservation_time', $editingReservation?->reservation_time) }}" required>
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="col-md-6">
                                 <label class="label-custom">Họ và Tên</label>
-                                <input type="text" name="full_name" class="form-control input-custom" placeholder="Nhập tên của bạn" required>
+                                <input type="text" name="full_name" class="form-control input-custom" value="{{ old('full_name', $editingReservation?->full_name) }}" placeholder="Nhập tên của bạn" required>
                             </div>
                             <div class="col-md-6">
                                 <label class="label-custom">Số điện thoại</label>
-                                <input type="tel" name="phone" class="form-control input-custom" placeholder="Nhập số điện thoại liên lạc" required>
+                                <input type="tel" name="phone" class="form-control input-custom" value="{{ old('phone', $editingReservation?->phone) }}" placeholder="Nhập số điện thoại liên lạc" required>
                             </div>
                         </div>
 
@@ -83,7 +87,8 @@
                                         name="table_id"
                                         value="{{ $table->id }}"
                                         id="table{{ $table->id }}"
-                                        {{ $isUnavailable ? 'disabled' : '' }}
+                                        {{ $isUnavailable && (int) $editingReservation?->table_id !== (int) $table->id ? 'disabled' : '' }}
+                                        {{ (int) old('table_id', $editingReservation?->table_id) === (int) $table->id ? 'checked' : '' }}
                                     >
 
                                     <label for="table{{ $table->id }}" id="label-{{ $table->id }}">
@@ -166,11 +171,11 @@
                         <div id="hidden-inputs-container"></div>
 
                         <label class="label-custom">Ghi Chú Yêu Cầu Đặc Biệt</label>
-                        <textarea name="notes" class="form-control input-custom" rows="3" placeholder="Ví dụ: Dị ứng đậu phộng, cần chuẩn bị hoa hồng, kỷ niệm sinh nhật..." style="height: auto !important; padding: 15px;"></textarea>
+                        <textarea name="notes" class="form-control input-custom" rows="3" placeholder="Ví dụ: Dị ứng đậu phộng, cần chuẩn bị hoa hồng, kỷ niệm sinh nhật..." style="height: auto !important; padding: 15px;">{{ old('notes', $editingReservation?->notes) }}</textarea>
 
                         <div class="text-center mt-4">
                             <button type="submit" class="btn btn-reserve">
-                                HOÀN TẤT ĐẶT BÀN
+                                {{ $editingReservation ? 'CẬP NHẬT ĐẶT BÀN' : 'HOÀN TẤT ĐẶT BÀN' }}
                             </button>
                         </div>
                     </form>

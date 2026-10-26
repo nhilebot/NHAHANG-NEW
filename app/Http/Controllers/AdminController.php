@@ -24,6 +24,7 @@ class AdminController extends Controller
 
     public function index()
     {
+        app(\App\Services\PendingReservationExpiry::class)->expire();
         $reservations = Reservation::with(['user', 'table'])->latest()->get();
         $orders       = Order::with('user')->latest()->get();
         $menus        = Menu::all();

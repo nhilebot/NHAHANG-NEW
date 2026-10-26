@@ -62,7 +62,9 @@
                     && !in_array($reservation->cancellation_status, ['pending', 'approved'], true);
 
                 $reservationStatusText = match ($reservation->status) {
-                    'pending_deposit' => 'Chờ xác nhận cọc',
+                    'pending_deposit' => $reservation->payment_status === 'deposit_submitted'
+                        ? 'Chờ nhân viên xác nhận cọc'
+                        : 'Chờ khách thanh toán cọc',
                     'pending' => 'Chờ xác nhận đặt bàn',
                     'confirmed' => 'Đã xác nhận',
                     'arrived' => 'Khách đã đến',
@@ -70,7 +72,9 @@
                     'ready' => 'Món ăn đã sẵn sàng',
                     'served' => 'Đã phục vụ',
                     'completed' => 'Hoàn tất',
-                    'cancelled' => 'Đã hủy',
+                    'cancelled' => $reservation->cancellation_status === 'expired'
+                        ? 'Đã hủy do hết hạn cọc'
+                        : 'Đã hủy',
                     default => $reservation->status,
                 };
 
@@ -105,12 +109,17 @@
 
                         <div class="info-item">
                             <strong><i class="fa-solid fa-chair"></i> Bàn số</strong>
-                            {{ $reservation->table_id }}
+                            {{ $reservation->table->name ?? $reservation->table_id }}
                         </div>
 
                         <div class="info-item">
                             <strong><i class="fa-solid fa-wallet"></i> Tiền cọc</strong>
                             {{ number_format($reservation->deposit_amount ?? 0, 0, ',', '.') }}đ
+                        </div>
+
+                        <div class="info-item">
+                            <strong><i class="fa-solid fa-receipt"></i> Tổng tiền món</strong>
+                            {{ number_format($reservation->total_price ?? 0, 0, ',', '.') }}đ
                         </div>
 
                         <div class="info-item">
@@ -180,8 +189,132 @@
                 <div class="order-footer">
                     <span class="total-label">
                         <i class="fa-solid fa-circle-info"></i>
-                        Thông tin đặt bàn
+                        {{ number_format($reservation->total_price ?? 0, 0, ',', '.') }}đ ·
+                        Cọc {{ number_format($reservation->deposit_amount ?? 0, 0, ',', '.') }}đ
                     </span>
+                    <div class="transaction-actions">
+                        <button class="btn-detail" type="button"
+                                onclick="toggleDetail('reservation-detail-{{ $reservation->id }}')">
+                            <i class="fa-solid fa-eye"></i> Xem chi tiết
+                        </button>
+                        @if($reservation->id === $editableReservationId)
+                            <a class="btn-detail"
+                               href="{{ route('cart.index', ['reservation_id' => $reservation->id]) }}">
+                                <i class="fa-solid fa-credit-card"></i> Tiếp tục thanh toán cọc
+                            </a>
+                            <a class="btn-detail"
+                               href="{{ route('reservation.index', ['reservation_id' => $reservation->id]) }}">
+                                <i class="fa-solid fa-pen"></i> Chỉnh sửa
+                            </a>
+                        @elseif($reservation->status === 'pending_deposit' && $reservation->payment_status === 'deposit_submitted')
+                            <span>Đang chờ nhân viên đối soát; không thể chỉnh sửa đơn.</span>
+                        @elseif($reservation->status === 'pending_deposit' && $reservation->payment_status === 'unpaid')
+                            <span>Chỉ yêu cầu chờ cọc mới nhất được tiếp tục thanh toán hoặc chỉnh sửa.</span>
+                        @endif
+                    </div>
+                </div>
+
+                <div id="reservation-detail-{{ $reservation->id }}" class="detail-box" style="display:none;">
+                    <section class="detail-section">
+                        <h3 class="detail-section-title">Thông tin khách hàng</h3>
+                        <div class="transaction-info">
+                            <div class="info-item">
+                                <strong><i class="fa-solid fa-user"></i> Họ tên</strong>
+                                {{ $reservation->full_name }}
+                            </div>
+                            <div class="info-item">
+                                <strong><i class="fa-solid fa-phone"></i> Số điện thoại</strong>
+                                {{ $reservation->phone }}
+                            </div>
+                            @if($reservation->email)
+                                <div class="info-item">
+                                    <strong><i class="fa-solid fa-envelope"></i> Email</strong>
+                                    {{ $reservation->email }}
+                                </div>
+                            @endif
+                            <div class="info-item">
+                                <strong><i class="fa-solid fa-calendar-days"></i> Ngày giờ đặt</strong>
+                                {{ $reservationDateTime->format('H:i - d/m/Y') }}
+                            </div>
+                            <div class="info-item">
+                                <strong><i class="fa-solid fa-chair"></i> Bàn</strong>
+                                {{ $reservation->table->name ?? ('Bàn ' . $reservation->table_id) }}
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="detail-section">
+                        <h3 class="detail-section-title">Chi tiết đơn hàng</h3>
+                        <div class="product-list">
+                            @forelse($reservation->reservationItems as $line)
+                                @if($line->active_quantity > 0)
+                                    <div class="product-row">
+                                        <div class="product-detail">
+                                            <div class="product-name">{{ $line->menu_name }}</div>
+                                            <div class="product-qty">Số lượng: {{ $line->active_quantity }}</div>
+                                        </div>
+                                        <div class="product-price">
+                                            {{ number_format($line->line_total, 0, ',', '.') }}đ
+                                        </div>
+                                    </div>
+                                @endif
+                            @empty
+                                @foreach($reservation->cart_data ?? [] as $line)
+                                    <div class="product-row">
+                                        <div class="product-detail">
+                                            <div class="product-name">{{ $line['name'] ?? 'Món ăn' }}</div>
+                                            <div class="product-qty">Số lượng: {{ $line['quantity'] ?? 0 }}</div>
+                                        </div>
+                                        <div class="product-price">
+                                            {{ number_format(($line['price'] ?? 0) * ($line['quantity'] ?? 0), 0, ',', '.') }}đ
+                                        </div>
+                                    </div>
+                                @endforeach
+                            @endforelse
+                        </div>
+                    </section>
+
+                    <section class="detail-section">
+                        <h3 class="detail-section-title">Thông tin hóa đơn</h3>
+                        <div class="transaction-info">
+                            @if(($reservation->discount_amount ?? 0) > 0)
+                                <div class="info-item">
+                                    <strong><i class="fa-solid fa-tag"></i> Giảm giá</strong>
+                                    {{ number_format($reservation->discount_amount, 0, ',', '.') }}đ
+                                </div>
+                            @endif
+                            <div class="info-item">
+                                <strong><i class="fa-solid fa-receipt"></i> Tổng tiền món</strong>
+                                {{ number_format($reservation->total_price ?? 0, 0, ',', '.') }}đ
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="detail-section">
+                        <h3 class="detail-section-title">Thông tin thanh toán</h3>
+                        <div class="transaction-info">
+                            <div class="info-item">
+                                <strong><i class="fa-solid fa-wallet"></i> Tiền cọc</strong>
+                                {{ number_format($reservation->deposit_amount ?? 0, 0, ',', '.') }}đ
+                            </div>
+                            <div class="info-item">
+                                <strong><i class="fa-solid fa-credit-card"></i> Trạng thái thanh toán cọc</strong>
+                                @if($reservation->payment_status === 'deposit_paid')
+                                    Đã xác nhận cọc
+                                @elseif($reservation->payment_status === 'deposit_submitted')
+                                    Đã gửi thông tin cọc, chờ xác nhận
+                                @elseif($reservation->payment_status === 'unpaid')
+                                    Chưa thanh toán cọc
+                                @else
+                                    {{ $reservation->payment_status ?? 'Chưa cập nhật' }}
+                                @endif
+                            </div>
+                            <div class="info-item">
+                                <strong><i class="fa-solid fa-circle-info"></i> Trạng thái đặt bàn</strong>
+                                {{ $reservationStatusText }}
+                            </div>
+                        </div>
+                    </section>
                 </div>
             </div>
         @empty
@@ -207,6 +340,7 @@
                 </div>
 
                 <div class="product-list">
+                    <h3 class="detail-section-title product-list-title">Chi tiết đơn hàng</h3>
                     @foreach($order->items as $item)
                         @if($item->quantity > 0)
                             @php
@@ -276,39 +410,64 @@
                 </div>
 
                 <div id="detail-{{ $order->id }}" class="detail-box" style="display:none;">
-                    <div class="transaction-info">
-                        <div class="info-item">
-                            <strong><i class="fa-solid fa-user-tie"></i> Khách hàng</strong>
-                            {{ $order->name }}
+                    <section class="detail-section">
+                        <h3 class="detail-section-title">Thông tin khách hàng</h3>
+                        <div class="transaction-info">
+                            <div class="info-item">
+                                <strong><i class="fa-solid fa-user-tie"></i> Khách hàng</strong>
+                                {{ $order->name }}
+                            </div>
+                            <div class="info-item">
+                                <strong><i class="fa-solid fa-phone"></i> Số điện thoại</strong>
+                                {{ $order->phone ?? 'Chưa cập nhật' }}
+                            </div>
+                            <div class="info-item">
+                                <strong><i class="fa-solid fa-chair"></i> Vị trí</strong>
+                                {{ $order->table->name ?? 'Chưa có bàn' }}
+                                - {{ $order->table->capacity ?? 0 }} ghế
+                            </div>
+                            <div class="info-item">
+                                <strong><i class="fa-solid fa-clock"></i> Giờ đặt</strong>
+                                {{ $order->created_at?->format('H:i d/m/Y') ?? 'N/A' }}
+                            </div>
                         </div>
+                    </section>
 
-                        <div class="info-item">
-                            <strong><i class="fa-solid fa-chair"></i> Vị trí</strong>
-                            {{ $order->table->name ?? 'Chưa có bàn' }}
-                            - {{ $order->table->capacity ?? 0 }} ghế
-                        </div>
-
-                        <div class="info-item">
-                            <strong><i class="fa-solid fa-note-sticky"></i> Ghi chú</strong>
-                            {{ $order->notes ?: 'Không có ghi chú' }}
-                        </div>
-
-                        <div class="info-item">
-                            <strong><i class="fa-solid fa-wallet"></i> Thanh toán</strong>
-                            @if(strtolower($order->payment_method ?? '') === 'cash')
-                                Tiền mặt
-                            @elseif(strtolower($order->payment_method ?? '') === 'transfer')
-                                Chuyển khoản
-                            @else
-                                {{ $order->payment_method ?? 'Chưa cập nhật' }}
+                    <section class="detail-section">
+                        <h3 class="detail-section-title">Thông tin hóa đơn</h3>
+                        <div class="transaction-info">
+                            <div class="info-item">
+                                <strong><i class="fa-solid fa-receipt"></i> Tổng hóa đơn</strong>
+                                {{ number_format($order->total_price, 0, ',', '.') }}đ
+                            </div>
+                            @if($order->notes)
+                                <div class="info-item">
+                                    <strong><i class="fa-solid fa-note-sticky"></i> Ghi chú</strong>
+                                    {{ $order->notes }}
+                                </div>
                             @endif
                         </div>
+                    </section>
 
-                        <div class="info-item">
-                            <strong><i class="fa-solid fa-clock"></i> Giờ đặt</strong>
-                            {{ $order->created_at?->format('H:i d/m/Y') ?? 'N/A' }}
+                    <section class="detail-section">
+                        <h3 class="detail-section-title">Thông tin thanh toán</h3>
+                        <div class="transaction-info">
+                            <div class="info-item">
+                                <strong><i class="fa-solid fa-credit-card"></i> Phương thức thanh toán</strong>
+                                @if(strtolower($order->payment_method ?? '') === 'cash')
+                                    Tiền mặt
+                                @elseif(strtolower($order->payment_method ?? '') === 'transfer')
+                                    Chuyển khoản
+                                @else
+                                    {{ $order->payment_method ?? 'Chưa cập nhật' }}
+                                @endif
+                            </div>
+                            <div class="info-item">
+                                <strong><i class="fa-solid fa-circle-info"></i> Trạng thái đơn hàng</strong>
+                                {{ \App\Helpers\StatusHelper::getTextWithEmoji($order->status) }}
+                            </div>
                         </div>
-                    </div>
+                    </section>
                 </div>
             </div>
         @empty
@@ -317,7 +476,7 @@
     </div>
 
     {{-- THÔNG BÁO KHI KHÔNG CÓ GIAO DỊCH PHÙ HỢP --}}
-    <div id="no-transactions" class="empty-state" style="display:none;">
+    <div id="no-transactions" class="empty-state" style="display:none;" role="status" aria-live="polite">
         <i class="fa-solid fa-receipt"></i>
         <p>Không tìm thấy giao dịch nào.</p>
     </div>

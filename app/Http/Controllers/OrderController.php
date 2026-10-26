@@ -74,6 +74,8 @@ class OrderController extends Controller
     
 public function history()
 {
+    app(\App\Services\PendingReservationExpiry::class)->expire();
+
     $orders = \App\Models\Order::with(['items.menu', 'table'])
         ->where('user_id', \Illuminate\Support\Facades\Auth::id())
         ->latest()
@@ -83,10 +85,21 @@ public function history()
         'user_id',
         \Illuminate\Support\Facades\Auth::id()
     )
+        ->with(['table', 'reservationItems.menu'])
         ->latest()
         ->get();
+    $latestPendingReservation = Reservation::where(
+        'user_id',
+        \Illuminate\Support\Facades\Auth::id()
+    )
+        ->where('status', 'pending_deposit')
+        ->latest('id')
+        ->first(['id', 'payment_status']);
+    $editableReservationId = $latestPendingReservation?->payment_status === 'unpaid'
+        ? $latestPendingReservation->id
+        : null;
 
-    return view('orders.history', compact('orders', 'reservations'));
+    return view('orders.history', compact('orders', 'reservations', 'editableReservationId'));
 }
 
 

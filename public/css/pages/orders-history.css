@@ -530,3 +530,182 @@ body {
         font-size: 18px;
     }
 }
+
+.history-container {
+    width: calc(100% - 32px);
+    max-width: 1020px;
+    margin: 42px auto 72px;
+    padding: 0 0 48px;
+}
+
+.title-page {
+    margin: 36px 0 12px;
+    font-size: clamp(27px, 4vw, 34px);
+    letter-spacing: 0.3px;
+}
+
+.title-page::after {
+    width: 48px;
+    height: 2px;
+    margin-top: 12px;
+}
+
+.history-subtitle {
+    margin-bottom: 28px;
+    line-height: 1.7;
+}
+
+.flash-message {
+    border: 1px solid currentColor;
+    line-height: 1.6;
+}
+
+.order-tabs {
+    gap: 8px;
+    padding: 7px;
+    border-radius: 14px;
+    box-shadow: 0 8px 24px rgba(26, 34, 40, 0.06);
+}
+
+.tab-item {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.order-block {
+    border-radius: 14px;
+    box-shadow: 0 5px 20px rgba(26, 34, 40, 0.055);
+}
+
+.order-header {
+    padding: 18px 22px;
+}
+
+.status-badge {
+    min-height: 30px;
+    line-height: 1.35;
+}
+
+.detail-section + .detail-section {
+    margin-top: 22px;
+    padding-top: 18px;
+    border-top: 1px solid #EAEAEA;
+}
+
+.detail-section-title {
+    margin: 0 0 14px;
+    color: #1A2228;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.15px;
+}
+
+.detail-section-title::before {
+    content: '';
+    display: inline-block;
+    width: 3px;
+    height: 15px;
+    margin-right: 9px;
+    vertical-align: -2px;
+    border-radius: 2px;
+    background: #D4AF37;
+}
+
+.detail-box .transaction-info {
+    padding: 14px;
+    border: 1px solid #EFECE4;
+    border-radius: 10px;
+    background: #fff;
+}
+
+.detail-box .product-list {
+    padding: 0;
+}
+
+.product-list-title {
+    margin: 4px 22px 0;
+}
+
+.transaction-actions {
+    align-items: center;
+}
+
+.transaction-actions .btn-detail,
+.transaction-actions .btn-cancel {
+    min-height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    text-decoration: none;
+}
+
+.btn-detail:focus-visible,
+.btn-cancel:focus-visible,
+.btn-request-cancel:focus-visible,
+.tab-item:focus-visible {
+    outline: 3px solid rgba(212, 175, 55, 0.45);
+    outline-offset: 2px;
+}
+
+.empty-state {
+    margin-top: 6px;
+    padding: 48px 20px;
+    box-shadow: 0 5px 20px rgba(26, 34, 40, 0.045);
+}
+
+.empty-state i {
+    display: block;
+}
+
+@media (max-width: 600px) {
+    .history-container {
+        width: calc(100% - 24px);
+        margin: 24px auto 48px;
+        padding-bottom: 28px;
+    }
+
+    .title-page {
+        margin-top: 72px;
+    }
+
+    .order-tabs {
+        overflow-x: auto;
+        overscroll-behavior-x: contain;
+        scrollbar-width: thin;
+    }
+
+    .tab-item {
+        flex: 1 0 auto;
+        min-width: 92px;
+        white-space: nowrap;
+    }
+
+    .detail-box {
+        padding: 16px;
+    }
+
+    .detail-box .transaction-info {
+        padding: 12px;
+    }
+
+    .product-list-title {
+        margin-right: 15px;
+        margin-left: 15px;
+    }
+
+    .transaction-actions {
+        gap: 8px;
+    }
+
+    .transaction-actions .btn-detail,
+    .transaction-actions .btn-cancel {
+        flex: 1 1 auto;
+        min-width: 0;
+        padding: 9px 10px;
+        text-align: center;
+    }
+}

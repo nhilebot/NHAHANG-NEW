@@ -20,7 +20,7 @@ $depositAmount = \App\Models\Reservation::calcDeposit((int) $total);
     $bankID      = config('services.bank.id');
     $accountNo   = config('services.bank.account');
     $accountName = config('services.bank.name'); 
-    $info = "Thanh toan " . ($reservation['table'] ?? '0'); 
+    $info = "Dat coc " . ($latestReservation->code ?? $latestReservation->id ?? '0');
     $infoEncoded = urlencode($info);
     $nameEncoded = urlencode($accountName);
     $qrUrl = "https://img.vietqr.io/image/{$bankID}-{$accountNo}-compact.png?amount={$depositAmount}&addInfo={$infoEncoded}&accountName={$nameEncoded}";
@@ -138,6 +138,19 @@ $depositAmount = \App\Models\Reservation::calcDeposit((int) $total);
     </div>
 </div>
 
+        @if($canEditReservation)
+            <div class="mb-3">
+                <a href="{{ route('reservation.index', ['reservation_id' => $latestReservation->id ?? request('reservation_id')]) }}"
+                   class="btn btn-outline-secondary">
+                    Chỉnh sửa bàn, ngày giờ hoặc thông tin đặt bàn
+                </a>
+            </div>
+        @elseif($latestReservation && $latestReservation->status === 'pending_deposit' && $latestReservation->payment_status === 'deposit_submitted')
+            <div class="alert alert-info" role="status">
+                Bạn đã gửi xác nhận chuyển khoản. Đơn đang chờ nhân viên đối soát nên món và bàn đã được khóa chỉnh sửa.
+            </div>
+        @endif
+
         <div class="table-responsive mb-5">
             <table class="table table-order">
                 <thead>
@@ -161,9 +174,13 @@ $depositAmount = \App\Models\Reservation::calcDeposit((int) $total);
                             </td>
                             <td class="text-center">
                                 <div class="qty-box">
-                                    <button type="button" class="qty-btn" onclick="changeQty(this, -1)">-</button>
+                                    @if($canEditReservation)
+                                        <button type="button" class="qty-btn" onclick="changeQty(this, -1)">-</button>
+                                    @endif
                                     <input type="text" class="qty-input" data-id="{{ $item['id'] }}" value="{{ $item['quantity'] }}" readonly data-price="{{ $item['price'] ?? 0 }}" data-stock="{{ \App\Models\Menu::find($item['id'])->stock ?? 0 }}">
-                                    <button type="button" class="qty-btn" onclick="changeQty(this, 1)">+</button>
+                                    @if($canEditReservation)
+                                        <button type="button" class="qty-btn" onclick="changeQty(this, 1)">+</button>
+                                    @endif
                                 </div>
                             </td>
                             <td class="text-right" style="color: #718096;">{{ number_format($item['price'] ?? 0, 0, ',', '.') }}đ</td>
@@ -171,12 +188,15 @@ $depositAmount = \App\Models\Reservation::calcDeposit((int) $total);
                                 {{ number_format(($item['price'] ?? 0) * $item['quantity'], 0, ',', '.') }}đ
                             </td>
                             <td class="text-center">
+                                @if($canEditReservation)
                                 <form action="{{ route('cart.remove', $item['id']) }}" method="POST" class="d-inline">
                                     @csrf
+                                    <input type="hidden" name="reservation_id" value="{{ $latestReservation->id }}">
                                     <button type="submit" class="btn btn-sm" style="background: #FEE2E2; color: #EF4444; border: none; padding: 6px 10px; border-radius: 6px;" onclick="return confirm('Bạn có chắc chắn muốn bỏ món này?')">
                                         <i class="fa fa-trash"></i>
                                     </button>
                                 </form>
+                                @endif
                             </td>
                         </tr>
                         @endif
@@ -260,6 +280,7 @@ $depositAmount = \App\Models\Reservation::calcDeposit((int) $total);
     {{-- Đã có đặt bàn, đang chờ cọc: hiện form + QR (giỏ trống thì QR là 100.000đ) --}}
     <form id="checkoutForm" action="{{ route('cart.checkout') }}" method="POST">
         @csrf
+        <input type="hidden" name="reservation_id" value="{{ $latestReservation->id }}">
         <input type="hidden" name="total_price" value="{{ $total }}">
         <input type="hidden" name="deposit_amount" id="deposit_amount_input" value="{{ $depositAmount }}">
         <input type="hidden" name="table_number" value="{{ $reservation['table_id'] }}">
@@ -516,7 +537,9 @@ function buildQrUrl(amount) {
         .then(response => response.json())
         .then(data => {
             if(!data.success) {
-                alert("Có lỗi xảy ra, vui lòng thử lại!");
+                alert(data.message || "Có lỗi xảy ra, vui lòng thử lại!");
+                location.reload();
+            } else {
                 location.reload();
             }
         })

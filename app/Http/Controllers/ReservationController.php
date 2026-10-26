@@ -30,10 +30,42 @@ class ReservationController extends Controller
      */
     public function index(Request $request)
     {
+        app(\App\Services\PendingReservationExpiry::class)->expire();
         Table::releaseExpiredCleaning();
 
         $menus  = Menu::all();
         $tables = Table::all();
+        $editingReservation = null;
+
+        if ($request->filled('reservation_id')) {
+            $editingReservation = Reservation::where('user_id', auth()->id())
+                ->findOrFail($request->integer('reservation_id'));
+            $latestPendingReservation = Reservation::where('user_id', auth()->id())
+                ->where('status', 'pending_deposit')
+                ->latest('id')
+                ->first(['id', 'payment_status']);
+
+            abort_unless(
+                $editingReservation->status === 'pending_deposit'
+                && $editingReservation->payment_status === 'unpaid'
+                && $latestPendingReservation?->payment_status === 'unpaid'
+                && (int) $editingReservation->id === (int) $latestPendingReservation->id,
+                403,
+                'Yêu cầu đặt bàn này không còn được phép chỉnh sửa.'
+            );
+        }
+
+        $cart = $editingReservation
+            ? ($editingReservation->cart_data ?? [])
+            : Cart::with('menu')->where('user_id', auth()->id())->get()
+                ->filter(fn ($item) => $item->menu && $item->quantity > 0)
+                ->map(fn ($item) => [
+                    'id' => $item->menu_id,
+                    'name' => $item->menu->name,
+                    'price' => $item->menu->price,
+                    'quantity' => $item->quantity,
+                    'image' => $item->menu->image,
+                ])->values()->all();
 
         // Bàn đang được sử dụng/đặt/dọn không thể được khách chọn.
         $occupiedTableIds = Table::where('status', '!=', 'empty')->pluck('id')->toArray();
@@ -45,7 +77,7 @@ class ReservationController extends Controller
             ->pluck('table_id')
             ->toArray();
 
-        return view('reservation', compact('menus', 'tables', 'bookedTableIds', 'paymentTableIds'));
+        return view('reservation', compact('menus', 'tables', 'bookedTableIds', 'paymentTableIds', 'cart', 'editingReservation'));
     }
 
     /**
@@ -53,124 +85,117 @@ class ReservationController extends Controller
      */
 public function store(Request $request)
 {
-    $request->validate([
+    $data = $request->validate([
         'full_name'        => 'required|string|max:255',
         'phone'            => 'required|string|max:20',
         'reservation_date' => 'required|date|after_or_equal:today',
-        'reservation_time' => 'required',
+        'reservation_time' => ['required', 'string', 'regex:/^(?:[01]\d|2[0-3]):[0-5]\d$/'],
         'table_id'         => 'required|integer|exists:tables,id',
+        'reservation_id'   => 'nullable|integer',
+        'notes'            => 'nullable|string|max:2000',
     ]);
-    
-    
-$time = $request->input('reservation_time');
 
-// Bước 1: Kiểm tra định dạng giờ và khung giờ nhà hàng.
-if (
-    !is_string($time) ||
-    !preg_match('/^(?:[01]\d|2[0-3]):[0-5]\d$/', $time) ||
-    $time < '06:00' ||
-    $time > '22:00'
-) {
-    return back()
-        ->withInput()
-        ->withErrors([
+    if ($data['reservation_time'] < '06:00' || $data['reservation_time'] > '22:00') {
+        return back()->withInput()->withErrors([
             'reservation_time' => 'Nhà hàng chỉ nhận đặt bàn từ 06:00 đến 22:00.',
         ]);
-}
+    }
 
-// Bước 2: Kiểm tra ngày giờ đặt bàn theo giờ Việt Nam.
-try {
     $reservationDateTime = \Carbon\Carbon::createFromFormat(
         '!Y-m-d H:i',
-        $request->input('reservation_date') . ' ' . $time,
+        $data['reservation_date'] . ' ' . $data['reservation_time'],
         'Asia/Ho_Chi_Minh'
     );
-} catch (\Throwable $e) {
-    return back()
-        ->withInput()
-        ->withErrors([
-            'reservation_time' => 'Ngày hoặc giờ đặt bàn không hợp lệ.',
-        ]);
-}
-
-// Bước 3: Không cho đặt vào thời điểm đã qua hoặc đúng thời điểm hiện tại.
-if (
-    !$reservationDateTime ||
-    $reservationDateTime->lessThanOrEqualTo(now('Asia/Ho_Chi_Minh'))
-) {
-    return back()
-        ->withInput()
-        ->withErrors([
+    if (!$reservationDateTime || $reservationDateTime->lessThanOrEqualTo(now('Asia/Ho_Chi_Minh'))) {
+        return back()->withInput()->withErrors([
             'reservation_time' => 'Giờ đặt bàn đã qua. Vui lòng chọn thời điểm trong tương lai.',
         ]);
-}
-
-
-    if (
-        !is_string($time) ||
-        !preg_match('/^(?:[01]\d|2[0-3]):[0-5]\d$/', $time) ||
-        $time < '06:00' ||
-        $time > '22:00'
-    ) {
-        return back()
-            ->withInput()
-            ->withErrors([
-                'reservation_time' => 'Nhà hàng chỉ nhận đặt bàn từ 06:00 đến 22:00.',
-            ]);
     }
-
-
-    $dbCart     = Cart::with('menu')->where('user_id', auth()->id())->get();
-    $cartData   = [];
-    $totalAmount = 0;
-
-    foreach ($dbCart as $item) {
-        if ($item->menu && $item->quantity > 0) {
-            $subTotal     = $item->menu->price * $item->quantity;
-            $totalAmount += $subTotal;
-            $cartData[]   = [
-                'id'       => $item->menu_id,
-                'name'     => $item->menu->name,
-                'price'    => $item->menu->price,
-                'quantity' => $item->quantity,
-                'image'    => $item->menu->image,
-            ];
-        }
-    }
-
-    // Có món -> 20%, không món -> 100.000đ cố định
-$depositAmount = Reservation::calcDeposit($totalAmount);
 
     try {
-        $reservation = DB::transaction(function () use ($request, $cartData, $totalAmount, $depositAmount) {
-            if (!Table::lockIfAvailableForBooking((int) $request->table_id)) {
+        [$reservation, $created] = DB::transaction(function () use ($request, $data) {
+            \App\Models\User::whereKey(auth()->id())->lockForUpdate()->firstOrFail();
+            $latestPendingReservation = Reservation::where('user_id', auth()->id())
+                ->where('status', 'pending_deposit')
+                ->latest('id')
+                ->lockForUpdate()
+                ->first();
+
+            if (!empty($data['reservation_id'])) {
+                $reservation = Reservation::where('user_id', auth()->id())
+                    ->lockForUpdate()
+                    ->findOrFail($data['reservation_id']);
+                if (
+                    $latestPendingReservation?->payment_status !== 'unpaid'
+                    || (int) $reservation->id !== (int) $latestPendingReservation->id
+                ) {
+                    throw new \DomainException('Chỉ có thể chỉnh sửa yêu cầu đặt bàn đang chờ cọc mới nhất.');
+                }
+            } else {
+                if ($latestPendingReservation && $latestPendingReservation->payment_status !== 'unpaid') {
+                    throw new \DomainException('Bạn đã gửi xác nhận chuyển khoản. Vui lòng chờ nhân viên đối soát trước khi tạo yêu cầu khác.');
+                }
+                $reservation = Reservation::where('user_id', auth()->id())
+                    ->where('status', 'pending_deposit')
+                    ->where('payment_status', 'unpaid')
+                    ->latest('id')
+                    ->lockForUpdate()
+                    ->first();
+            }
+
+            if ($reservation && (
+                $reservation->status !== 'pending_deposit'
+                || $reservation->payment_status !== 'unpaid'
+            )) {
+                throw new \DomainException('Yêu cầu đã gửi xác nhận cọc nên không thể chỉnh sửa.');
+            }
+
+            if (!Table::lockIfAvailableForBooking((int) $data['table_id'])) {
                 throw new \DomainException('Bàn này hiện đang được sử dụng, đã đặt hoặc đang dọn. Vui lòng chọn bàn khác.');
             }
 
-            $reservation                     = new Reservation();
-            $reservation->user_id            = auth()->id();
-            $reservation->full_name          = $request->full_name;
-            $reservation->email              = auth()->user()->email;
-            $reservation->phone              = $request->phone;
-            $reservation->reservation_date   = $request->reservation_date;
-            $reservation->reservation_time   = $request->reservation_time;
-            $reservation->table_id           = $request->table_id;
-            $reservation->notes              = $request->notes;
-            $reservation->status             = 'pending_deposit';
-            $reservation->payment_status     = 'unpaid';
-            $reservation->payment_method     = 'BANK';
-            $reservation->deposit_amount     = $depositAmount;
-            $reservation->total_price        = $totalAmount;
-            $reservation->cart_data          = $cartData;
+            $created = !$reservation;
+            $reservation ??= new Reservation();
+            $reservation->user_id = auth()->id();
+            $reservation->full_name = $data['full_name'];
+            $reservation->email = auth()->user()->email;
+            $reservation->phone = $data['phone'];
+            $reservation->reservation_date = $data['reservation_date'];
+            $reservation->reservation_time = $data['reservation_time'];
+            $reservation->table_id = $data['table_id'];
+            $reservation->notes = $data['notes'] ?? null;
+            if ($created) {
+                $reservation->status = 'pending_deposit';
+                $reservation->payment_status = 'unpaid';
+                $reservation->payment_method = 'BANK';
+                $reservation->total_price = 0;
+                $reservation->cart_data = [];
+            }
             $reservation->save();
 
-            // Mỗi món là một dòng reservation_items (lần gọi đầu tiên của khách).
-            // cart_data / order_items được service sinh lại từ các dòng này.
-            app(\App\Services\ReservationItemService::class)->addLines(
-                $reservation, $cartData, \App\Models\ReservationItem::SOURCE_CUSTOMER_PREORDER, auth()->id()
-            );
+            $cartItems = Cart::where('user_id', auth()->id())->lockForUpdate()->get();
+            $menus = Menu::whereIn('id', $cartItems->pluck('menu_id')->unique())
+                ->lockForUpdate()
+                ->get()
+                ->keyBy('id');
+            $wanted = [];
+            foreach ($cartItems as $item) {
+                $menu = $menus->get($item->menu_id);
+                if (!$menu) {
+                    throw new \DomainException('Một món trong giỏ không còn tồn tại. Vui lòng cập nhật giỏ hàng.');
+                }
+                if ((int) $item->quantity > 0) {
+                    $wanted[(int) $menu->id] = (int) $item->quantity;
+                }
+            }
 
-            return $reservation;
+            $itemService = app(\App\Services\ReservationItemService::class);
+            $itemService->syncCustomerCart($reservation, $wanted, auth()->id());
+            $reservation->refresh();
+            $reservation->deposit_amount = Reservation::calcDeposit($itemService->total($reservation));
+            $reservation->save();
+
+            return [$reservation, $created];
         });
     } catch (\DomainException $e) {
         return back()->withInput()->with('error', $e->getMessage());
@@ -180,7 +205,7 @@ $depositAmount = Reservation::calcDeposit($totalAmount);
     // ở trang giỏ hàng (CartController::checkout).
 
     // At this point the booking is only a request awaiting payment and staff verification.
-    if (self::RESERVATION_EMAILS_ENABLED) {
+    if ($created && self::RESERVATION_EMAILS_ENABLED) {
         try {
             $reservation->refresh()->load('table');
             Mail::to($reservation->email)->send(new BookingPendingDeposit($reservation));
@@ -200,47 +225,92 @@ $depositAmount = Reservation::calcDeposit($totalAmount);
      */
     public function addToCartAjax(Request $request)
     {
-        $id       = $request->menu_id ?? $request->food_id;
-        $quantity = (int) ($request->quantity ?? 1);
-        $isUpdate = $request->is_update ?? false;
+        $data = $request->validate([
+            'food_id' => ['required', 'integer', 'exists:menus,id'],
+            'quantity' => ['required', 'integer', 'min:0', 'max:50'],
+            'is_update' => ['nullable', 'boolean'],
+        ]);
 
-        $menu = Menu::find($id);
-        if (!$menu) {
-            return response()->json(['success' => false, 'message' => 'Món không tồn tại!']);
+        try {
+            $cart = DB::transaction(function () use ($data) {
+                \App\Models\User::whereKey(auth()->id())->lockForUpdate()->firstOrFail();
+
+                $reservation = Reservation::where('user_id', auth()->id())
+                    ->where('status', 'pending_deposit')
+                    ->latest('id')
+                    ->lockForUpdate()
+                    ->first();
+                if ($reservation && $reservation->payment_status !== 'unpaid') {
+                    throw new \DomainException('Bạn đã gửi xác nhận chuyển khoản. Không thể chỉnh sửa món trong yêu cầu này.');
+                }
+
+                $menu = Menu::whereKey($data['food_id'])->lockForUpdate()->firstOrFail();
+                $item = Cart::where('user_id', auth()->id())
+                    ->where('menu_id', $menu->id)
+                    ->lockForUpdate()
+                    ->first();
+                $isUpdate = (bool) ($data['is_update'] ?? false);
+                $quantity = (int) $data['quantity'];
+                $newQuantity = $isUpdate ? $quantity : (int) ($item->quantity ?? 0) + 1;
+
+                if ($newQuantity > $menu->stock) {
+                    throw new \DomainException("Món '{$menu->name}' hiện chỉ còn {$menu->stock} phần.");
+                }
+
+                if ($newQuantity === 0) {
+                    $item?->delete();
+                } elseif ($item) {
+                    $item->quantity = $newQuantity;
+                    $item->save();
+                } else {
+                    Cart::create([
+                        'user_id' => auth()->id(),
+                        'menu_id' => $menu->id,
+                        'quantity' => $newQuantity,
+                    ]);
+                }
+
+                if ($reservation) {
+                    $this->syncPendingReservationCart($reservation);
+                }
+
+                return Cart::with('menu')->where('user_id', auth()->id())->get()
+                    ->filter(fn ($cartItem) => $cartItem->menu && $cartItem->quantity > 0)
+                    ->map(fn ($cartItem) => [
+                        'id' => $cartItem->menu_id,
+                        'name' => $cartItem->menu->name,
+                        'price' => $cartItem->menu->price,
+                        'quantity' => $cartItem->quantity,
+                        'image' => $cartItem->menu->image,
+                    ])->values()->all();
+            });
+        } catch (\DomainException $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 422);
         }
-
-        $dbCartItem = Cart::where('user_id', auth()->id())->where('menu_id', $id)->first();
-
-        // 🔥 ĐOẠN FIX QUAN TRỌNG:
-        // Nếu khách bấm giảm số lượng về <= 0, ta tiến hành XÓA món đó khỏi Database
-        if ($isUpdate && $quantity <= 0) {
-            if ($dbCartItem) {
-                $dbCartItem->delete();
-            }
-        } 
-        // Ngược lại, nếu > 0 thì mới thêm hoặc cập nhật
-        else {
-            if ($dbCartItem) {
-                $dbCartItem->quantity = $isUpdate ? $quantity : $dbCartItem->quantity + 1;
-                $dbCartItem->save();
-            } else {
-                Cart::create(['user_id' => auth()->id(), 'menu_id' => $id, 'quantity' => $quantity]);
-            }
-        }
-
-        // Lấy lại giỏ hàng mới nhất để trả về giao diện
-        $dbCart = Cart::with('menu')->where('user_id', auth()->id())->get();
-        
-        // Chỉ map những món CÓ số lượng > 0 trả về JS
-        $cart   = $dbCart->filter(fn($i) => $i->menu && $i->quantity > 0)->map(fn($i) => [
-            'id'       => $i->menu_id,
-            'name'     => $i->menu->name,
-            'price'    => $i->menu->price,
-            'quantity' => $i->quantity,
-            'image'    => $i->menu->image,
-        ])->values()->toArray();
 
         return response()->json(['success' => true, 'cartCount' => count($cart), 'cartData' => $cart]);
+    }
+
+    private function syncPendingReservationCart(Reservation $reservation): void
+    {
+        $cartItems = Cart::where('user_id', $reservation->user_id)->lockForUpdate()->get();
+        $menus = Menu::whereIn('id', $cartItems->pluck('menu_id')->unique())
+            ->lockForUpdate()
+            ->get()
+            ->keyBy('id');
+        $wanted = [];
+        foreach ($cartItems as $item) {
+            if (!$menus->has($item->menu_id)) {
+                throw new \DomainException('Một món trong giỏ không còn tồn tại. Vui lòng cập nhật giỏ hàng.');
+            }
+            $wanted[(int) $item->menu_id] = (int) $item->quantity;
+        }
+
+        $items = app(\App\Services\ReservationItemService::class);
+        $items->syncCustomerCart($reservation, $wanted, auth()->id());
+        $reservation->refresh();
+        $reservation->deposit_amount = Reservation::calcDeposit($items->total($reservation));
+        $reservation->save();
     }
     public function saveNoteAjax(Request $request)
     {
@@ -260,6 +330,8 @@ $depositAmount = Reservation::calcDeposit($totalAmount);
      */
     public function adminIndex()
     {
+        app(\App\Services\PendingReservationExpiry::class)->expire();
+        app(\App\Services\PendingReservationExpiry::class)->expire();
         $user         = auth()->user();
         $reservations = Reservation::with(['user', 'table'])->latest()->get();
 
