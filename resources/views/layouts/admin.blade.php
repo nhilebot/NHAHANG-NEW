@@ -127,6 +127,10 @@
   </div>
   <!-- <span class="nav-arrow">›</span> -->
 </a>
+      <a class="nav-item {{ Request::routeIs('admin.promotions.*') ? 'active' : '' }}"
+         href="{{ route('admin.promotions.index') }}">
+        <div class="nav-item-left"><div class="nav-icon">🎟️</div>Khuyến mãi</div>
+      </a>
         <div>
           <div class="sidebar-section-label">Người dùng</div>
           <a class="nav-item {{ Request::routeIs('admin.employees.*') ? 'active' : '' }}"

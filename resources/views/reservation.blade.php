@@ -4,6 +4,7 @@
 
 @section('head')
 <link rel="stylesheet" href="{{ asset('css/pages/reservation.css') }}?v=1">
+<link rel="stylesheet" href="{{ asset('css/pages/reservation-mobile.css') }}?v=1">
 @endsection
 
 @section('content')

@@ -537,7 +537,12 @@ public function reviewCancellation(Request $request, $id)
     }
 
     $total = (int) $reservation->total_price;
-    $due   = max(0, $total - min((int) ($reservation->deposit_amount ?? 0), $total));
+
+    // Khuyến mãi (xem trước): tiền giảm thật sự chỉ được chốt trong pay()
+    $promo    = app(\App\Services\PromotionService::class)->summary($reservation, $total);
+    $discount = (int) $promo['discount'];
+
+    $due = max(0, $total - $discount - min((int) ($reservation->deposit_amount ?? 0), $total));
 
     $qrUrl = 'https://img.vietqr.io/image/'
         . config('services.bank.id') . '-' . config('services.bank.account') . '-compact2.png'
@@ -546,9 +551,11 @@ public function reviewCancellation(Request $request, $id)
         . '&accountName=' . urlencode(config('services.bank.name'));
 
     return view('staff.reservations.checkout', [
-        'res'   => $reservation,
-        'due'   => $due,
-        'qrUrl' => $qrUrl,
+        'res'      => $reservation,
+        'due'      => $due,
+        'qrUrl'    => $qrUrl,
+        'promo'    => $promo,
+        'discount' => $discount,
     ]);
 }
     public function pay(Request $request, $id)
@@ -573,9 +580,13 @@ public function reviewCancellation(Request $request, $id)
                 $total   = (int) $reservation->total_price;
                 $deposit = min((int) ($reservation->deposit_amount ?? 0), $total);
 
-                $reservation->status         = $data['payment_method'] === 'cash' ? 'paid_cash' : 'paid_transfer';
-                $reservation->payment_status = 'paid';
-                $reservation->paid_amount    = $total - $deposit;   // phần còn lại thu tại quầy
+                // Chốt khuyến mãi (kiểm tra lại mã + tăng lượt dùng) trong cùng transaction với việc thanh toán
+                $discount = app(\App\Services\PromotionService::class)->settle($reservation, $total);
+
+                $reservation->status          = $data['payment_method'] === 'cash' ? 'paid_cash' : 'paid_transfer';
+                $reservation->payment_status  = 'paid';
+                $reservation->discount_amount = $discount;
+                $reservation->paid_amount     = max(0, $total - $discount - $deposit);   // phần còn lại thu tại quầy
                 $reservation->paid_at        = now();
                 $reservation->paid_by        = auth()->id();
                 $reservation->save();

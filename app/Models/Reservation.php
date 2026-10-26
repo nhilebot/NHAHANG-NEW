@@ -112,7 +112,10 @@ public static function calcDeposit(int $total): int
     'payment_method', 
     'deposit_amount', 
     'cleanup_started_at', 
-    'status'
+    'status',
+    'promotion_id',
+    'promotion_code',
+    'discount_amount',
 ];  
     protected $casts = [
         'cleanup_started_at' => 'datetime',
@@ -139,6 +142,11 @@ public function order()
     return $this->hasOne(\App\Models\Order::class, 'user_id', 'user_id')
                 ->where('table_number', $this->table_id)
                 ->latest();
+}
+/** Mã khuyến mãi đang gắn với đơn (chưa chắc đã được trừ tiền — xem discount_amount). */
+public function promotion()
+{
+    return $this->belongsTo(\App\Models\Promotion::class, 'promotion_id');
 }
 public function user()
     {

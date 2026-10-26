@@ -43,7 +43,38 @@
             @endif
 
             <div class="co-row"><span>Tổng hóa đơn</span><b>{{ number_format($res->total_price, 0, ',', '.') }}đ</b></div>
+            @if(($discount ?? 0) > 0)
+                <div class="co-row green"><span>Khuyến mãi {{ $promo['promotion']->code }}</span><b>− {{ number_format($discount, 0, ',', '.') }}đ</b></div>
+            @endif
             <div class="co-row green"><span>Đã cọc</span><b>− {{ number_format($deposit, 0, ',', '.') }}đ</b></div>
+
+            {{-- MÃ KHUYẾN MÃI --}}
+            @php
+                $pfx = request()->is('admin/*') ? 'admin' : 'staff';
+                $appliedPromo = $promo['promotion'] ?? null;
+            @endphp
+            <div style="margin:14px 0;padding:12px;border:1px dashed #c9a45c;border-radius:10px;background:#FFFDF8;">
+                <div style="font-weight:700;font-size:14px;margin-bottom:8px;">🎟️ Mã khuyến mãi</div>
+                @if($appliedPromo)
+                    <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;">
+                        <span><b>{{ $appliedPromo->code }}</b> — {{ $appliedPromo->name }} ({{ $appliedPromo->discount_text }})</span>
+                        <form method="POST" action="{{ route($pfx . '.reservations.promotion.remove', $res->id) }}">
+                            @csrf @method('DELETE')
+                            <button type="submit" style="border:1px solid #FED7D7;background:#fff;color:#C53030;border-radius:6px;padding:5px 10px;cursor:pointer;">Gỡ mã</button>
+                        </form>
+                    </div>
+                    @if(!empty($promo['error']))
+                        <div style="margin-top:8px;color:#C53030;font-size:13px;">⚠️ {{ $promo['error'] }} Hãy gỡ mã để tiếp tục thanh toán.</div>
+                    @endif
+                @else
+                    <form method="POST" action="{{ route($pfx . '.reservations.promotion.apply', $res->id) }}" style="display:flex;gap:8px;">
+                        @csrf
+                        <input type="text" name="code" placeholder="Nhập mã" maxlength="30" required
+                               style="flex:1;padding:8px 10px;border:1px solid #E2E8F0;border-radius:8px;text-transform:uppercase;">
+                        <button type="submit" style="border:none;background:#D4AF37;color:#fff;font-weight:700;border-radius:8px;padding:8px 14px;cursor:pointer;">Áp dụng</button>
+                    </form>
+                @endif
+            </div>
 
             <div class="co-due">
                 <p>Khách cần thanh toán</p>
@@ -114,6 +145,7 @@
 <script>
 const money = '{{ number_format($due, 0, ',', '.') }}đ';
 const btn   = document.getElementById('confirmBtn');
+const promoBlocked = {{ !empty($promo['error']) ? 'true' : 'false' }};
 
 document.querySelectorAll('.co-method').forEach(label => {
     label.querySelector('input').addEventListener('change', () => {
@@ -123,7 +155,7 @@ document.querySelectorAll('.co-method').forEach(label => {
         document.getElementById('panel-cash').classList.toggle('show', m === 'cash');
         document.getElementById('panel-transfer').classList.toggle('show', m === 'transfer');
 
-        btn.disabled = false;
+        btn.disabled = promoBlocked;   // mã khuyến mãi không còn hợp lệ => phải gỡ mã trước
         btn.textContent = m === 'transfer'
             ? '✅ Đã nhận chuyển khoản ' + money
             : '✅ Đã thu tiền mặt ' + money;

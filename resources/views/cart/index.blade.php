@@ -13,7 +13,9 @@
 @php
     // Dùng chung công thức với controller: có món 20%, không món 100.000đ
 $depositAmount = \App\Models\Reservation::calcDeposit((int) $total);
-    $remainingAmount = $total - $depositAmount;
+    // Khuyến mãi chỉ trừ vào phần thanh toán tại quầy, KHÔNG làm đổi tiền cọc
+    $promotionDiscount = (int) ($promotionDiscount ?? 0);
+    $remainingAmount = max(0, $total - $promotionDiscount - $depositAmount);
 
     $bankID      = config('services.bank.id');
     $accountNo   = config('services.bank.account');
@@ -190,6 +192,11 @@ $depositAmount = \App\Models\Reservation::calcDeposit((int) $total);
         </th>
         <th></th>
     </tr>
+    <tr id="promo-row" @if(!$promotionDiscount) style="display:none" @endif>
+        <th colspan="3" class="text-right" style="font-size: 14px; color:#2f855a;">Khuyến mãi {{ $appliedPromotion->code ?? '' }} (trừ khi thanh toán tại quầy):</th>
+        <th class="text-right" style="color:#2f855a; font-weight:700;" id="promo-discount-text">− {{ number_format($promotionDiscount, 0, ',', '.') }} VNĐ</th>
+        <th></th>
+    </tr>
     <tr>
         <th colspan="3" class="text-right" style="font-size: 14px; color: var(--ct-gold-text, #8a6a28);">Tiền cọc cần thanh toán:</th>
         <th class="text-right" style="color: var(--ct-gold-text, #8a6a28); font-size: 1.2rem; font-weight:700;" id="deposit-total-text">
@@ -207,6 +214,46 @@ $depositAmount = \App\Models\Reservation::calcDeposit((int) $total);
 </tfoot>
             </table>
         </div>
+
+@if($canCheckout)
+    {{-- ===== MÃ KHUYẾN MÃI (khách chỉ gắn mã; tiền giảm được trừ khi thanh toán tại quầy) ===== --}}
+    <div class="promo-box" style="margin:0 0 24px;padding:16px 18px;border:1px dashed var(--ft-gold, #c9a45c);border-radius:12px;background:#FFFDF8;">
+        <h6 style="font-weight:700;margin-bottom:10px;"><i class="fas fa-ticket-alt mr-2" style="color: var(--ct-gold-text, #8a6a28);"></i>Mã khuyến mãi</h6>
+
+        @if(session('promo_success'))
+            <div class="small" style="color:#2f855a;margin-bottom:8px;">{{ session('promo_success') }}</div>
+        @endif
+        @if(session('promo_error'))
+            <div class="small" style="color:#C53030;margin-bottom:8px;">{{ session('promo_error') }}</div>
+        @endif
+
+        @if(!empty($appliedPromotion))
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;">
+                <div>
+                    <strong>{{ $appliedPromotion->code }}</strong> — {{ $appliedPromotion->name }}
+                    <span class="small" style="color:#718096;">({{ $appliedPromotion->discount_text }})</span>
+                    @if(!empty($promotionError))
+                        <div class="small" style="color:#C53030;">⚠️ {{ $promotionError }}</div>
+                    @endif
+                </div>
+                <form action="{{ route('cart.promotion.remove') }}" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-sm" style="background:#FEE2E2;color:#EF4444;border:none;border-radius:6px;padding:6px 12px;">Gỡ mã</button>
+                </form>
+            </div>
+        @else
+            {{-- Dropdown: mã đủ điều kiện chọn được; mã chưa đủ hiện "Đơn cần tối thiểu ..." (xem renderPromoOptions) --}}
+            <form action="{{ route('cart.promotion.apply') }}" method="POST" style="display:flex;gap:8px;">
+                @csrf
+                <select name="code" id="promo-select" required
+                        style="flex:1;min-width:0;padding:9px 12px;border:1px solid #E2E8F0;border-radius:8px;background:#fff;"></select>
+                <button type="submit" id="promo-apply-btn" class="btn" style="background:var(--ft-gold, #c9a45c);color:#fff;font-weight:700;border-radius:8px;padding:9px 18px;">Áp dụng</button>
+            </form>
+        @endif
+        <div class="small" style="color:#718096;margin-top:8px;">Tiền cọc vẫn tính trên tiền món gốc. Khoản giảm được trừ vào số tiền thanh toán tại quầy.</div>
+    </div>
+@endif
 
 {{-- ===== KHỐI NÚT / FORM CỌC ===== --}}
 @if($canCheckout)
@@ -333,6 +380,9 @@ $depositAmount = \App\Models\Reservation::calcDeposit((int) $total);
     </div>
 </div>
 <div class="total-highlight" style="margin-top: 8px; background:#FFFDF8; color:var(--ft-bg, #111010); border:1px dashed var(--ft-gold, #c9a45c);">
+    <div class="d-flex justify-content-between" id="bill-discount-row" style="font-size:13px; color:#2f855a;@if(!$promotionDiscount) display:none;@endif">
+        <span>Khuyến mãi</span><strong id="bill-discount">− {{ number_format($promotionDiscount, 0, ',', '.') }}đ</strong>
+    </div>
     <div class="d-flex justify-content-between" style="font-size:13px;">
         <span>Đặt cọc</span><strong style="color: var(--ct-gold-text, #8a6a28);" id="bill-deposit">{{ number_format($depositAmount, 0, ',', '.') }}đ</strong>
     </div>
@@ -358,6 +408,68 @@ $depositAmount = \App\Models\Reservation::calcDeposit((int) $total);
 const QR_ACCOUNT_NO = "{{ $accountNo }}";
 const QR_ACCOUNT_NAME = "{{ $nameEncoded }}";
 const QR_INFO = "{{ $infoEncoded }}";
+
+// ==== PROMO-JS-START ====
+// Quy tắc khuyến mãi (khớp Promotion::discountFor ở PHP) — chỉ để hiển thị khi khách bấm +/-
+@php
+    $promoJs = (isset($appliedPromotion) && $appliedPromotion && empty($promotionError))
+        ? ['type' => $appliedPromotion->discount_type, 'value' => (int) $appliedPromotion->discount_value,
+           'min' => (int) $appliedPromotion->min_order_amount]
+        : null;
+    $promoListJs = $promoOptions ?? [];
+@endphp
+const PROMO = @json($promoJs);
+const PROMO_LIST = @json($promoListJs);
+
+function promoDiscountOf(p, total) {
+    const d = p.type === 'percent' ? Math.floor(total * p.value / 100) : p.value;
+    return Math.max(0, Math.min(d, total));
+}
+function calcPromoDiscount(total) {
+    if (!PROMO || total <= 0 || total < PROMO.min) return 0;
+    return promoDiscountOf(PROMO, total);
+}
+
+// Dropdown mã khuyến mãi: mã hợp lệ với tổng tiền món hiện tại => chọn được;
+// mã chưa hợp lệ => hiện mờ kèm "Đơn cần tối thiểu ... để dùng mã".
+function renderPromoOptions(total) {
+    const sel = document.getElementById('promo-select');
+    if (!sel) return;
+    const fmt = n => new Intl.NumberFormat('vi-VN').format(n) + 'đ';
+    const btn = document.getElementById('promo-apply-btn');
+    sel.innerHTML = '';
+
+    const valid = [], invalid = [];
+    PROMO_LIST.forEach(p => ((total > 0 && total >= p.min) ? valid : invalid).push(p));
+
+    const head = document.createElement('option');
+    head.value = '';
+    head.disabled = true;
+    head.selected = true;
+    head.textContent = PROMO_LIST.length ? '— Chọn mã khuyến mãi —' : 'Hiện chưa có mã khuyến mãi';
+    sel.appendChild(head);
+
+    valid.forEach(p => {
+        const o = document.createElement('option');
+        o.value = p.code;
+        o.textContent = p.code + ' — Giảm ' + (p.type === 'percent' ? p.value + '%' : fmt(p.value))
+                      + ' (−' + fmt(promoDiscountOf(p, total)) + ')';
+        sel.appendChild(o);
+    });
+    invalid.forEach(p => {
+        const o = document.createElement('option');
+        o.value = p.code;
+        o.disabled = true;
+        o.textContent = total > 0
+            ? p.code + ' — Đơn cần tối thiểu ' + fmt(p.min) + ' để dùng mã'
+            : p.code + ' — Chưa có món trong đơn';
+        sel.appendChild(o);
+    });
+
+    if (btn) btn.disabled = valid.length === 0;
+}
+// ==== PROMO-JS-END ====
+document.addEventListener('DOMContentLoaded', function () { renderPromoOptions({{ (int) $total }}); });
 
 function buildQrUrl(amount) {
     return `https://img.vietqr.io/image/${QR_BANK_ID}-${QR_ACCOUNT_NO}-compact.png?amount=${amount}&addInfo=${QR_INFO}&accountName=${QR_ACCOUNT_NAME}`;
@@ -418,7 +530,8 @@ function buildQrUrl(amount) {
     }
 
    // Vẽ lại hoá đơn (modal) theo đúng các món đang có trong bảng, để luôn khớp khi bấm +/-
-   function refreshBill(total, depositAmount, remainingAmount) {
+   function refreshBill(total, depositAmount, remainingAmount, discount) {
+    discount = discount || 0;
     const fmt = n => new Intl.NumberFormat('vi-VN').format(n) + 'đ';
     const tbody = document.getElementById('bill-items');
     if (tbody) {
@@ -445,6 +558,12 @@ function buildQrUrl(amount) {
     }
     const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = fmt(v); };
     set('bill-total', total);
+    const dRow = document.getElementById('bill-discount-row');
+    if (dRow) {
+        dRow.style.display = discount > 0 ? 'flex' : 'none';
+        const dEl = document.getElementById('bill-discount');
+        if (dEl) dEl.textContent = '− ' + fmt(discount);
+    }
     set('bill-deposit', depositAmount);
     set('bill-remaining', remainingAmount);
    }
@@ -458,7 +577,8 @@ function buildQrUrl(amount) {
     // Phải khớp Reservation::calcDeposit() ở PHP: có món 20%, không món 100.000đ
 const TABLE_ONLY_DEPOSIT = {{ \App\Models\Reservation::TABLE_ONLY_DEPOSIT }};
 const depositAmount = total > 0 ? Math.round(total * 20 / 100) : TABLE_ONLY_DEPOSIT;
-    const remainingAmount = total - depositAmount;
+    const promoDiscount = calcPromoDiscount(total);
+    const remainingAmount = Math.max(0, total - promoDiscount - depositAmount);
 
     document.getElementById('grand-total-text').innerText = new Intl.NumberFormat('vi-VN').format(total) + ' VNĐ';
     document.getElementById('deposit-total-text').innerText = new Intl.NumberFormat('vi-VN').format(depositAmount) + ' VNĐ';
@@ -466,7 +586,14 @@ const depositAmount = total > 0 ? Math.round(total * 20 / 100) : TABLE_ONLY_DEPO
     if (btnDeposit) btnDeposit.innerText = new Intl.NumberFormat('vi-VN').format(depositAmount);
     document.getElementById('remaining-total-text').innerText = new Intl.NumberFormat('vi-VN').format(remainingAmount) + ' VNĐ';
 
-    refreshBill(total, depositAmount, remainingAmount);
+    const promoRow = document.getElementById('promo-row');
+    if (promoRow) {
+        promoRow.style.display = promoDiscount > 0 ? '' : 'none';
+        document.getElementById('promo-discount-text').innerText = '− ' + new Intl.NumberFormat('vi-VN').format(promoDiscount) + ' VNĐ';
+    }
+
+    refreshBill(total, depositAmount, remainingAmount, promoDiscount);
+    renderPromoOptions(total);
 
         const totalInput = document.querySelector('input[name="total_price"]');
     if (totalInput) totalInput.value = total;

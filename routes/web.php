@@ -6,7 +6,7 @@ use App\Http\Controllers\{
     OrderController, TableController, AdminController, AuthController,
     CartController, OtpPasswordController, ProfileController, CommentController,
     AdminCategoryController, AdminMenuController, AdminTableController,
-    AdminUserController, BookingController, StaffOrderController, ChatbotController, AdminBillController, NewsController
+    AdminUserController, BookingController, StaffOrderController, ChatbotController, AdminBillController, NewsController, AdminPromotionController, ReservationPromotionController
 };
 
 // =========================================================
@@ -74,6 +74,10 @@ Route::get('/order-history', [App\Http\Controllers\OrderController::class, 'hist
         Route::post('/cart/update', 'update')->name('update');
     });
 
+    // Khuyến mãi: khách gắn/gỡ mã ở giỏ hàng
+    Route::post('/cart/promotion', [ReservationPromotionController::class, 'customerApply'])->name('cart.promotion.apply');
+    Route::delete('/cart/promotion', [ReservationPromotionController::class, 'customerRemove'])->name('cart.promotion.remove');
+
     // Đặt bàn (Khách đã đăng nhập)
     Route::controller(ReservationController::class)->name('reservation.')->group(function () {
         Route::get('/reservation', 'index')->name('index');
@@ -119,6 +123,9 @@ Route::get('/bills/{id}', [App\Http\Controllers\AdminBillController::class, 'sho
         Route::resource('categories', AdminCategoryController::class);
         Route::resource('users', AdminUserController::class)->except('show');
         Route::resource('tables', AdminTableController::class);
+        // Quản lý khuyến mãi (mã giảm giá)
+        Route::patch('promotions/{promotion}/toggle', [AdminPromotionController::class, 'toggle'])->name('promotions.toggle');
+        Route::resource('promotions', AdminPromotionController::class)->except(['show']);
         // Hiển thị form tạo đơn đặt bàn mới
 Route::get('/reservations/create', [ReservationController::class, 'create'])->name('reservations.create');
 
@@ -167,6 +174,8 @@ Route::delete('/orders/{id}', [OrderController::class, 'destroy'])->name('orders
     'reviewCancellation',
 ])->name('reservations.reviewCancellation');
         Route::post('/reservations/{id}/pay', [ReservationController::class, 'pay'])->name('reservations.pay');
+        Route::post('/reservations/{id}/promotion', [ReservationPromotionController::class, 'staffApply'])->name('reservations.promotion.apply');
+        Route::delete('/reservations/{id}/promotion', [ReservationPromotionController::class, 'staffRemove'])->name('reservations.promotion.remove');
         Route::get('/orders/{id}', [OrderController::class, 'show'])->name('orders.show');
     });
 
@@ -200,6 +209,8 @@ Route::post(
         Route::post('/reservations/store', [ReservationController::class, 'staffStore'])->name('reservations.store');
         Route::post('/reservations/{id}/update-status', [ReservationController::class, 'updateStatus'])->name('reservations.updateStatus');
         Route::post('/reservations/{id}/pay', [ReservationController::class, 'pay'])->name('reservations.pay');
+        Route::post('/reservations/{id}/promotion', [ReservationPromotionController::class, 'staffApply'])->name('reservations.promotion.apply');
+        Route::delete('/reservations/{id}/promotion', [ReservationPromotionController::class, 'staffRemove'])->name('reservations.promotion.remove');
         Route::get('/reservations/{id}/checkout', [ReservationController::class, 'checkout'])->name('reservations.checkout');
         Route::get('/reservations/{id}/edit-items', [StaffOrderController::class, 'editItems'])->name('reservations.edit_items');
         Route::post('/reservations/{id}/update-items', [StaffOrderController::class, 'update'])->name('reservations.update_items');

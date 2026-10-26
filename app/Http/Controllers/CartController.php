@@ -126,6 +126,18 @@ $canCheckout = $latestReservation
             $total += ($item['price'] ?? 0) * ($item['quantity'] ?? 0);
         }
 
+        // Mã khuyến mãi đang gắn với đặt bàn (chỉ để hiển thị; tiền giảm được chốt lúc thanh toán tại quầy)
+        $promoInfo = $latestReservation
+            ? app(\App\Services\PromotionService::class)->summary($latestReservation, (int) $total)
+            : ['promotion' => null, 'discount' => 0, 'error' => null];
+        $appliedPromotion  = $promoInfo['promotion'];
+        $promotionDiscount = $promoInfo['discount'];
+        $promotionError    = $promoInfo['error'];
+        // Danh sách mã để khách chọn (dropdown); trang tự đánh dấu mã nào đủ điều kiện theo tổng tiền món
+        $promoOptions = ($latestReservation && !$latestReservation->promotion_id)
+            ? app(\App\Services\PromotionService::class)->listActive()
+            : [];
+
         // Trả dữ liệu ra view
         return view('cart.index', compact(
             'cart',
@@ -133,7 +145,11 @@ $canCheckout = $latestReservation
             'reservation',
             'canCheckout',
             'checkoutUnavailableMessage',
-            'needReservation'
+            'needReservation',
+            'appliedPromotion',
+            'promotionDiscount',
+            'promotionError',
+            'promoOptions'
         ));
     }
 
