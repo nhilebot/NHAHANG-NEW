@@ -1,0 +1,16 @@
+/* ==========================================================================
+   public/css/admin/users.css
+   Phần RIÊNG của 3 trang Tài khoản (index / create / edit).
+   Giao diện chung (tiêu đề, form, bảng, nhãn vai trò, phân trang...) nằm ở
+   admin-ui.css -> file này chỉ giữ những gì chỉ trang Tài khoản cần.
+   ========================================================================== */
+
+/* iPad và laptop nhỏ (768-1199px): ẩn cột "Ngày tạo" để bảng vừa khung, không phải cuộn ngang */
+@media (min-width: 768px) and (max-width: 1199px) {
+    .users-page .ui-table { min-width: 0; }
+    .users-page .ui-table thead th:nth-child(6),
+    .users-page .ui-table td.cell-date { display: none; }
+    .users-page .cell-user { min-width: 170px; }
+    .users-page .ui-table thead th,
+    .users-page .ui-table tbody td { padding-left: 10px; padding-right: 10px; }
+}

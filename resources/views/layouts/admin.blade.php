@@ -9,6 +9,7 @@
 <link rel="stylesheet" href="{{ asset('admin_assets/style.css') }}">
 <link rel="stylesheet" href="{{ asset('css/admin/layout.css') }}?v=1">
 <link rel="stylesheet" href="{{ asset('css/admin-responsive.css') }}?v=1">
+<link rel="stylesheet" href="{{ asset('css/admin/admin-ui.css') }}?v=1">
 {{-- CSS riêng của từng trang (@push('styles')) - nạp SAU admin-responsive để giữ đúng thứ tự cascade cũ --}}
 @stack('styles')
 </head>
@@ -133,11 +134,12 @@
       </a>
         <div>
           <div class="sidebar-section-label">Người dùng</div>
-          <a class="nav-item {{ Request::routeIs('admin.employees.*') ? 'active' : '' }}"
-             href="#" onclick="toggleSub(event,'emp-sub',this)">
-            <div class="nav-item-left"><div class="nav-icon">👥</div>Quản lý nhân viên</div>
-            <span class="nav-arrow {{ Request::routeIs('admin.employees.*') ? 'rotate-90':'' }}">›</span>
-          </a>
+             <a class="nav-item {{ Request::routeIs('admin.users.*') ? 'active' : '' }}" href="{{ route('admin.users.index') }}">
+     <div class="nav-item-left"><div class="nav-icon">👥</div>Tất cả tài khoản</div>
+   </a>
+   <a class="nav-item {{ Request::routeIs('admin.employees.*') ? 'active' : '' }}" href="{{ route('admin.employees.index') }}">
+     <div class="nav-item-left"><div class="nav-icon">🗓️</div>Nhân sự & lịch ca</div>
+   </a>
           <div class="sub-menu" id="emp-sub"
                style="display:{{ Request::routeIs('admin.employees.*') ? 'flex':'none' }}">
             <a class="sub-item {{ request('role') === 'staff' ? 'active':'' }}"

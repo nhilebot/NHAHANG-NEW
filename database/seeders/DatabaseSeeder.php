@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             InventorySampleSeeder::class,
             OpeningBalanceSeeder::class,
             NewsSeeder::class,
+            PromotionSeeder::class, // khuyến mãi mẫu
         ]);
     }
 }

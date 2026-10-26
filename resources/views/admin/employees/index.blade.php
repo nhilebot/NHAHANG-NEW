@@ -1,5 +1,6 @@
 @extends('layouts.admin')
-@section('topbar_title', 'Quản lý nhân viên')
+@section('page_title', 'Nhân sự & lịch ca')
+@section('topbar_title', 'Nhân sự & lịch ca')
 
 @section('admin_content')
 @php
@@ -7,192 +8,135 @@
     $shiftCfg = \App\Support\ShiftSchedule::viewConfigs();
 @endphp
 @push('styles')
-<link rel="stylesheet" href="{{ asset('css/admin/employees-index.css') }}?v=1">
+<link rel="stylesheet" href="{{ asset('css/admin/employees-index.css') }}?v=2">
 @endpush
 
-<div class="container-fluid" style="max-width:1200px;margin:0 auto;">
+<div class="ui-page emp-page">
 
-    {{-- TABS --}}
-    <div class="emp-tabs">
-        <a href="{{ route('admin.employees.index', ['role'=>'staff']) }}"
-           class="emp-tab {{ $role === 'staff' ? 'active' : '' }}">🧑‍💼 Nhân viên phục vụ</a>
-        <a href="{{ route('admin.employees.index', ['role'=>'chef']) }}"
-           class="emp-tab {{ $role === 'chef' ? 'active' : '' }}">👨‍🍳 Đầu bếp</a>
+    {{-- TIÊU ĐỀ + NÚT THÊM (thêm / sửa / xóa tài khoản làm tập trung ở trang Tài khoản) --}}
+    <div class="ui-head">
+        <div>
+            <h2 class="ui-title">🗓️ Nhân sự &amp; lịch ca</h2>
+            <p class="ui-subtitle">Xếp ca làm việc trong tuần. Thêm, sửa, xóa tài khoản ở mục <a href="{{ route('admin.users.index') }}">Tất cả tài khoản</a>.</p>
+        </div>
+        <a href="{{ route('admin.users.create', ['role' => $role]) }}" class="btn btn-primary">＋ Thêm nhân viên</a>
     </div>
 
-    <div class="emp-layout">
+    {{-- TABS --}}
+    <div class="ui-tabs">
+        <a href="{{ route('admin.employees.index', ['role'=>'staff']) }}"
+           class="ui-tab {{ $role === 'staff' ? 'active' : '' }}">🧑‍💼 Nhân viên phục vụ</a>
+        <a href="{{ route('admin.employees.index', ['role'=>'chef']) }}"
+           class="ui-tab {{ $role === 'chef' ? 'active' : '' }}">👨‍🍳 Đầu bếp</a>
+    </div>
 
-        {{-- ══ BẢNG TRÁI ══ --}}
-        <div>
-            <div class="emp-card">
-                <div class="emp-card-header">
-                    <span class="emp-card-title">
-                        {{ $role === 'staff' ? '🧑‍💼 Nhân viên phục vụ' : '👨‍🍳 Đầu bếp' }}
-                        <span style="font-size:.8rem;color:#94a3b8;font-weight:500;margin-left:6px;">
-                            ({{ $employees->count() }} người)
-                        </span>
-                    </span>
-                </div>
+    <div class="panel">
+        <div class="panel-header">
+            <span class="panel-title">
+                {{ $role === 'staff' ? '🧑‍💼 Nhân viên phục vụ' : '👨‍🍳 Đầu bếp' }}
+                <span class="ui-count">({{ $employees->count() }} người)</span>
+            </span>
+        </div>
 
-                @if($employees->isEmpty())
-                <div style="text-align:center;padding:48px 20px;color:#94a3b8;">
-                    <div style="font-size:2.5rem;margin-bottom:10px;">👤</div>
-                    Chưa có nhân viên nào. Thêm mới ở bên phải.
-                </div>
-                @else
-                <div style="overflow-x:auto;">
-                    <table class="emp-table">
-                        <thead>
-                            <tr>
-                                <th>Nhân viên</th>
-                                <th>Liên hệ</th>
-                                <th>Lịch ca làm việc</th>
-                                <th class="text-center">Xóa</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($employees as $emp)
-                            @php
-                                $days = ['T2','T3','T4','T5','T6','T7','CN'];
-                                $userShifts = $emp->shifts ?? []; 
-                            @endphp
-                            <tr>
-                                {{-- Avatar + Tên --}}
-                                <td>
-                                    <div style="display:flex;align-items:center;gap:10px;">
-                                        <div class="avatar-circle">
-                                            {{ mb_strtoupper(mb_substr($emp->name, 0, 1)) }}
-                                        </div>
-                                        <div>
-                                            <div style="font-weight:600;color:#0f172a;font-size:.88rem;">{{ $emp->name }}</div>
+        @if($employees->isEmpty())
+        <div class="empty-box">
+            <div class="empty-icon">👤</div>
+            Chưa có nhân viên nào. Bấm “＋ Thêm nhân viên” để tạo mới.
+        </div>
+        @else
+        <div class="table-wrap">
+            <table class="ui-table">
+                <thead>
+                    <tr>
+                        <th>Nhân viên</th>
+                        <th>Liên hệ</th>
+                        <th>Lịch ca làm việc</th>
+                        <th class="col-actions">Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($employees as $emp)
+                    @php
+                        $days = ['T2','T3','T4','T5','T6','T7','CN'];
+                        $userShifts = $emp->shifts ?? [];
+                    @endphp
+                    <tr>
+                        {{-- Avatar + Tên --}}
+                        <td class="cell-user" data-label="Nhân viên">
+                            <div class="ui-user">
+                                <div class="ui-avatar">
+                                    {{ mb_strtoupper(mb_substr($emp->name, 0, 1)) }}
+                                </div>
+                                <div>
+                                    <div class="ui-user-name">{{ $emp->name }}</div>
 
 {{-- SỬ DỤNG TRỰC TIẾP BIẾN $role CỦA TAB, KHÔNG CẦN GỌI DATABASE --}}
 @php
     $roleLabel = ($role === 'staff') ? 'Nhân viên phục vụ' : 'Đầu bếp';
 @endphp
 
-<span class="rbadge rbadge-{{ $role }}">
-    {{ $roleLabel }}
-</span>
-                                    </div>
-                                </td>
+                                    <span class="role-badge role-{{ $role }}">
+                                        {{ $roleLabel }}
+                                    </span>
+                                </div>
+                            </div>
+                        </td>
 
-                                {{-- Liên hệ --}}
-                                <td>
-                                    <div style="font-size:.82rem;color:#374151;">{{ $emp->email }}</div>
-                                    <div style="font-size:.78rem;color:#94a3b8;">{{ $emp->phone ?? '—' }}</div>
-                                </td>
+                        {{-- Liên hệ --}}
+                        <td class="cell-text" data-label="Liên hệ">
+                            <div>
+                                <div>{{ $emp->email }}</div>
+                                <span class="cell-sub">{{ $emp->phone ?? '—' }}</span>
+                            </div>
+                        </td>
 
-                                {{-- Lịch ca --}}
-                                <td style="min-width:260px;">
-                                    <div class="shift-grid">
-                                        @foreach($days as $i => $day)
-                                        @php
-                                            $current = $userShifts[$day] ?? 'off';
-                                            $labels = collect($shiftCfg)->map(fn($c) => $c['short'])->all(); // nhãn ngắn trên nút ca
-                                        @endphp
-                                        <div class="shift-cell">
-                                            <div class="shift-day">{{ $day }}</div>
-                                            <button class="shift-pill shift-{{ $current }}"
-                                                    data-uid="{{ $emp->id }}"
-                                                    data-day="{{ $day }}"
-                                                    data-current="{{ $current }}"
-                                                    onclick="cycleShift(this)">
-                                                {{ $labels[$current] }}
-                                            </button>
-                                        </div>
-                                        @endforeach
-                                    </div>
-                                </td>
+                        {{-- Lịch ca --}}
+                        <td class="cell-shifts" data-label="Lịch ca làm việc">
+                            <div class="shift-grid">
+                                @foreach($days as $i => $day)
+                                @php
+                                    $current = $userShifts[$day] ?? 'off';
+                                    $labels = collect($shiftCfg)->map(fn($c) => $c['short'])->all(); // nhãn ngắn trên nút ca
+                                @endphp
+                                <div class="shift-cell">
+                                    <div class="shift-day">{{ $day }}</div>
+                                    <button class="shift-pill shift-{{ $current }}"
+                                            data-uid="{{ $emp->id }}"
+                                            data-day="{{ $day }}"
+                                            data-current="{{ $current }}"
+                                            onclick="cycleShift(this)">
+                                        {{ $labels[$current] }}
+                                    </button>
+                                </div>
+                                @endforeach
+                            </div>
+                        </td>
 
-                                {{-- Xóa --}}
-                                <td class="text-center">
-                                    <form action="{{ route('admin.employees.destroy', $emp->id) }}"
-                                          method="POST"
-                                          onsubmit="return confirm('Xóa nhân viên {{ $emp->name }}?')">
-                                        @csrf @method('DELETE')
-                                        <button type="submit" class="btn-del" title="Xóa">🗑️</button>
-                                    </form>
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-                @endif
-            </div>
-        </div>
-
-        {{-- ══ FORM PHẢI ══ --}}
-        <div class="add-card">
-            <div class="add-title">➕ Thêm nhân viên mới</div>
-
-            <form action="{{ route('admin.employees.store') }}" method="POST">
-                @csrf
-
-                <div class="form-group">
-                    <label class="form-label">Họ và tên *</label>
-                    <input type="text" name="name" class="form-control"
-                           placeholder="Nguyễn Văn A" value="{{ old('name') }}" required>
-                    @error('name') <div style="color:#ef4444;font-size:.78rem;margin-top:4px;">{{ $message }}</div> @enderror
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Email *</label>
-                    <input type="email" name="email" class="form-control"
-                           placeholder="nhanvien@nhahang.vn" value="{{ old('email') }}" required>
-                    @error('email') <div style="color:#ef4444;font-size:.78rem;margin-top:4px;">{{ $message }}</div> @enderror
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Số điện thoại</label>
-                    <input type="text" name="phone" class="form-control"
-                           placeholder="09xx xxx xxx" value="{{ old('phone') }}">
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Mật khẩu *</label>
-                    <input type="password" name="password" class="form-control"
-                           placeholder="Tối thiểu 6 ký tự" required>
-                    @error('password') <div style="color:#ef4444;font-size:.78rem;margin-top:4px;">{{ $message }}</div> @enderror
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Vai trò *</label>
-                    <select name="role_id" class="form-control form-select" required>
-                        <option value="">-- Chọn vai trò --</option>
-                        @foreach($roles as $r)
-                        <option value="{{ $r->id }}"
-                            {{ old('role_id') == $r->id || $role === $r->name ? 'selected' : '' }}>
-                            {{ $r->name === 'staff' ? '🧑‍💼 Nhân viên phục vụ' : '👨‍🍳 Đầu bếp' }}
-                        </option>
-                        @endforeach
-                    </select>
-                    @error('role_id') <div style="color:#ef4444;font-size:.78rem;margin-top:4px;">{{ $message }}</div> @enderror
-                </div>
-
-                <button type="submit" class="btn-add">✅ Thêm nhân viên</button>
-            </form>
-
-            {{-- Chú thích ca --}}
-            <div style="margin-top:20px;padding-top:16px;border-top:1px solid #f1f5f9;">
-                <div style="font-size:.78rem;font-weight:700;color:#64748b;margin-bottom:8px;">
-                    Ghi chú lịch ca:
-                </div>
-                <div style="display:flex;flex-direction:column;gap:5px;">
-                    {{-- Chú thích 3 ca lấy từ config/shifts.php --}}
-                    @foreach(collect($shiftCfg)->except('off') as $key => $cfg)
-                    <span style="font-size:.78rem;"><span style="display:inline-block;min-width:40px;text-align:center;background:{{ $cfg['bg'] }};color:{{ $cfg['color'] }};border-radius:4px;padding:1px 4px;font-weight:600;">{{ $cfg['short'] }}</span> {{ $cfg['time'] }}</span>
+                        {{-- Sửa tài khoản (xóa / đổi vai trò / đặt lại mật khẩu làm ở trang Tài khoản) --}}
+                        <td class="cell-actions" data-label="Thao tác">
+                            <div class="row-actions">
+                                <a href="{{ route('admin.users.edit', $emp->id) }}" class="btn btn-ghost btn-sm">✏️ Sửa tài khoản</a>
+                            </div>
+                        </td>
+                    </tr>
                     @endforeach
-                    <span style="font-size:.78rem;"><span style="display:inline-block;width:40px;text-align:center;background:#f1f5f9;color:#94a3b8;border-radius:4px;padding:1px 4px;font-weight:600;">Nghỉ</span> Không làm</span>
-                </div>
-                <div style="margin-top:10px;font-size:.75rem;color:#94a3b8;">
-                    💡 Nhấn vào ô ca để chuyển: Sáng → Chiều → Full → Nghỉ
-                </div>
-            </div>
+                </tbody>
+            </table>
         </div>
 
+        {{-- Chú thích ca --}}
+        <div class="shift-legend">
+            <span class="shift-legend-title">Ghi chú lịch ca:</span>
+            {{-- Chú thích 3 ca lấy từ config/shifts.php (màu theo từng ca nên giữ inline) --}}
+            @foreach(collect($shiftCfg)->except('off') as $key => $cfg)
+            <span class="shift-legend-item"><span class="shift-chip" style="background:{{ $cfg['bg'] }};color:{{ $cfg['color'] }};">{{ $cfg['short'] }}</span> {{ $cfg['time'] }}</span>
+            @endforeach
+            <span class="shift-legend-item"><span class="shift-chip shift-chip--off">Nghỉ</span> Không làm</span>
+            <span class="shift-legend-hint">💡 Nhấn vào ô ca để chuyển: Sáng → Chiều → Full → Nghỉ</span>
+        </div>
+        @endif
     </div>
+
 </div>
 
 <script>

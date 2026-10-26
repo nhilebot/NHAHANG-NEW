@@ -134,6 +134,18 @@
             <strong>{{ number_format($total, 0, ',', '.') }}đ</strong>
         </div>
 
+        @if(($discount ?? 0) > 0)
+        <div class="pay-row discount">
+            <span>
+                Khuyến mãi
+                @if($bill->promotion_code)
+                    <small>· {{ $bill->promotion_code }}</small>
+                @endif
+            </span>
+            <strong>− {{ number_format($discount, 0, ',', '.') }}đ</strong>
+        </div>
+        @endif
+
         <div class="pay-row deposit">
             <span>
                 {{-- Không ghi cố định "20%": đặt bàn không kèm món có mức cọc cố định --}}
@@ -162,7 +174,9 @@
             <p>Khách thanh toán cuối buổi</p>
             <h2>{{ number_format($remaining, 0, ',', '.') }}đ</h2>
             <p class="total-formula">
-                = {{ number_format($total, 0, ',', '.') }}đ − {{ number_format($deposit, 0, ',', '.') }}đ đã cọc
+                = {{ number_format($total, 0, ',', '.') }}đ
+                @if(($discount ?? 0) > 0) − {{ number_format($discount, 0, ',', '.') }}đ khuyến mãi @endif
+                − {{ number_format($deposit, 0, ',', '.') }}đ đã cọc
             </p>
         </div>
 
@@ -223,6 +237,9 @@
 
     <div class="r-sum">
         <div><span>Tổng cộng</span><b>{{ number_format($total, 0, ',', '.') }}đ</b></div>
+        @if(($discount ?? 0) > 0)
+        <div><span>Khuyến mãi{{ $bill->promotion_code ? ' (' . $bill->promotion_code . ')' : '' }}</span><b>− {{ number_format($discount, 0, ',', '.') }}đ</b></div>
+        @endif
         <div><span>Đã thanh toán trước (tiền đặt cọc)</span><b>− {{ number_format($deposit, 0, ',', '.') }}đ</b></div>
         <div class="grand"><span>Còn phải thanh toán</span><b>{{ number_format($remaining, 0, ',', '.') }}đ</b></div>
     </div>

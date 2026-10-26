@@ -1,0 +1,302 @@
+/* ==========================================================================
+   public/css/admin/admin-ui.css
+   BỘ GIAO DIỆN DÙNG CHUNG cho các trang quản trị dạng "danh sách + form":
+     - Tài khoản (admin/users/*)      - Nhân sự & lịch ca (admin/employees/*)
+   Trang nào muốn dùng chỉ cần bọc nội dung trong <div class="ui-page"> và
+   nạp file này (đã nạp sẵn trong layouts/admin.blade.php).
+   - Mọi quy tắc nằm dưới ".ui-page" -> trang chưa bọc sẽ KHÔNG bị ảnh hưởng.
+   - Một theme duy nhất: vàng #D4AF37 (lấy từ biến --gold-accent của layout).
+   - Responsive: Desktop >= 992px | iPad <= 991px | Điện thoại <= 767px
+   Thứ tự nạp: admin_assets/style.css -> layout.css -> admin-responsive.css
+               -> admin-ui.css -> CSS riêng của trang (@push('styles'))
+   ========================================================================== */
+
+.ui-page { max-width: 1180px; margin: 0 auto; }
+
+/* ---------- Tiêu đề trang ---------- */
+.ui-page .ui-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+.ui-page .ui-head--form { display: block; }
+.ui-page .ui-title    { font-size: 1.3rem; font-weight: 800; color: #0f172a; margin: 0; }
+.ui-page .ui-head--form .ui-title { margin: 8px 0 4px; }
+.ui-page .ui-subtitle { font-size: .85rem; color: #64748b; margin: 4px 0 0; }
+.ui-page .ui-subtitle a { color: #B58500; font-weight: 600; text-decoration: none; }
+.ui-page .ui-subtitle a:hover { text-decoration: underline; }
+.ui-page .ui-back {
+    display: inline-block;
+    padding: 4px 0;
+    color: #64748b;
+    font-size: .88rem;
+    text-decoration: none;
+}
+.ui-page .ui-back:hover { color: var(--gold-accent, #D4AF37); }
+
+/* ---------- Tab (Nhân viên phục vụ | Đầu bếp) ---------- */
+.ui-page .ui-tabs { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+.ui-page .ui-tab {
+    padding: 9px 20px;
+    border: 1px solid var(--border-color, #E2E8F0);
+    border-radius: 999px;
+    background: #fff;
+    color: #64748b;
+    font-size: .875rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all .18s;
+}
+.ui-page .ui-tab:hover:not(.active) { background: #f8fafc; color: #1A2228; }
+.ui-page .ui-tab.active {
+    background: var(--sidebar-bg, #1A2228);
+    border-color: var(--sidebar-bg, #1A2228);
+    color: var(--gold-accent, #D4AF37);
+}
+
+/* ---------- Thanh lọc ---------- */
+.ui-page .ui-filter { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
+.ui-page .ui-filter .ui-filter-search { width: 240px; }
+.ui-page .ui-filter .ui-filter-select { width: 180px; }
+
+/* ---------- Form ---------- */
+.ui-page .form-group { margin-bottom: 18px; }
+.ui-page .form-group--flush { margin-bottom: 0; }
+.ui-page .form-label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: .82rem;
+    font-weight: 700;
+    color: #475569;
+}
+.ui-page .req { color: #dc2626; }
+.ui-page .form-control {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    height: 44px;
+    padding: 0 14px;
+    font-family: inherit;
+    font-size: .92rem;
+    color: var(--text-dark, #1A2228);
+    background: #fff;
+    border: 1px solid var(--border-color, #E2E8F0);
+    border-radius: 10px;
+    outline: none;
+    transition: border-color .2s, box-shadow .2s;
+}
+.ui-page .form-control::placeholder { color: #a0aec0; }
+.ui-page .form-control:focus {
+    border-color: var(--gold-accent, #D4AF37);
+    box-shadow: 0 0 0 3px var(--gold-glow, rgba(212, 175, 55, .15));
+}
+.ui-page select.form-control {
+    -webkit-appearance: none;
+    appearance: none;
+    padding-right: 38px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23718096' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+}
+.ui-page .form-wrap { max-width: 600px; }
+.ui-page .form-wrap .panel { padding: 24px; }
+.ui-page .form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.ui-page .form-actions { display: flex; gap: 10px; margin-top: 8px; }
+.ui-page .form-alert {
+    max-width: 600px;
+    margin-bottom: 20px;
+    padding: 14px 18px;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 10px;
+}
+.ui-page .form-alert-title { color: #dc2626; }
+.ui-page .form-alert-list  { margin: 8px 0 0 18px; padding: 0; color: #dc2626; }
+.ui-page .pw-box {
+    margin-bottom: 18px;
+    padding: 16px;
+    background: #f8fafc;
+    border: 1px solid #eef2f7;
+    border-radius: 10px;
+}
+.ui-page .pw-box-title { margin: 0 0 12px; font-size: .83rem; font-weight: 600; color: #64748b; }
+
+/* ---------- Bảng ---------- */
+.ui-page .panel { overflow: hidden; }
+.ui-page .panel-title { margin: 0; }
+.ui-page .table-wrap { -webkit-overflow-scrolling: touch; }
+.ui-page .ui-table { min-width: 760px; }
+.ui-page .ui-table thead th,
+.ui-page .ui-table tbody td { padding-left: 12px; padding-right: 12px; }
+.ui-page .col-actions,
+.ui-page .cell-actions { text-align: center; }
+.ui-page .cell-id    { color: #94a3b8; font-size: .82rem; }
+.ui-page .cell-text  { color: #475569; }
+.ui-page .cell-sub   { display: block; margin-top: 2px; font-size: .78rem; color: #94a3b8; }
+.ui-page .cell-date  { color: #94a3b8; font-size: .83rem; white-space: nowrap; }
+.ui-page .cell-user  { min-width: 190px; }
+.ui-page .cell-empty { padding: 40px; text-align: center; color: #94a3b8; }
+.ui-page .empty-box  { padding: 48px 20px; text-align: center; color: #94a3b8; }
+.ui-page .empty-box .empty-icon { margin-bottom: 10px; font-size: 2.5rem; }
+
+.ui-page .ui-user { display: flex; align-items: center; gap: 10px; }
+.ui-page .ui-avatar {
+    flex: 0 0 36px;
+    width: 36px;
+    height: 36px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold-accent, #D4AF37), #B58500);
+    color: #fff;
+    font-weight: 700;
+    font-size: .85rem;
+}
+.ui-page .ui-user-name { font-weight: 600; color: #0f172a; }
+.ui-page .ui-tag {
+    display: inline-block;
+    padding: 1px 8px;
+    border-radius: 10px;
+    background: #eff6ff;
+    color: #1d4ed8;
+    font-size: .72rem;
+}
+.ui-page .ui-count { margin-left: 6px; font-size: .8rem; font-weight: 500; color: #94a3b8; }
+
+/* Nhãn vai trò: bản gốc trong layout dùng màu sáng cho sidebar tối nên khó đọc trên nền trắng */
+.ui-page .role-badge {
+    margin-top: 2px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: .7rem;
+    white-space: nowrap;
+}
+.ui-page .role-admin    { background: #fee2e2; color: #b91c1c; border: 1px solid #fecaca; }
+.ui-page .role-staff    { background: #dbeafe; color: #1d4ed8; border: 1px solid #bfdbfe; }
+.ui-page .role-chef     { background: #fef3c7; color: #b45309; border: 1px solid #fde68a; }
+.ui-page .role-customer { background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0; }
+
+.ui-page .row-actions { display: flex; justify-content: center; gap: 6px; }
+.ui-page .row-actions form { margin: 0; }
+.ui-page .row-actions .btn { white-space: nowrap; }
+
+/* ---------- Phân trang ---------- */
+.ui-page .ui-pager { padding: 14px 18px; border-top: 1px solid rgba(15, 23, 42, .06); }
+.ui-page .ui-pager:empty { display: none; }
+.ui-page .ui-pager svg { width: 18px; height: 18px; }
+.ui-page .ui-pager nav[role="navigation"] > div:first-child:not(:only-child) { display: none; }
+.ui-page .ui-pager nav[role="navigation"] > div:last-child { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; }
+.ui-page .ui-pager nav p { margin: 0; font-size: .82rem; color: #64748b; }
+.ui-page .ui-pager nav a,
+.ui-page .ui-pager nav span[aria-current] > span,
+.ui-page .ui-pager nav span[aria-disabled] > span { padding: 6px 10px; font-size: .82rem; }
+.ui-page .ui-pager .pagination { display: flex; flex-wrap: wrap; gap: 4px; margin: 0; padding: 0; list-style: none; }
+.ui-page .ui-pager .page-link,
+.ui-page .ui-pager .pagination li > a,
+.ui-page .ui-pager .pagination li > span {
+    display: inline-block;
+    min-width: 36px;
+    padding: 7px 10px;
+    text-align: center;
+    background: #fff;
+    border: 1px solid var(--border-color, #E2E8F0);
+    border-radius: 8px;
+    color: #475569;
+    text-decoration: none;
+}
+.ui-page .ui-pager .active .page-link,
+.ui-page .ui-pager .pagination li.active > span {
+    background: var(--gold-accent, #D4AF37);
+    border-color: var(--gold-accent, #D4AF37);
+    color: #fff;
+}
+
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
+
+/* ---- iPad / máy tính bảng (<= 991px) ---- */
+@media (max-width: 991px) {
+    .ui-page .ui-filter .ui-filter-search { flex: 1 1 220px; width: auto; }
+    .ui-page .ui-filter .ui-filter-select { flex: 0 1 180px; }
+    .ui-page .form-wrap { max-width: 640px; }
+}
+
+/* ---- Điện thoại (<= 767px) ---- */
+@media (max-width: 767px) {
+    .ui-page .ui-head { flex-wrap: wrap; align-items: flex-start; }
+    .ui-page .ui-head:not(.ui-head--form) > .btn { width: 100%; }
+    .ui-page .ui-title { font-size: 1.15rem; }
+
+    .ui-page .ui-tabs { flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+    .ui-page .ui-tabs::-webkit-scrollbar { display: none; }
+    .ui-page .ui-tab { flex: 1 0 auto; text-align: center; white-space: nowrap; }
+
+    .ui-page .ui-filter { gap: 8px; }
+    .ui-page .ui-filter .ui-filter-search,
+    .ui-page .ui-filter .ui-filter-select { flex: 1 1 100%; width: 100%; }
+    .ui-page .ui-filter .btn { flex: 1 1 calc(50% - 4px); }
+
+    /* BẢNG -> THẺ: mỗi dòng là một thẻ, nhãn cột lấy từ data-label */
+    .ui-page .panel:has(.ui-table) { background: transparent; border: 0; box-shadow: none; overflow: visible; }
+    .ui-page .panel:has(.ui-table) > .panel-header { padding: 0 0 12px; border-bottom: 0; }
+    .ui-page .ui-table { min-width: 0; }
+    .ui-page .ui-table,
+    .ui-page .ui-table tbody,
+    .ui-page .ui-table tr,
+    .ui-page .ui-table td { display: block; width: 100%; box-sizing: border-box; }
+    .ui-page .ui-table thead { display: none; }
+    .ui-page .ui-table tbody tr {
+        margin: 0 0 12px;
+        padding: 12px 14px;
+        background: #fff;
+        border: 1px solid var(--border-color, #E2E8F0);
+        border-radius: 14px;
+        box-shadow: var(--shadow-sm);
+    }
+    .ui-page .ui-table tbody tr:hover td { background: transparent; }
+    .ui-page .ui-table tbody td {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 8px 0;
+        border-bottom: 1px dashed #e8edf3;
+        text-align: right;
+        word-break: break-word;
+    }
+    .ui-page .ui-table tbody td::before {
+        content: attr(data-label);
+        flex: 0 0 auto;
+        font-size: .72rem;
+        font-weight: 700;
+        letter-spacing: .06em;
+        text-transform: uppercase;
+        color: #94a3b8;
+        text-align: left;
+    }
+    .ui-page .ui-table tbody td:last-child { border-bottom: 0; }
+    .ui-page .ui-table tbody td.cell-id { display: none; }
+    .ui-page .ui-table tbody td.cell-user { min-width: 0; padding-top: 0; justify-content: flex-start; text-align: left; }
+    .ui-page .ui-table tbody td.cell-user::before { display: none; }
+    .ui-page .ui-table tbody td.cell-actions { display: block; padding-bottom: 0; border-bottom: 0; }
+    .ui-page .ui-table tbody td.cell-actions::before { display: none; }
+    .ui-page .ui-table tbody td.cell-empty { display: block; text-align: center; }
+    .ui-page .ui-table tbody td.cell-empty::before { display: none; }
+    .ui-page .row-actions { gap: 8px; }
+    .ui-page .row-actions > .btn,
+    .ui-page .row-actions form { flex: 1 1 0; }
+    .ui-page .row-actions form .btn { width: 100%; }
+    .ui-page .ui-pager { padding: 6px 0 0; border-top: 0; }
+
+    /* Form */
+    .ui-page .form-wrap .panel { padding: 16px; }
+    .ui-page .form-grid-2 { grid-template-columns: 1fr; gap: 0; }
+    .ui-page .form-grid-2 .form-group--flush:first-child { margin-bottom: 14px; }
+    .ui-page .form-control { height: 48px; font-size: 16px; }   /* >= 16px: iOS không tự phóng to */
+    .ui-page .form-actions { flex-direction: column; }
+    .ui-page .form-actions .btn { width: 100%; }
+    .ui-page .pw-box { padding: 14px; }
+}

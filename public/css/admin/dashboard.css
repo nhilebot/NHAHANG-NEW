@@ -1,0 +1,152 @@
+/* ==========================================================================
+   public/css/admin/dashboard.css
+   Trang TỔNG QUAN HỆ THỐNG (admin/index.blade.php)
+   Phần giao diện chung (tiêu đề, bảng -> thẻ trên điện thoại...) nằm ở admin-ui.css.
+   Khối .stats-row / .stat-card dùng lại từ admin_assets/style.css.
+   Responsive: Desktop >= 992px | iPad <= 991px | Điện thoại <= 767px
+   ========================================================================== */
+
+.dash-page .stats-row { margin-bottom: 20px; }
+.dash-page .stat-value--green { color: #16a34a; }
+.dash-page .stat-value--gold  { color: #B58500; }
+.dash-page .stat-value--dark  { color: #0f172a; }
+
+/* ---------- 3 ô số lượng: tài khoản / món ăn / danh mục ---------- */
+.dash-page .count-row {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+    margin-bottom: 20px;
+}
+.dash-page .count-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 18px 20px;
+    background: #fff;
+    border-radius: 14px;
+    border-left: 4px solid var(--accent, #D4AF37);
+    box-shadow: 0 4px 20px rgba(15, 23, 42, .07);
+    text-decoration: none;
+    transition: transform .15s, box-shadow .15s;
+}
+.dash-page .count-card:hover { transform: translateY(-2px); box-shadow: 0 8px 26px rgba(15, 23, 42, .12); }
+.dash-page .count-card--users { --accent: #D4AF37; }
+.dash-page .count-card--menus { --accent: #f59e0b; }
+.dash-page .count-card--cats  { --accent: #10b981; }
+.dash-page .count-icon {
+    flex: 0 0 48px;
+    width: 48px;
+    height: 48px;
+    display: grid;
+    place-items: center;
+    border-radius: 12px;
+    background: #f8fafc;
+    font-size: 1.5rem;
+}
+.dash-page .count-body  { display: flex; flex-direction: column; min-width: 0; }
+.dash-page .count-value { font-size: 1.7rem; line-height: 1.1; font-weight: 800; color: #0f172a; }
+.dash-page .count-label { margin-top: 3px; font-size: .82rem; font-weight: 600; color: #64748b; }
+
+/* ---------- Món bán chạy nhất ---------- */
+.dash-page .panel-note { font-size: .75rem; color: #94a3b8; }
+.dash-page .panel { margin-bottom: 20px; }
+.dash-page .top-list { list-style: none; margin: 0; padding: 6px 22px 12px; }
+.dash-page .top-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 0;
+    border-bottom: 1px solid #f1f5f9;
+}
+.dash-page .top-item:last-child { border-bottom: 0; }
+.dash-page .top-rank {
+    flex: 0 0 28px;
+    width: 28px;
+    height: 28px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: #f1f5f9;
+    color: #64748b;
+    font-size: .8rem;
+    font-weight: 800;
+}
+.dash-page .top-rank--1 { background: #D4AF37; color: #fff; }
+.dash-page .top-rank--2 { background: #94a3b8; color: #fff; }
+.dash-page .top-rank--3 { background: #c2763a; color: #fff; }
+.dash-page .top-thumb {
+    flex: 0 0 52px;
+    width: 52px;
+    height: 52px;
+    border-radius: 10px;
+    object-fit: cover;
+    background: #f1f5f9;
+}
+.dash-page .top-thumb--empty { display: grid; place-items: center; font-size: 1.4rem; }
+.dash-page .top-info { flex: 1 1 auto; min-width: 0; }
+.dash-page .top-name {
+    font-weight: 700;
+    color: #0f172a;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.dash-page .top-bar {
+    height: 7px;
+    margin-top: 8px;
+    border-radius: 99px;
+    background: #f1f5f9;
+    overflow: hidden;
+}
+.dash-page .top-bar span {
+    display: block;
+    height: 100%;
+    border-radius: 99px;
+    background: linear-gradient(90deg, #D4AF37, #B58500);
+}
+.dash-page .top-qty { flex: 0 0 auto; text-align: right; white-space: nowrap; color: #0f172a; }
+.dash-page .top-qty strong { font-size: 1.1rem; }
+.dash-page .top-qty small  { display: block; font-size: .72rem; color: #94a3b8; }
+
+/* ---------- Đơn hàng gần nhất ---------- */
+.dash-page .order-code  { color: #B58500; }
+.dash-page .order-total { font-weight: 700; color: #16a34a; }
+.dash-page .table-chip {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 8px;
+    background: #f1f5f9;
+    font-size: .82rem;
+    font-weight: 600;
+}
+
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
+@media (max-width: 991px) {
+    .dash-page .count-card { padding: 16px; gap: 12px; }
+    .dash-page .count-icon { flex-basis: 42px; width: 42px; height: 42px; font-size: 1.3rem; }
+    .dash-page .count-value { font-size: 1.45rem; }
+}
+@media (max-width: 767px) {
+    /* 4 ô doanh thu: 2 cột gọn thay vì mỗi ô một hàng quá cao */
+    .dash-page .stats-row { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-bottom: 14px; }
+    .dash-page .stat-card { padding: 14px; min-height: 0; }
+    .dash-page .stat-icon { display: none; }
+    .dash-page .stat-label { font-size: .74rem; }
+    .dash-page .stat-value { font-size: 1.05rem; }
+
+    /* 3 ô số lượng xếp dọc, mỗi ô một hàng ngang gọn */
+    .dash-page .count-row { grid-template-columns: 1fr; gap: 10px; }
+    .dash-page .count-card { padding: 14px 16px; }
+    .dash-page .count-body { flex-direction: row; align-items: baseline; justify-content: space-between; flex: 1 1 auto; gap: 10px; }
+    .dash-page .count-label { margin-top: 0; font-size: .9rem; order: -1; }
+
+    .dash-page .panel-note { display: none; }
+    .dash-page .top-list { padding: 4px 14px 8px; }
+    .dash-page .top-item { gap: 10px; padding: 10px 0; }
+    .dash-page .top-thumb { flex-basis: 44px; width: 44px; height: 44px; }
+    .dash-page .top-rank { flex-basis: 24px; width: 24px; height: 24px; font-size: .72rem; }
+    .dash-page .top-qty strong { font-size: 1rem; }
+}
