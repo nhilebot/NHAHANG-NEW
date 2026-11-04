@@ -1,0 +1,88 @@
+/* ==========================================================================
+   public/css/pages/best-sellers.css
+   Khu "MÓN BÁN CHẠY" trên trang khách (partial: partials/best-sellers.blade.php)
+   Dùng lại thẻ .menu-card của trang thực đơn (menu.css / menu-mobile.css).
+   Desktop >= 992px: 4 cột | iPad 768-991px: 2 cột | Điện thoại <= 767px: vuốt ngang
+   Nạp SAU menu.css và menu-mobile.css.
+   ========================================================================== */
+
+.best-sellers { margin: 10px 0 46px; }
+
+.best-head { text-align: center; margin-bottom: 26px; }
+.best-title {
+    margin: 0;
+    font-size: 30px;
+    color: #1A2228;
+    letter-spacing: 1px;
+}
+.best-sub { margin: 8px 0 0; color: #777; font-size: 14px; }
+
+.best-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 25px;
+}
+
+/* Thẻ món: thêm nhãn hạng + số lượng đã bán */
+.best-card { position: relative; }
+.best-card .rank-badge {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    z-index: 3;
+    padding: 4px 11px;
+    border-radius: 999px;
+    background: #1A2228;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .5px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .25);
+}
+.best-card .rank-1 { background: #D4AF37; }
+.best-card .rank-2 { background: #94a3b8; }
+.best-card .rank-3 { background: #c2763a; }
+.best-card .sold-text {
+    margin: -6px 0 12px;
+    color: #c2410c;
+    font-size: 13px;
+    font-weight: 600;
+    text-align: center;
+}
+.best-card.is-soldout .product-img { filter: grayscale(100%); }
+.best-card.is-soldout { opacity: .75; }
+.best-card .btn-action:disabled { background-color: #ccc; color: #666; cursor: not-allowed; }
+
+/* ---------- iPad ---------- */
+@media (max-width: 991px) {
+    .best-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+    .best-title { font-size: 26px; }
+}
+
+/* ---------- Điện thoại: dải vuốt ngang, mỗi lần vuốt dừng đúng thẻ ---------- */
+@media (max-width: 767px) {
+    .best-sellers { margin: 8px 0 30px; }
+    .best-head { margin-bottom: 14px; text-align: left; }
+    .best-title { font-size: 19px; letter-spacing: .3px; }
+    .best-sub { margin-top: 4px; font-size: 12.5px; }
+
+    .best-grid {
+        display: flex;
+        gap: 12px;
+        margin: 0 -20px;                 /* tràn sát mép màn hình (container có padding 20px) */
+        padding: 4px 20px 14px;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        scroll-padding-left: 20px;       /* thẻ đầu tiên dừng đúng lề, không dính mép */
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+    .best-grid::-webkit-scrollbar { display: none; }
+    .best-card {
+        flex: 0 0 62%;
+        max-width: 250px;
+        scroll-snap-align: start;
+    }
+    .best-card .rank-badge { top: 14px; left: 14px; font-size: 11px; padding: 3px 9px; }
+    .best-card .sold-text { margin: -2px 2px 10px; font-size: 12px; text-align: left; }
+}

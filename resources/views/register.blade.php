@@ -10,6 +10,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 <link rel="stylesheet" href="{{ asset('css/pages/register.css') }}?v=1">
+<link rel="stylesheet" href="{{ asset('css/pages/auth-bg.css') }}?v=1">
 @endsection
 
 @section('content')

@@ -6,6 +6,7 @@
 
 @section('head')
 <link rel="stylesheet" href="{{ asset('css/pages/verify-otp.css') }}?v=1">
+<link rel="stylesheet" href="{{ asset('css/pages/auth-bg.css') }}?v=1">
 @endsection
 
 @section('content')

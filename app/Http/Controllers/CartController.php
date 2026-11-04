@@ -52,10 +52,24 @@ class CartController extends Controller
                 ->whereIn('status', Reservation::ACTIVE_STATUSES)
                 ->latest('id')
                 ->first();
-        if ($latestReservation && is_array($latestReservation->cart_data)) {
-            $cart = $latestReservation->cart_data;
-        }
-        $reservationTable = $latestReservation
+       if ($latestReservation && is_array($latestReservation->cart_data)) {
+    // Tra id món theo tên (chỉ nhận tên không bị trùng)
+    $menuIdByName = \App\Models\Menu::get(['id', 'name'])
+        ->groupBy(fn ($m) => mb_strtolower(trim($m->name)))
+        ->filter(fn ($g) => $g->count() === 1)
+        ->map(fn ($g) => $g->first()->id);
+
+    $cart = collect($latestReservation->cart_data)->map(function ($row) use ($menuIdByName) {
+        $row = (array) $row;
+        $row['id'] = $row['id']
+            ?? $row['menu_id']
+            ?? $menuIdByName[mb_strtolower(trim($row['name'] ?? ''))]
+            ?? null;
+        return $row;
+    })->values()->toArray();
+}
+
+$reservationTable = $latestReservation
             ? \App\Models\Table::find($latestReservation->table_id)
             : null;
         $reservationStatusLabel = $latestReservation

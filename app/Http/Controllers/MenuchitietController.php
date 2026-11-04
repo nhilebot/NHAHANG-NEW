@@ -29,10 +29,22 @@ class MenuchitietController extends Controller
         $menus->where('category_id', $request->category_id);
     }
 
-    // Lấy dữ liệu
-    $menus = $menus->get();
+    // Lấy dữ liệu: PHÂN TRANG 12 món/trang (chia đều cho lưới 2, 3, 4 cột).
+    // Xếp theo danh mục rồi theo id để các món cùng nhóm đứng cạnh nhau.
+    // withQueryString(): giữ ?search= / ?category_id= khi chuyển trang.
+    // fragment('thuc-don'): đổi trang xong tự cuộn tới danh sách món, không phải kéo từ banner xuống.
+    $menus = $menus->orderBy('category_id')->orderBy('id')
+                   ->paginate(12)
+                   ->onEachSide(1)
+                   ->withQueryString()
+                   ->fragment('thuc-don');
 
-    return view('menu', compact('menus', 'categories'));
+    // Món bán chạy: chỉ hiện ở trang "Tất cả", trang số 1 (không tìm kiếm, không lọc, không ở trang 2+)
+    $bestSellers = ($request->filled('search') || $request->filled('category_id') || (int) $request->query('page', 1) > 1)
+        ? collect()
+        : \App\Support\BestSellers::top(4);
+
+    return view('menu', compact('menus', 'categories', 'bestSellers'));
 }
 
     public function special()

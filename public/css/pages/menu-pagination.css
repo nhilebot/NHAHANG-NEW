@@ -1,0 +1,67 @@
+/* ==========================================================================
+   public/css/pages/menu-pagination.css
+   Phân trang cho trang THỰC ĐƠN của khách (partials/menu-pagination.blade.php)
+   Desktop: có chữ "Trước / Sau" | Điện thoại (<= 575px): chỉ mũi tên, nút to dễ chạm
+   Nạp sau menu.css và menu-mobile.css.
+   ========================================================================== */
+
+/* Khi bấm sang trang khác, trình duyệt cuộn tới #thuc-don: chừa chỗ cho navbar cố định */
+#thuc-don { scroll-margin-top: 90px; }
+
+.menu-pager-wrap { margin: 10px 0 50px; text-align: center; }
+.menu-pager { background: none; border: 0; box-shadow: none; }
+.menu-pager-info { margin: 0 0 14px; color: #777; font-size: 14px; }
+
+.menu-pager-list {
+    display: inline-flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.menu-pager-list li > a,
+.menu-pager-list li > span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    min-width: 42px;
+    height: 42px;
+    padding: 0 14px;
+    box-sizing: border-box;
+    background: #fff;
+    border: 1px solid #e3ded0;
+    border-radius: 999px;
+    color: #333;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1;
+    text-decoration: none;
+    transition: background .15s, color .15s, border-color .15s, transform .15s;
+}
+.menu-pager-list li > a:hover {
+    background: #1A2228;
+    border-color: #1A2228;
+    color: #fff;
+}
+.menu-pager-list li > a:active { transform: scale(.96); }
+.menu-pager-list .is-active > span {
+    background: #B5952F;
+    border-color: #B5952F;
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(181, 149, 47, .35);
+}
+.menu-pager-list .is-disabled > span { opacity: .4; cursor: not-allowed; }
+.menu-pager-list .is-dots > span { min-width: 24px; padding: 0; background: transparent; border-color: transparent; color: #999; }
+.menu-pager-list em { font-style: normal; }
+
+@media (max-width: 575px) {
+    .menu-pager-wrap { margin: 4px 0 36px; }
+    .menu-pager-info { font-size: 13px; margin-bottom: 12px; }
+    .menu-pager-list { gap: 6px; }
+    .menu-pager-list li > a,
+    .menu-pager-list li > span { min-width: 44px; height: 44px; padding: 0 10px; font-size: 15px; }
+    .menu-pager-list em { display: none; }      /* chỉ còn mũi tên ‹ › cho gọn */
+}

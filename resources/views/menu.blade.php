@@ -5,6 +5,8 @@
 @section('head')
 <link rel="stylesheet" href="{{ asset('css/pages/menu.css') }}?v=1">
 <link rel="stylesheet" href="{{ asset('css/pages/menu-mobile.css') }}?v=1">
+<link rel="stylesheet" href="{{ asset('css/pages/best-sellers.css') }}?v=1">
+<link rel="stylesheet" href="{{ asset('css/pages/menu-pagination.css') }}?v=1">
 @endsection
 
 @section('content')
@@ -45,10 +47,13 @@
     @endforeach
 </div>
 
-    <div class="category-container">
+    {{-- MÓN BÁN CHẠY (chỉ hiện khi có dữ liệu và không đang tìm kiếm / lọc) --}}
+    @include('partials.best-sellers')
+
+    <div class="category-container" id="thuc-don">
         {{-- NHÓM MÓN ĂN TỰ ĐỘNG THEO TÊN DANH MỤC TRONG ADMIN --}}
         @php 
-            $groupedMenus = $menus->groupBy(function($menu) {
+            $groupedMenus = $menus->getCollection()->groupBy(function($menu) {
                 // Sử dụng relationship mà chúng ta đã làm ở Admin
                 return $menu->category_relation ? $menu->category_relation->name : 'Chưa phân loại';
             }); 
@@ -107,6 +112,14 @@
             @endforeach
         @endif
     </div>
+
+    {{-- PHÂN TRANG --}}
+    @if($menus->hasPages())
+        <div class="menu-pager-wrap">
+            <!-- <p class="menu-pager-info">Hiển thị {{ $menus->firstItem() }}–{{ $menus->lastItem() }} trên {{ $menus->total() }} món</p> -->
+            {{ $menus->links('partials.menu-pagination') }}
+        </div>
+    @endif
 </div>
 </div>
 

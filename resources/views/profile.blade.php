@@ -40,7 +40,7 @@
                 {{-- CỘT TRÁI: ẢNH ĐẠI DIỆN --}}
                 <div class="profile-left">
                     <div class="avatar-box">
-                        <img src="{{ $user->avatar ? asset('storage/' . $user->avatar) : 'https://ui-avatars.com/api/?name=' . urlencode($user->name) . '&background=041526&color=fff' }}"
+                        <img src="{{ $user->avatar ? (str_starts_with($user->avatar, 'uploads/') ? asset($user->avatar) : asset('storage/' . $user->avatar)) : 'https://ui-avatars.com/api/?name=' . urlencode($user->name) . '&background=041526&color=fff' }}"
                              id="avatar-preview" class="avatar-img" alt="Ảnh đại diện của {{ $user->name }}">
 
                         <button type="button" class="avatar-btn" id="avatar-btn" aria-label="Đổi ảnh đại diện">

@@ -1,0 +1,40 @@
+/* ==========================================================================
+   public/css/pages/auth-bg.css
+   NỀN ẢNH cho các trang xác thực: Đăng nhập, Đăng ký, Quên mật khẩu (lấy mã OTP), Nhập OTP.
+   Khung form (.auth-card) nằm "nổi" phía trước tấm ảnh nhà hàng.
+   Dùng chung cho login / register / forgot-password / verify-otp.
+   Nạp SAU css riêng của từng trang để ghi đè màu nền cũ (#eef1f5 / #f9f9f9).
+   Ảnh: public/images/auth-bg.jpg  (đường dẫn trong CSS tính từ public/css/pages/)
+   ========================================================================== */
+
+body {
+    /* Lớp phủ xanh navy (màu chủ đạo của form) để chữ và khung form nổi rõ trên ảnh */
+    background:
+        linear-gradient(rgba(4, 21, 38, .55), rgba(4, 21, 38, .72)),
+        url('../../images/auth-bg.jpg') center 40% / cover no-repeat fixed;
+    background-color: #1a1410;                 /* màu dự phòng khi ảnh chưa tải xong */
+}
+
+/* Khung form: kính mờ nhẹ + bóng đổ sâu để tách khỏi nền ảnh */
+.auth-card {
+    background: rgb(255 255 255 / 12%);
+    -webkit-backdrop-filter: blur(8px);
+            backdrop-filter: blur(8px);
+    box-shadow: 0 24px 60px rgba(0, 0, 0, .45);
+}
+
+/* Trang OTP dùng class khoảng cách kiểu Bootstrap 5 (mb-3, mb-4, mt-4, mb-0)
+   nhưng site chỉ nạp Bootstrap 3 nên các ô bị dính sát nhau -> bổ sung tại đây */
+.auth-card .mb-0 { margin-bottom: 0; }
+.auth-card .mb-3 { margin-bottom: 1rem; }
+.auth-card .mb-4 { margin-bottom: 1.5rem; }
+.auth-card .mt-4 { margin-top: 1.5rem; }
+
+/* Điện thoại / iPad: "fixed" bị lỗi trên iOS (ảnh phóng to, giật) -> dùng cuộn thường */
+@media (max-width: 991px) {
+    body { background-attachment: scroll, scroll; background-position: center top; }
+}
+@media (max-width: 575px) {
+    .auth { padding-left: 12px; padding-right: 12px; }
+    .auth-card { padding: 28px 20px; border-radius: 14px; }
+}

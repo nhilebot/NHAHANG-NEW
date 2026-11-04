@@ -34,43 +34,14 @@ class AdminController extends Controller
         $totalMonth   = Order::whereMonth('created_at', now()->month)->sum('total_price');
 
         // ── MÓN BÁN CHẠY NHẤT ──────────────────────────────────────────────
-        // Chỉ tính món của đơn mà khách ĐÃ THANH TOÁN PHẦN CÒN LẠI:
-        //  (1) Đơn đặt bàn: Reservation::pay() chuyển status -> paid_cash / paid_transfer (sau đó completed).
-        //      Món lấy từ reservation_items (nguồn chính), số lượng = quantity - cancelled_quantity.
-        //  (2) Đơn lẻ không gắn đặt bàn (OrderController::store, reservation_id = NULL): tính khi status = paid / completed.
-        //      Đơn gắn đặt bàn KHÔNG lấy từ order_items vì bảng đó chỉ là bản sao của reservation_items (tránh cộng 2 lần).
-        $paidReservationStatuses = array_merge(Reservation::PAID_STATUSES, ['completed']);
-
-        $soldFromReservations = ReservationItem::query()
-            ->join('reservations', 'reservations.id', '=', 'reservation_items.reservation_id')
-            ->whereIn('reservations.status', $paidReservationStatuses)
-            ->groupBy('reservation_items.menu_id')
-            ->selectRaw('reservation_items.menu_id as menu_id, MAX(reservation_items.menu_name) as name,
-                         SUM(reservation_items.quantity - reservation_items.cancelled_quantity) as qty');
-
-        $soldFromOrders = OrderItem::query()
-            ->join('orders', 'orders.id', '=', 'order_items.order_id')
-            ->whereNull('orders.reservation_id')
-            ->whereIn('orders.status', ['paid', 'completed'])
-            ->groupBy('order_items.menu_id')
-            ->selectRaw('order_items.menu_id as menu_id, MAX(order_items.product_name) as name,
-                         SUM(order_items.quantity) as qty');
-
-        $topRows = DB::query()
-            ->fromSub($soldFromReservations->unionAll($soldFromOrders), 'sold')
-            ->selectRaw('menu_id, MAX(name) as name, SUM(qty) as qty')
-            ->groupBy('menu_id')
-            ->havingRaw('SUM(qty) > 0')
-            ->orderByDesc('qty')
-            ->limit(5)
-            ->get();
-
-        // Lấy tên hiện tại + ảnh từ bảng menus (món đã xóa thì dùng tên lưu trong đơn)
-        $topMenus  = Menu::whereIn('id', $topRows->pluck('menu_id')->filter())->get()->keyBy('id');
-        $topDishes = $topRows->map(fn ($r) => [
-            'name' => $topMenus[$r->menu_id]->name ?? $r->name,
-            'qty'  => (int) $r->qty,
-            'menu' => $topMenus[$r->menu_id] ?? null,
+        // Dùng CHUNG một hàm với trang khách (App\Support\BestSellers) để hai nơi luôn khớp nhau:
+        // chỉ tính món của đơn khách ĐÃ THANH TOÁN phần còn lại. Admin luôn tính mới (fresh = true), không qua cache.
+        $ranking   = \App\Support\BestSellers::ranking(5, true);
+        $topMenus  = Menu::whereIn('id', array_keys($ranking))->get()->keyBy('id');
+        $topDishes = collect($ranking)->map(fn ($qty, $menuId) => [
+            'name' => $topMenus[$menuId]->name ?? ('Món #' . $menuId),
+            'qty'  => (int) $qty,
+            'menu' => $topMenus[$menuId] ?? null,
         ])->values();
 
         // Thống kê nhanh trạng thái đặt bàn
