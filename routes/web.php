@@ -143,10 +143,6 @@ Route::post('/reservations/store', [ReservationController::class, 'staffStore'])
 // Quản lý đơn hàng (Admin)
         // QUẢN LÝ KHO NGUYÊN LIỆU (chỉ Admin)
         Route::prefix('inventory')->name('inventory.')->group(function () {
-            Route::post(
-    '/reservations/{id}/review-cancellation',
-    [ReservationController::class, 'reviewCancellation']
-)->name('reservations.reviewCancellation');
             Route::resource('issues', \App\Http\Controllers\Admin\Inventory\StockIssueController::class)
     ->only(['index', 'create', 'store', 'show']);
             Route::get('/', fn () => redirect()->route('admin.inventory.ingredients.index'))->name('index');
@@ -162,7 +158,6 @@ Route::get('movements', [\App\Http\Controllers\Admin\Inventory\StockMovementCont
     ->name('movements.index');
         });
 Route::get('/orders', [OrderController::class, 'adminIndex'])->name('orders.index');
-Route::get('/orders/{id}', [OrderController::class, 'show'])->name('orders.show');      // đã có
 Route::get('/orders/{id}/edit', [OrderController::class, 'edit'])->name('orders.edit');
 Route::put('/orders/{id}', [OrderController::class, 'update'])->name('orders.update');
 Route::delete('/orders/{id}', [OrderController::class, 'destroy'])->name('orders.destroy');

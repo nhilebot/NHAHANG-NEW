@@ -709,10 +709,15 @@ return redirect()->route($billRoute, $id)
 
         // 2. Validate dữ liệu linh hoạt
         $rules = [
-            'reservation_date' => 'required|date',
-            'reservation_time' => 'required',
-            'table_id'         => 'required|integer|exists:tables,id',
-        ];
+    'reservation_date' => 'required|date',
+    'reservation_time' => 'required',
+    'table_id'         => 'required|integer|exists:tables,id',
+
+    // Kiểm tra danh sách món ăn
+    'foods' => 'nullable|array',
+    'foods.*' => 'array',
+    'foods.*.quantity' => 'required|integer|min:0|max:999',
+];
 
         // Chỉ bắt buộc tên và SĐT nếu KHÔNG phải khách Walk-in
         if (!$isWalkIn) {
