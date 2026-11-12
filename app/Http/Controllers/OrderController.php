@@ -176,8 +176,11 @@ public function history()
         $unfinished = fn ($q) => $q->active()->whereIn('status', ['pending', 'cooking']);
 
         // Đơn cần nấu: đang ở bếp (arrived/serving) HOẶC đã ready/served nhưng có món gọi thêm chưa nấu xong
+        // KDS chỉ hiển thị đơn có món còn hiệu lực. Đơn check-in không có món đặt trước
+        // vẫn đổi trạng thái arrived nhưng không xuất hiện trên màn hình bếp.
         $pendingOrders = Reservation::with(['table', 'reservationItems' => fn ($q) => $q->active()])
             ->whereIn('status', ['arrived', 'serving', 'ready', 'served'])
+            ->whereHas('reservationItems', fn ($q) => $q->active())
             ->where(function ($q) use ($unfinished) {
                 $q->whereIn('status', ['arrived', 'serving'])
                   ->orWhereHas('reservationItems', $unfinished);

@@ -540,8 +540,13 @@ public function reviewCancellation(Request $request, $id)
 
                 // Trạng thái bếp theo TỪNG DÒNG món (không còn gán chung theo menu_id).
                 // Service tự sinh lại cart_data/chef_statuses cho các màn hình cũ.
+                // Chỉ báo bếp khi đơn thật sự có món còn hiệu lực; nếu không có món đặt trước
+                // thì check-in vẫn chuyển trạng thái bàn nhưng không tạo đơn bếp rỗng.
                 if ($newStatus === 'serving') {
-                    $itemService->markSentToKitchen($reservation);
+                    $hasActiveItems = $reservation->reservationItems()->active()->exists();
+                    if ($hasActiveItems) {
+                        $itemService->markSentToKitchen($reservation);
+                    }
                 } elseif ($newStatus === 'ready') {
                     $itemService->finishAll($reservation);
                 } elseif ($newStatus === 'served') {

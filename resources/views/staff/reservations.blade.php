@@ -115,9 +115,9 @@
 
                                         {{-- 3. Báo bếp --}}
                                         @elseif($res->status == 'arrived')
-                                            <button type="submit" name="status" value="serving" class="btn btn-warning">
+                                            <!-- <button type="submit" name="status" value="serving" class="btn btn-warning">
                                                 <i class="fas fa-fire"></i> Báo bếp nấu
-                                            </button>
+                                            </button> -->
 
                                         {{-- 4. Bếp nấu xong (ready) --}}
                                         @elseif($res->status == 'ready')

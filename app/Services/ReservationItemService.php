@@ -158,12 +158,21 @@ class ReservationItemService
     //  B. BẾP
     // =====================================================================
 
-    /** Đánh dấu các dòng chưa gửi bếp là đã gửi (sent_at). Trả về số dòng được đánh dấu. */
+    /** Đánh dấu các dòng chưa gửi bếp là đã gửi (sent_at). Trả về số dòng được đánh dấu.
+     * Chỉ chốt khi đơn thực sự còn món hiệu lực. Nếu khách chưa chọn món đặt trước,
+     * check-in vẫn cập nhật trạng thái bàn nhưng không tạo/đánh dấu đơn bếp rỗng.
+     */
     public function markSentToKitchen(Reservation $reservation): int
     {
         return DB::transaction(function () use ($reservation) {
             $res = $this->lock($reservation);
             $this->importLegacyIfNeeded($res);
+
+            // Không gửi đơn rỗng xuống KDS: chỉ đánh dấu dòng khi tồn tại món đang có hiệu lực.
+            $hasActiveItems = ReservationItem::where('reservation_id', $res->id)->active()->exists();
+            if (! $hasActiveItems) {
+                return 0;
+            }
 
             $n = ReservationItem::where('reservation_id', $res->id)->active()
                 ->whereNull('sent_at')->update(['sent_at' => now()]);

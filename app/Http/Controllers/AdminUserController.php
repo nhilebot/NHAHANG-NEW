@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Role;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Hash;
+use App\Support\PasswordPolicy;
 
 class AdminUserController extends Controller
 {
@@ -54,10 +55,10 @@ class AdminUserController extends Controller
         $request->validate([
             'name'     => 'required|string|max:255',
             'email'    => 'required|email|unique:users',
-            'password' => 'required|min:8|confirmed',
+            'password' => array_merge(PasswordPolicy::rules(), ['confirmed']),
             'role_id'  => ['required', Rule::in(array_values(Role::MAP))],
             'phone'    => 'nullable|string|max:20',
-        ]);
+        ], PasswordPolicy::messages());
 
         $user = new User($request->only('name', 'email', 'phone'));
         $user->password = Hash::make($request->password);
@@ -84,8 +85,8 @@ class AdminUserController extends Controller
             'email'    => 'required|email|unique:users,email,' . $id,
             'role_id'  => ['required', Rule::in(array_values(Role::MAP))],
             'phone'    => 'nullable|string|max:20',
-            'password' => 'nullable|min:8|confirmed',
-        ]);
+            'password' => array_merge(PasswordPolicy::rules(false), ['confirmed']),
+        ], PasswordPolicy::messages());
 
         // Không cho Admin tự hạ quyền của chính mình (tránh khoá hệ thống)
         if ($user->id === auth()->id() && (int) $request->role_id !== Role::ADMIN) {
@@ -142,10 +143,10 @@ public function employeeStore(Request $request)
     $request->validate([
         'name'     => 'required|string|max:255',
         'email'    => 'required|email|unique:users',
-        'password' => 'required|min:8',
+        'password' => array_merge(PasswordPolicy::rules(), ['confirmed']),
         'role_id'  => ['required', Rule::in([Role::STAFF, Role::CHEF])],
         'phone'    => 'nullable|string|max:20',
-    ]);
+    ], PasswordPolicy::messages());
 
     $user = new User($request->only('name', 'email', 'phone'));
     $user->password = Hash::make($request->password);

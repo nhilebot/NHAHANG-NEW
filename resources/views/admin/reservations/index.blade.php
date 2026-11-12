@@ -214,13 +214,13 @@
                                         {{-- 4. BÁO BẾP NẤU --}}
                                         @elseif($status === 'arrived')
 
-                                            <button type="submit"
+                                            <!-- <button type="submit"
                                                     name="status"
                                                     value="serving"
                                                     class="btn btn-warning">
                                                 <i class="fas fa-fire"></i>
                                                 Báo bếp nấu
-                                            </button>
+                                            </button> -->
 
                                         {{-- 5. XÁC NHẬN LÊN MÓN --}}
                                         @elseif(in_array($status, ['serving', 'ready'], true))

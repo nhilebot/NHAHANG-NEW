@@ -60,11 +60,11 @@
             <div class="form-grid-2">
                 <div class="form-group">
                     <label class="form-label">Mật khẩu <span class="req">*</span></label>
-                    <input class="form-control" type="password" name="password" placeholder="Ít nhất 6 ký tự" required>
+                    <input class="form-control" type="password" name="password" placeholder="8–64 ký tự, có chữ hoa, chữ thường, số và ký tự đặc biệt" required minlength="8" maxlength="64" pattern="(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[^A-Za-z0-9\s]).+" title="Mật khẩu phải dài 8–64 ký tự, gồm chữ hoa, chữ thường, chữ số và ký tự đặc biệt.">
                 </div>
                 <div class="form-group">
                     <label class="form-label">Xác nhận mật khẩu <span class="req">*</span></label>
-                    <input class="form-control" type="password" name="password_confirmation" placeholder="Nhập lại mật khẩu" required>
+                    <input class="form-control" type="password" name="password_confirmation" placeholder="Nhập lại mật khẩu" required minlength="8" maxlength="64">
                 </div>
             </div>
 

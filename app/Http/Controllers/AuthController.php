@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
+use App\Support\PasswordPolicy;
 class AuthController extends Controller
 {
     // Hiển thị trang đăng nhập
@@ -95,8 +96,8 @@ class AuthController extends Controller
         'name' => 'required|string|max:255',
         'email' => 'required|email|unique:users,email',
         'phone' => 'required|string|max:20',
-        'password' => 'required|confirmed|min:8'
-    ]);
+        'password' => array_merge(PasswordPolicy::rules(), ['confirmed']),
+    ], PasswordPolicy::messages());
 
     // Thêm role_id vào đây để sửa lỗi SQL 1364
     $user = new User([

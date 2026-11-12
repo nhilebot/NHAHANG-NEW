@@ -43,11 +43,11 @@
             </div>
             <div class="mb-3">
                 <label for="password" class="form-label">Mật khẩu mới</label>
-                <input id="password" type="password" name="password" class="form-control" placeholder="••••••••" required>
+                <input id="password" type="password" name="password" class="form-control" placeholder="8–64 ký tự, gồm chữ hoa, chữ thường, số và ký tự đặc biệt" required minlength="8" maxlength="64" pattern="(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[^A-Za-z0-9\s]).+" title="Mật khẩu phải dài 8–64 ký tự, gồm chữ hoa, chữ thường, chữ số và ký tự đặc biệt.">
             </div>
             <div class="mb-3">
                 <label for="password_confirmation" class="form-label">Xác nhận mật khẩu</label>
-                <input id="password_confirmation" type="password" name="password_confirmation" class="form-control" placeholder="••••••••" required>
+                <input id="password_confirmation" type="password" name="password_confirmation" class="form-control" placeholder="Nhập lại mật khẩu" required minlength="8" maxlength="64">
             </div>
 
             <button type="submit" class="btn btn-primary-custom">Đặt lại mật khẩu</button>

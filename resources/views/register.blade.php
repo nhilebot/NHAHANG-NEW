@@ -53,11 +53,12 @@
                     <label for="password">Mật khẩu</label>
                     <div class="input-wrap">
                         <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
-                        <input id="password" type="password" name="password" class="input" placeholder="Nhập mật khẩu" autocomplete="new-password" required>
+                        <input id="password" type="password" name="password" class="input" placeholder="Nhập mật khẩu" autocomplete="new-password" required minlength="8" maxlength="64">
                         <button type="button" class="toggle-pass" data-target="password" aria-label="Hiện mật khẩu" aria-pressed="false">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
                         </button>
                     </div>
+                    <p class="sub">8–64 ký tự, gồm chữ hoa, chữ thường, chữ số và ký tự đặc biệt.</p>
                     <div class="field-error" data-error-for="password"></div>
                 </div>
 
@@ -124,6 +125,14 @@ $(document).ready(function () {
         if (!$('#name').val().trim()) { showError('name', 'Vui lòng nhập họ và tên.'); hasError = true; }
         if (!$('#email').val().trim()) { showError('email', 'Vui lòng nhập email.'); hasError = true; }
         if (!$('#password').val()) { showError('password', 'Vui lòng nhập mật khẩu.'); hasError = true; }
+        else if ($('#password').val().length < 8 || $('#password').val().length > 64
+            || !/[A-Z]/.test($('#password').val())
+            || !/[a-z]/.test($('#password').val())
+            || !/[0-9]/.test($('#password').val())
+            || !/[^A-Za-z0-9\s]/.test($('#password').val())) {
+            showError('password', 'Mật khẩu phải dài 8–64 ký tự, gồm chữ hoa, chữ thường, chữ số và ký tự đặc biệt.');
+            hasError = true;
+        }
         if ($('#password').val() !== $('#password_confirmation').val()) {
             showError('password_confirmation', 'Mật khẩu nhập lại chưa khớp.');
             hasError = true;
